@@ -1,0 +1,221 @@
+# Chatbot Feature - Complete Technical Documentation
+
+## 1. Component Overview
+
+Total Components: 13 files in 7 directories
+Architecture: Clean Architecture with RAG (Retrieval-Augmented Generation)
+
+### Directory Structure
+```
+notefiber-BE/
+├── cmd/
+│   └── rest/
+│       └── main.go                    # Entry point, component initialization
+├── internal/
+│   ├── constant/
+│   │   └── chatbot_constant.go        # Constants and system prompts
+│   ├── controller/
+│   │   └── chatbot_controller.go      # HTTP endpoint handlers
+│   ├── dto/
+│   │   └── chatbot_dto.go            # Data transfer objects
+│   ├── entity/
+│   │   ├── chat_message_entity.go     # Message data model
+│   │   ├── chat_message_raw_entity.go # Raw message data model
+│   │   └── chat_session_entity.go     # Session data model
+│   ├── repository/
+│   │   ├── chat_message_repository.go     # Message storage operations
+│   │   ├── chat_message_raw_repository.go # Raw message storage
+│   │   └── chat_session_repository.go     # Session management
+│   └── service/
+│       └── chatbot_service.go         # Core business logic
+└── pkg/
+    ├── chatbot/
+    │   └── gemini_chatbot.go          # Gemini API integration
+    └── embedding/
+        └── gemini_embedding.go        # Text embedding functionality
+```
+
+## 2. Core Package Components
+
+### 2.1 Gemini Integration (pkg/chatbot/gemini_chatbot.go)
+Core functionality for interacting with Google's Gemini API:
+- Chat message processing
+- Response generation
+- RAG decision making
+- Context management
+
+### 2.2 Text Embedding (pkg/embedding/gemini_embedding.go)
+Vector embedding generation for semantic search:
+- Text to vector conversion
+- Semantic similarity calculation
+- RAG support
+- API integration with Gemini embedding model
+
+## 3. Key Features
+
+### 3.1 RAG System
+- Dynamic RAG decision making
+- Semantic search integration
+- Context-aware responses
+- Note embedding integration
+
+### 3.2 Session Management
+- Persistent chat sessions
+- History tracking
+- Session metadata
+- Deletion handling
+
+### 3.3 Message Processing
+- Dual storage system (raw/processed)
+- Role-based handling
+- Timestamp tracking
+- Soft delete support
+
+## 4. API Documentation
+
+### Endpoints
+
+1. `POST /api/chatbot/v1/create-session`
+   - Creates new chat session
+   - Initializes with system prompts
+   - Returns session ID
+
+2. `GET /api/chatbot/v1/sessions`
+   - Lists all chat sessions
+   - Includes metadata
+   - Supports pagination
+
+3. `GET /api/chatbot/v1/chat-history`
+   - Retrieves session messages
+   - Chronological ordering
+   - Role-based filtering
+
+4. `POST /api/chatbot/v1/send-chat`
+   - Processes user messages
+   - Generates responses
+   - Updates session state
+
+5. `DELETE /api/chatbot/v1/delete-session`
+   - Removes chat sessions
+   - Handles related messages
+   - Supports soft deletion
+
+## 5. Database Schema
+
+### 5.1 Chat Session Table
+```sql
+CREATE TABLE chat_session (
+    id UUID PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP,
+    deleted_at TIMESTAMP,
+    is_deleted BOOLEAN DEFAULT FALSE
+);
+```
+
+### 5.2 Chat Message Table
+```sql
+CREATE TABLE chat_message (
+    id UUID PRIMARY KEY,
+    chat TEXT NOT NULL,
+    role VARCHAR(10) NOT NULL,
+    chat_session_id UUID NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP,
+    deleted_at TIMESTAMP,
+    is_deleted BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (chat_session_id) REFERENCES chat_session(id)
+);
+```
+
+### 5.3 Raw Message Table
+```sql
+CREATE TABLE chat_message_raw (
+    id UUID PRIMARY KEY,
+    chat TEXT NOT NULL,
+    role VARCHAR(10) NOT NULL,
+    chat_session_id UUID NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP,
+    deleted_at TIMESTAMP,
+    is_deleted BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (chat_session_id) REFERENCES chat_session(id)
+);
+```
+
+## 6. Implementation Details
+
+### 6.1 Message Flow
+1. User sends message
+2. System decides RAG usage
+3. If RAG needed:
+   - Generate embeddings
+   - Search similar content
+   - Enhance context
+4. Process with Gemini
+5. Store raw and processed
+6. Return response
+
+### 6.2 Session Lifecycle
+1. Creation
+   - Generate UUID
+   - Initialize prompts
+   - Set metadata
+2. Active Use
+   - Message processing
+   - Context management
+   - Title updates
+3. Deletion
+   - Soft delete
+   - Related cleanup
+
+### 6.3 RAG Process
+1. Embedding Generation
+   - Text vectorization
+   - Model: gemini-embedding-exp-03-07
+   - Task-specific processing
+2. Similarity Search
+   - Vector comparison
+   - Relevance ranking
+   - Context selection
+3. Response Enhancement
+   - Context integration
+   - Reference management
+   - Language adaptation
+
+## 7. Dependencies
+
+### External APIs
+- Google Gemini Chat API
+- Gemini Embedding API
+
+### Libraries
+- github.com/google/uuid
+- github.com/jackc/pgx/v5
+- github.com/gofiber/fiber/v2
+
+## 8. Configuration
+
+### Environment Variables
+- GOOGLE_GEMINI_API_KEY
+- DB_CONNECTION_STRING
+- Other configuration parameters
+
+## 9. Testing
+
+### Test Categories
+1. Unit Tests
+   - Repository layer
+   - Service layer
+   - Controller endpoints
+
+2. Integration Tests
+   - Database operations
+   - API interactions
+   - RAG functionality
+
+3. End-to-End Tests
+   - Complete chat flows
+   - Session management
+   - Error scenarios

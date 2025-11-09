@@ -1,0 +1,166 @@
+# Chatbot Feature Architecture Overview
+
+## File Structure Summary
+This document contains all the components related to the chatbot feature in the NoteFiber backend.
+
+### Total Files: 12
+1. Main Entry Point (cmd/rest/):
+   - main.go (chatbot-related initialization)
+
+2. Constants (internal/constant/):
+   - chatbot_constant.go
+
+3. Controller Layer (internal/controller/):
+   - chatbot_controller.go
+
+4. DTO Layer (internal/dto/):
+   - chatbot_dto.go
+
+5. Entity Layer (internal/entity/):
+   - chat_message_entity.go
+   - chat_message_raw_entity.go
+   - chat_session_entity.go
+
+6. Repository Layer (internal/repository/):
+   - chat_message_repository.go
+   - chat_message_raw_repository.go
+   - chat_session_repository.go
+
+7. Service Layer (internal/service/):
+   - chatbot_service.go
+
+8. Core Chatbot Implementation (pkg/chatbot/):
+   - gemini_chatbot.go
+
+## File Contents
+
+### 1. Main Entry Point (main.go) - Chatbot Related Sections
+```go
+// Chatbot related repository initialization
+chatSessionRepository := repository.NewChatSessionRepository(db)
+chatMessageRepository := repository.NewChatMessageRepository(db)
+chatMessageRawRepository := repository.NewChatMessageRawRepository(db)
+
+// Chatbot service initialization
+chatbotService := service.NewChatbotService(
+    db,
+    chatSessionRepository,
+    chatMessageRepository,
+    chatMessageRawRepository,
+    noteEmbeddingRepository,
+)
+
+// Chatbot controller initialization
+chatbotController := controller.NewChatbotController(chatbotService)
+
+// Route registration
+chatbotController.RegisterRoutes(api)
+```
+
+### 2. Constants (chatbot_constant.go)
+```go
+package constant
+
+const (
+    ChatMessageRoleUser  = "user"
+    ChatMessageRoleModel = "model"
+
+    ChatMessageRawInitialUserPromptV1 = `You are a chatbot assistant that will answer your user question based on references provided. You must answer based on user next chat language even the reference is in different language. There reference I provide will have reference number, never recall the reference using number since the number is only for raw chat session. This chat session is raw session that will be formatted again later. I'll give you reference before you answering, you can mention again the reference if you need to. You must answer don't know if you don't have enough reference.`
+
+    ChatMessageRawInitialModelPromptV1 = `Understood. I will answer your questions based solely on the provided references, and I will indicate if I do not have enough information to answer. I will also adapt my responses to the language you use in your subsequent turns. I will not refer to the references by their numbers.\n`
+
+    DecideUseRAGMessageRawInitialUserPromptV1 = `You are a chatbot assistant that will answer your user question based on references provided. In this session, you will provide true or false data. True if you can answer directly without other information, false otherwise.`
+
+    DecideUseRAGMessageRawInitialModelPromptV1 = `Okay, I understand. I will answer \"True\" if I can definitively answer the user's question based solely on my existing knowledge, and \"False\" if I cannot. I will not attempt to make educated guesses or provide potentially inaccurate information. I will wait for your question.\n`
+)
+```
+
+### 3. Controller Layer (chatbot_controller.go)
+```go
+// Interface definition
+type IChatbotController interface {
+    RegisterRoutes(r fiber.Router)
+    CreateSession(ctx *fiber.Ctx) error
+    GetAllSessions(ctx *fiber.Ctx) error
+    GetChatHistory(ctx *fiber.Ctx) error
+    SendChat(ctx *fiber.Ctx) error
+    DeleteSession(ctx *fiber.Ctx) error
+}
+
+// Route registration
+func (c *chatbotController) RegisterRoutes(r fiber.Router) {
+    h := r.Group("/chatbot/v1")
+    h.Get("sessions", c.GetAllSessions)
+    h.Get("chat-history", c.GetChatHistory)
+    h.Post("create-session", c.CreateSession)
+    h.Post("send-chat", c.SendChat)
+    h.Delete("delete-session", c.DeleteSession)
+}
+```
+
+## Architecture Overview
+
+The chatbot feature follows a clean architecture pattern with the following layers:
+
+1. **Presentation Layer** (Controller)
+   - Handles HTTP requests
+   - Input validation
+   - Response formatting
+
+2. **Service Layer**
+   - Business logic implementation
+   - Integration with Gemini chatbot
+   - Session management
+   - Chat history handling
+
+3. **Repository Layer**
+   - Data persistence
+   - Database operations for:
+     - Chat sessions
+     - Chat messages
+     - Raw chat messages
+
+4. **Entity Layer**
+   - Data models
+   - Database schema representation
+
+5. **DTO Layer**
+   - Request/Response objects
+   - Data transfer between layers
+
+6. **Core Package**
+   - Gemini chatbot implementation
+   - Core chatbot functionality
+
+## API Endpoints
+
+1. GET /api/chatbot/v1/sessions
+   - Get all chat sessions
+
+2. GET /api/chatbot/v1/chat-history
+   - Get chat history for a specific session
+
+3. POST /api/chatbot/v1/create-session
+   - Create a new chat session
+
+4. POST /api/chatbot/v1/send-chat
+   - Send a message in a chat session
+
+5. DELETE /api/chatbot/v1/delete-session
+   - Delete a chat session
+
+## Database Schema
+
+The chatbot feature uses three main tables:
+
+1. chat_session
+   - Stores chat session information
+   - Manages session lifecycle
+
+2. chat_message
+   - Stores processed chat messages
+   - Links messages to sessions
+
+3. chat_message_raw
+   - Stores raw chat messages
+   - Used for message processing

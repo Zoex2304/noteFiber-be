@@ -1,0 +1,218 @@
+# Chatbot Component Relationships and Dependencies Map
+
+## 1. High-Level Component Diagram
+```
+                                     ┌─────────────────┐
+                                     │     main.go     │
+                                     │  (Entry Point)  │
+                                     └────────┬────────┘
+                                              │
+                 ┌──────────────────────────┬─┴─────────────────────────┐
+                 │                          │                           │
+        ┌────────┴────────┐      ┌─────────┴──────────┐     ┌─────────┴────────┐
+        │   Controllers   │      │      Services      │     │    Repositories   │
+        └────────┬────────┘      └─────────┬──────────┘     └─────────┬────────┘
+                 │                          │                           │
+        ┌────────┴────────┐      ┌─────────┴──────────┐     ┌─────────┴────────┐
+        │      DTOs       │      │  External Services  │     │     Entities     │
+        └─────────────────┘      └──────────────────┬─┘     └──────────────────┘
+                                                    │
+                                         ┌──────────┴───────┐
+                                         │  Database/APIs   │
+                                         └──────────────────┘
+```
+
+## 2. File Dependencies and Relationships
+
+### 2.1 Entry Point (main.go)
+Location: `cmd/rest/main.go`
+Dependencies:
+```
+main.go
+├── pkg/database/connection.go          # Database initialization
+├── internal/controller/
+│   └── chatbot_controller.go          # Route registration
+├── internal/repository/
+│   ├── chat_session_repository.go     # Repository initialization
+│   ├── chat_message_repository.go
+│   └── chat_message_raw_repository.go
+└── internal/service/
+    └── chatbot_service.go            # Service initialization
+```
+
+### 2.2 Controller Layer
+Location: `internal/controller/chatbot_controller.go`
+Dependencies:
+```
+chatbot_controller.go
+├── internal/dto/chatbot_dto.go        # Request/Response structures
+├── internal/service/chatbot_service.go # Business logic interface
+└── internal/pkg/serverutils/          # Error handling & responses
+```
+
+### 2.3 Service Layer
+Location: `internal/service/chatbot_service.go`
+Dependencies:
+```
+chatbot_service.go
+├── internal/constant/chatbot_constant.go    # System constants
+├── internal/dto/chatbot_dto.go             # Data transfer objects
+├── internal/entity/
+│   ├── chat_message_entity.go              # Message model
+│   ├── chat_message_raw_entity.go          # Raw message model
+│   └── chat_session_entity.go              # Session model
+├── internal/repository/
+│   ├── chat_session_repository.go          # Data access
+│   ├── chat_message_repository.go
+│   └── chat_message_raw_repository.go
+├── pkg/chatbot/gemini_chatbot.go           # Gemini integration
+└── pkg/embedding/gemini_embedding.go        # Text embeddings
+```
+
+### 2.4 Repository Layer
+Common Dependencies for all repositories:
+```
+*_repository.go
+├── pkg/database/
+│   ├── connection.go                  # Database connection
+│   └── queryer.go                    # Database interface
+└── internal/entity/
+    └── corresponding_entity.go       # Entity models
+```
+
+### 2.5 Entity Layer
+Location: `internal/entity/`
+```
+Entities (No dependencies)
+├── chat_message_entity.go
+├── chat_message_raw_entity.go
+└── chat_session_entity.go
+```
+
+### 2.6 External Services
+Location: `pkg/`
+```
+chatbot/gemini_chatbot.go           # Standalone Gemini integration
+embedding/gemini_embedding.go        # Standalone embedding service
+```
+
+## 3. Data Flow Relationships
+
+### 3.1 Create Session Flow
+```
+HTTP Request
+└── chatbot_controller.go (CreateSession)
+    └── chatbot_service.go
+        ├── chat_session_repository.go    # Create session
+        ├── chat_message_repository.go    # Store initial message
+        └── chat_message_raw_repository.go # Store raw message
+```
+
+### 3.2 Send Chat Flow
+```
+HTTP Request
+└── chatbot_controller.go (SendChat)
+    └── chatbot_service.go
+        ├── gemini_embedding.go           # Generate embeddings
+        ├── gemini_chatbot.go            # Get response
+        ├── chat_message_repository.go    # Store messages
+        └── chat_message_raw_repository.go # Store raw messages
+```
+
+## 4. Database Relationships
+
+### 4.1 Table Relations
+```
+chat_session
+└── (1:N) chat_message
+└── (1:N) chat_message_raw
+```
+
+### 4.2 Repository-Entity Mappings
+```
+chat_session_repository.go    ↔ chat_session_entity.go
+chat_message_repository.go    ↔ chat_message_entity.go
+chat_message_raw_repository.go ↔ chat_message_raw_entity.go
+```
+
+## 5. Environment Dependencies
+Location: `.env.example`
+```
+Database Connection:
+└── pkg/database/connection.go
+
+Gemini API Key:
+├── pkg/chatbot/gemini_chatbot.go
+└── pkg/embedding/gemini_embedding.go
+
+Message Queue Topic:
+└── internal/service/chatbot_service.go
+```
+
+## 6. Key Integration Points
+
+### 6.1 Database Integration
+```
+connection.go
+└── queryer.go
+    └── All repositories
+```
+
+### 6.2 External API Integration
+```
+gemini_chatbot.go & gemini_embedding.go
+└── chatbot_service.go
+```
+
+### 6.3 Error Handling Chain
+```
+Repository Error
+└── Service Error Wrapping
+    └── Controller Error Handling
+        └── HTTP Response
+```
+
+## 7. Cross-Cutting Concerns
+
+### 7.1 Transaction Management
+Managed in: `chatbot_service.go`
+Affects:
+- All repository operations
+- Database transactions
+- Error handling
+
+### 7.2 Error Handling
+Implemented across:
+- Controllers (HTTP errors)
+- Services (Business logic errors)
+- Repositories (Database errors)
+
+### 7.3 Validation
+Implemented in:
+- DTOs (Request validation)
+- Services (Business rules)
+- Repositories (Data integrity)
+
+## 8. File Modification Impact
+
+When modifying these files, consider the following dependencies:
+
+1. **Entity Changes**
+   - Update corresponding repository
+   - Update related DTOs
+   - Update database schema
+
+2. **Repository Changes**
+   - Check service layer usage
+   - Verify transaction handling
+   - Update tests
+
+3. **Service Changes**
+   - Update controller responses
+   - Check repository calls
+   - Verify error handling
+
+4. **Controller Changes**
+   - Update route registration in main.go
+   - Update DTOs
+   - Update API documentation

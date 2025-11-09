@@ -1,0 +1,3 @@
+# Complete Chatbot Feature Documentation with Database Integration
+
+[Previous content remains the same...]
