@@ -17,7 +17,7 @@ const (
 	SubscriptionStatusCanceled SubscriptionStatus = "canceled"
 
 	PaymentStatusPending PaymentStatus = "pending"
-	PaymentStatusPaid    PaymentStatus = "paid"
+	PaymentStatusPaid    PaymentStatus = "success" // CHANGED: Must match DB Enum 'success'
 	PaymentStatusFailed  PaymentStatus = "failed"
 
 	BillingPeriodMonthly BillingPeriod = "monthly"
