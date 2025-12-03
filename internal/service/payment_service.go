@@ -150,6 +150,9 @@ func (s *paymentService) CreateSubscription(ctx context.Context, userId uuid.UUI
 }
 
 func (s *paymentService) HandleNotification(ctx context.Context, req *dto.MidtransWebhookRequest) error {
+	// Log webhook receipt
+	fmt.Printf("\n[WEBHOOK] Received notification for Order ID: %s | Status: %s\n", req.OrderId, req.TransactionStatus)
+
 	// Midtrans sends OrderID which corresponds to our UserSubscription ID
 	subId, err := uuid.Parse(req.OrderId)
 	if err != nil {
@@ -158,6 +161,7 @@ func (s *paymentService) HandleNotification(ctx context.Context, req *dto.Midtra
 
 	sub, err := s.subRepo.GetSubscriptionById(ctx, subId)
 	if err != nil {
+		fmt.Printf("[WEBHOOK] Subscription not found: %s\n", err.Error())
 		return err
 	}
 
@@ -169,12 +173,16 @@ func (s *paymentService) HandleNotification(ctx context.Context, req *dto.Midtra
 	case "capture", "settlement":
 		newStatus = entity.SubscriptionStatusActive
 		newPaymentStatus = entity.PaymentStatusPaid
+		fmt.Println("[WEBHOOK] Payment SUCCESS. Activating subscription.")
 	case "deny", "cancel", "expire":
 		newStatus = entity.SubscriptionStatusInactive
 		newPaymentStatus = entity.PaymentStatusFailed
+		fmt.Println("[WEBHOOK] Payment FAILED. Canceling subscription.")
 	case "pending":
+		fmt.Println("[WEBHOOK] Payment PENDING.")
 		return nil // Do nothing for pending
 	default:
+		fmt.Printf("[WEBHOOK] Unknown status: %s\n", req.TransactionStatus)
 		return nil // Unknown status, ignore
 	}
 
