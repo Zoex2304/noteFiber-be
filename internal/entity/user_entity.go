@@ -50,3 +50,12 @@ type UserProvider struct {
 	ProviderUserId string
 	CreatedAt      time.Time
 }
+
+// Add this struct
+type EmailVerificationToken struct {
+	Id        uuid.UUID
+	UserId    uuid.UUID
+	Token     string
+	ExpiresAt time.Time
+	CreatedAt time.Time
+}

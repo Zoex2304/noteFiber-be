@@ -15,6 +15,7 @@ type IAuthController interface {
 	Login(ctx *fiber.Ctx) error
 	ForgotPassword(ctx *fiber.Ctx) error
 	ResetPassword(ctx *fiber.Ctx) error
+	VerifyEmail(ctx *fiber.Ctx) error // New
 }
 
 type authController struct {
@@ -28,6 +29,7 @@ func NewAuthController(service service.IAuthService) IAuthController {
 func (c *authController) RegisterRoutes(r fiber.Router) {
 	h := r.Group("/auth")
 	h.Post("/register", c.Register)
+	h.Post("/verify-email", c.VerifyEmail) // New Route
 	h.Post("/login", c.Login)
 	h.Post("/forgot-password", c.ForgotPassword)
 	h.Post("/reset-password", c.ResetPassword)
@@ -47,7 +49,25 @@ func (c *authController) Register(ctx *fiber.Ctx) error {
 	if err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(serverutils.ErrorResponse(400, err.Error()))
 	}
-	return ctx.JSON(serverutils.SuccessResponse("User registered successfully", res))
+	return ctx.JSON(serverutils.SuccessResponse("User registered successfully. Check console for OTP.", res))
+}
+
+func (c *authController) VerifyEmail(ctx *fiber.Ctx) error {
+	var req dto.VerifyEmailRequest
+	if err := ctx.BodyParser(&req); err != nil {
+		return err
+	}
+
+	if err := serverutils.ValidateRequest(req); err != nil {
+		return err
+	}
+
+	err := c.service.VerifyEmail(ctx.Context(), &req)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(serverutils.ErrorResponse(400, err.Error()))
+	}
+
+	return ctx.JSON(serverutils.SuccessResponse[any]("Email verified successfully", nil))
 }
 
 func (c *authController) Login(ctx *fiber.Ctx) error {

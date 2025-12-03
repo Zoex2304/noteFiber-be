@@ -6,7 +6,10 @@ import (
 	"ai-notetaking-be/internal/entity"
 	"ai-notetaking-be/internal/repository"
 	"context"
-	"errors" // Standard errors package
+	"crypto/rand"
+	"errors"
+	"fmt"
+	"math/big"
 	"os"
 	"time"
 
@@ -20,6 +23,7 @@ type IAuthService interface {
 	Login(ctx context.Context, req *dto.LoginRequest) (*dto.LoginResponse, error)
 	ForgotPassword(ctx context.Context, req *dto.ForgotPasswordRequest) error
 	ResetPassword(ctx context.Context, req *dto.ResetPasswordRequest) error
+	VerifyEmail(ctx context.Context, req *dto.VerifyEmailRequest) error // New
 }
 
 type authService struct {
@@ -28,6 +32,15 @@ type authService struct {
 
 func NewAuthService(userRepo repository.IUserRepository) IAuthService {
 	return &authService{userRepo: userRepo}
+}
+
+// Helper to generate secure 6-digit OTP
+func generateOTP() (string, error) {
+	n, err := rand.Int(rand.Reader, big.NewInt(1000000))
+	if err != nil {
+		return "", err
+	}
+	return fmt.Sprintf("%06d", n), nil
 }
 
 func (s *authService) Register(ctx context.Context, req *dto.RegisterRequest) (*dto.RegisterResponse, error) {
@@ -47,15 +60,15 @@ func (s *authService) Register(ctx context.Context, req *dto.RegisterRequest) (*
 
 	// 3. Create User Entity
 	user := &entity.User{
-		Id:           uuid.New(),
-		Email:        req.Email,
-		FullName:     req.FullName,
-		PasswordHash: &hashStr,
-		Role:         entity.UserRoleUser,
-		Status:       entity.UserStatusPending,
-		EmailVerified: false, // Explicitly set to false until verified
-		CreatedAt:    time.Now(),
-		UpdatedAt:    time.Now(),
+		Id:            uuid.New(),
+		Email:         req.Email,
+		FullName:      req.FullName,
+		PasswordHash:  &hashStr,
+		Role:          entity.UserRoleUser,
+		Status:        entity.UserStatusPending,
+		EmailVerified: false,
+		CreatedAt:     time.Now(),
+		UpdatedAt:     time.Now(),
 	}
 
 	// 4. Save to DB
@@ -64,7 +77,60 @@ func (s *authService) Register(ctx context.Context, req *dto.RegisterRequest) (*
 		return nil, err
 	}
 
+	// 5. --- OTP Generation Logic ---
+	otpCode, err := generateOTP()
+	if err != nil {
+		return nil, err
+	}
+
+	verificationToken := &entity.EmailVerificationToken{
+		Id:        uuid.New(),
+		UserId:    user.Id,
+		Token:     otpCode,
+		ExpiresAt: time.Now().Add(15 * time.Minute), // OTP valid for 15 mins
+		CreatedAt: time.Now(),
+	}
+
+	err = s.userRepo.CreateVerificationToken(ctx, verificationToken)
+	if err != nil {
+		return nil, err
+	}
+
+	// TODO: Replace this Println with actual Email Service (e.g., SMTP, SendGrid)
+	fmt.Printf(">>> [MOCK EMAIL] OTP for %s is: %s <<<\n", user.Email, otpCode)
+
 	return &dto.RegisterResponse{Id: user.Id, Email: user.Email}, nil
+}
+
+func (s *authService) VerifyEmail(ctx context.Context, req *dto.VerifyEmailRequest) error {
+	user, err := s.userRepo.GetByEmail(ctx, req.Email)
+	if err != nil || user == nil {
+		return errors.New("user not found")
+	}
+
+	if user.Status == entity.UserStatusActive {
+		return nil // Already verified, idempotent success
+	}
+
+	tokenEntity, err := s.userRepo.GetVerificationToken(ctx, user.Id, req.Token)
+	if err != nil {
+		return errors.New("invalid otp code")
+	}
+
+	if time.Now().After(tokenEntity.ExpiresAt) {
+		return errors.New("otp code expired")
+	}
+
+	// Activate User
+	err = s.userRepo.ActivateUser(ctx, user.Id)
+	if err != nil {
+		return err
+	}
+
+	// Clean up used token
+	_ = s.userRepo.DeleteVerificationToken(ctx, tokenEntity.Id)
+
+	return nil
 }
 
 func (s *authService) Login(ctx context.Context, req *dto.LoginRequest) (*dto.LoginResponse, error) {
@@ -79,6 +145,11 @@ func (s *authService) Login(ctx context.Context, req *dto.LoginRequest) (*dto.Lo
 	if user.PasswordHash == nil {
 		return nil, errors.New("user registered via OAuth")
 	}
+
+	// Optional: Block login if email is not verified?
+	// if user.Status == entity.UserStatusPending {
+	// 	return nil, errors.New("please verify your email first")
+	// }
 
 	// 3. Compare passwords
 	err = bcrypt.CompareHashAndPassword([]byte(*user.PasswordHash), []byte(req.Password))

@@ -13,6 +13,11 @@ type RegisterRequest struct {
 	Password string `json:"password" validate:"required,min=8"`
 }
 
+type VerifyEmailRequest struct {
+	Email string `json:"email" validate:"required,email"`
+	Token string `json:"token" validate:"required,len=6"`
+}
+
 type RegisterResponse struct {
 	Id    uuid.UUID `json:"id"`
 	Email string    `json:"email"`

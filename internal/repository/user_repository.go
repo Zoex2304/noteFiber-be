@@ -23,6 +23,12 @@ type IUserRepository interface {
 	GetPasswordResetToken(ctx context.Context, tokenString string) (*entity.PasswordResetToken, error)
 	MarkTokenUsed(ctx context.Context, id uuid.UUID) error
 	UpdatePassword(ctx context.Context, userId uuid.UUID, hash string) error
+
+	// New OTP Methods
+	CreateVerificationToken(ctx context.Context, token *entity.EmailVerificationToken) error
+	GetVerificationToken(ctx context.Context, userId uuid.UUID, token string) (*entity.EmailVerificationToken, error)
+	DeleteVerificationToken(ctx context.Context, id uuid.UUID) error
+	ActivateUser(ctx context.Context, userId uuid.UUID) error
 }
 
 type userRepository struct {
@@ -90,5 +96,44 @@ func (r *userRepository) MarkTokenUsed(ctx context.Context, id uuid.UUID) error 
 
 func (r *userRepository) UpdatePassword(ctx context.Context, userId uuid.UUID, hash string) error {
 	_, err := r.db.Exec(ctx, `UPDATE users SET password_hash = $1, updated_at = $2 WHERE id = $3`, hash, time.Now(), userId)
+	return err
+}
+
+// --- New OTP Methods ---
+
+func (r *userRepository) CreateVerificationToken(ctx context.Context, token *entity.EmailVerificationToken) error {
+	_, err := r.db.Exec(ctx, `
+		INSERT INTO email_verification_tokens (id, user_id, token, expires_at, created_at)
+		VALUES ($1, $2, $3, $4, $5)
+	`, token.Id, token.UserId, token.Token, token.ExpiresAt, token.CreatedAt)
+	return err
+}
+
+func (r *userRepository) GetVerificationToken(ctx context.Context, userId uuid.UUID, token string) (*entity.EmailVerificationToken, error) {
+	row := r.db.QueryRow(ctx, `
+		SELECT id, user_id, token, expires_at, created_at 
+		FROM email_verification_tokens 
+		WHERE user_id = $1 AND token = $2
+	`, userId, token)
+
+	var t entity.EmailVerificationToken
+	err := row.Scan(&t.Id, &t.UserId, &t.Token, &t.ExpiresAt, &t.CreatedAt)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return nil, serverutils.ErrNotFound
+	}
+	return &t, err
+}
+
+func (r *userRepository) DeleteVerificationToken(ctx context.Context, id uuid.UUID) error {
+	_, err := r.db.Exec(ctx, `DELETE FROM email_verification_tokens WHERE id = $1`, id)
+	return err
+}
+
+func (r *userRepository) ActivateUser(ctx context.Context, userId uuid.UUID) error {
+	_, err := r.db.Exec(ctx, `
+		UPDATE users 
+		SET status = 'active', email_verified = true, email_verified_at = $1, updated_at = $2 
+		WHERE id = $3
+	`, time.Now(), time.Now(), userId)
 	return err
 }
