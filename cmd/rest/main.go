@@ -1,3 +1,4 @@
+// FILE: cmd/rest/main.go
 package main
 
 import (
@@ -30,6 +31,7 @@ func main() {
 
 	db := database.ConnectDB(os.Getenv("DB_CONNECTION_STRING"))
 
+	// --- Repositories ---
 	exampleRepository := repository.NewExampleRepository(db)
 	notebookRepository := repository.NewNotebookRepository(db)
 	noteRepository := repository.NewNoteRepository(db)
@@ -38,6 +40,11 @@ func main() {
 	chatMessageRepository := repository.NewChatMessageRepository(db)
 	chatMessageRawRepository := repository.NewChatMessageRawRepository(db)
 
+	// New Repos
+	userRepository := repository.NewUserRepository(db)
+	subscriptionRepository := repository.NewSubscriptionRepository(db)
+
+	// --- Event Bus ---
 	watermillLogger := watermill.NewStdLogger(false, false)
 	pubSub := gochannel.NewGoChannel(
 		gochannel.Config{},
@@ -56,6 +63,7 @@ func main() {
 		db,
 	)
 
+	// --- Services ---
 	exampleService := service.NewExampleService(exampleRepository)
 	notebookService := service.NewNotebookService(
 		notebookRepository,
@@ -73,17 +81,31 @@ func main() {
 		noteEmbeddingRepository,
 	)
 
+	// New Services
+	authService := service.NewAuthService(userRepository)
+	// IMPORTANT: Wired both subscriptionRepository and userRepository
+	paymentService := service.NewPaymentService(subscriptionRepository, userRepository)
+
+	// --- Controllers ---
 	exampleController := controller.NewExampleController(exampleService)
 	notebookController := controller.NewNotebookController(notebookService)
 	noteController := controller.NewNoteController(noteService)
 	chatbotController := controller.NewChatbotController(chatbotService)
 
+	// New Controllers
+	authController := controller.NewAuthController(authService)
+	paymentController := controller.NewPaymentController(paymentService)
+
+	// --- Routes ---
 	api := app.Group("/api")
 	exampleController.RegisterRoutes(api)
 	notebookController.RegisterRoutes(api)
 	noteController.RegisterRoutes(api)
 	chatbotController.RegisterRoutes(api)
+	authController.RegisterRoutes(api)
+	paymentController.RegisterRoutes(api)
 
+	// --- Background Consumers ---
 	err := consumerService.Consume(context.Background())
 	if err != nil {
 		panic(err)

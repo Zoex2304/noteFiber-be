@@ -1,0 +1,9 @@
+internal/entity/user_entity.go
+internal/entity/subscription_entity.go
+internal/dto/auth_payment_dto.go
+internal/repository/user_repository.go
+internal/repository/subscription_repository.go
+internal/service/auth_service.go
+internal/service/payment_service.go
+internal/controller/auth_controller.go
+internal/controller/payment_controller.go
