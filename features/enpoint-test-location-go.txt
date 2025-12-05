@@ -1,0 +1,124 @@
+# ============================================
+# TESTING WITH cURL (Linux/Mac/Git Bash)
+# ============================================
+
+# --- Test 1: Health Check ---
+curl http://localhost:8080/health
+
+# --- Test 2: Auto-detect Country (Mock) ---
+curl http://localhost:8080/api/detect-country
+
+# --- Test 3: Search Cities in Indonesia ---
+curl "http://localhost:8080/api/cities?country=ID&query=jakarta"
+
+# --- Test 4: Get States/Provinces for Jakarta (Indonesia) ---
+curl "http://localhost:8080/api/states?country=ID&city=Jakarta"
+
+# --- Test 5: Get ZIP Codes for Jakarta (Indonesia) ---
+curl "http://localhost:8080/api/zipcodes?country=ID&city=Jakarta&state=DKI%20Jakarta"
+
+# --- Test 6: Search Cities Internationally (USA) ---
+curl "http://localhost:8080/api/cities?country=US&query=new%20york"
+
+# --- Test 7: Get States for New York (USA) ---
+curl "http://localhost:8080/api/states?country=US&city=New%20York"
+
+# --- Test 8: Get ZIP Codes for New York (USA) ---
+curl "http://localhost:8080/api/zipcodes?country=US&city=New%20York&state=NY"
+
+# --- Test 9: Search Cities in Singapore ---
+curl "http://localhost:8080/api/cities?country=SG&query=singapore"
+
+# --- Test 10: More Indonesian Cities ---
+curl "http://localhost:8080/api/cities?country=ID&query=bandung"
+curl "http://localhost:8080/api/cities?country=ID&query=surabaya"
+
+
+# ============================================
+# TESTING WITH PowerShell (Windows)
+# ============================================
+
+# --- Test 1: Health Check ---
+Invoke-WebRequest -Uri "http://localhost:8080/health" -Method GET | Select-Object -Expand Content
+
+# --- Test 2: Auto-detect Country ---
+Invoke-RestMethod -Uri "http://localhost:8080/api/detect-country" -Method GET | ConvertTo-Json
+
+# --- Test 3: Search Cities in Indonesia ---
+Invoke-RestMethod -Uri "http://localhost:8080/api/cities?country=ID&query=jakarta" -Method GET | ConvertTo-Json -Depth 5
+
+# --- Test 4: Get States for Jakarta ---
+Invoke-RestMethod -Uri "http://localhost:8080/api/states?country=ID&city=Jakarta" -Method GET | ConvertTo-Json -Depth 5
+
+# --- Test 5: Get ZIP Codes for Jakarta ---
+Invoke-RestMethod -Uri "http://localhost:8080/api/zipcodes?country=ID&city=Jakarta&state=DKI Jakarta" -Method GET | ConvertTo-Json -Depth 5
+
+# --- Test 6: Search Cities in USA ---
+Invoke-RestMethod -Uri "http://localhost:8080/api/cities?country=US&query=new york" -Method GET | ConvertTo-Json -Depth 5
+
+# --- Test 7: Get States for New York ---
+Invoke-RestMethod -Uri "http://localhost:8080/api/states?country=US&city=New York" -Method GET | ConvertTo-Json -Depth 5
+
+# --- Test 8: Get ZIP Codes for New York ---
+Invoke-RestMethod -Uri "http://localhost:8080/api/zipcodes?country=US&city=New York&state=NY" -Method GET | ConvertTo-Json -Depth 5
+
+# --- Pretty formatted PowerShell output ---
+$result = Invoke-RestMethod -Uri "http://localhost:8080/api/cities?country=ID&query=jakarta" -Method GET
+$result | ConvertTo-Json -Depth 5
+
+
+# ============================================
+# FLOW TESTING SCENARIO
+# ============================================
+
+# SCENARIO 1: Indonesian Address
+# Step 1: User types "jakarta" in city field
+curl "http://localhost:8080/api/cities?country=ID&query=jakarta"
+
+# Step 2: User selects "Jakarta" → Get provinces
+curl "http://localhost:8080/api/states?country=ID&city=Jakarta"
+
+# Step 3: User selects "DKI Jakarta" → Get ZIP codes
+curl "http://localhost:8080/api/zipcodes?country=ID&city=Jakarta&state=DKI%20Jakarta"
+
+
+# SCENARIO 2: USA Address
+# Step 1: Search for "Los Angeles"
+curl "http://localhost:8080/api/cities?country=US&query=los%20angeles"
+
+# Step 2: Get states for Los Angeles
+curl "http://localhost:8080/api/states?country=US&city=Los%20Angeles"
+
+# Step 3: Get ZIP codes for Los Angeles, CA
+curl "http://localhost:8080/api/zipcodes?country=US&city=Los%20Angeles&state=CA"
+
+
+# ============================================
+# ADVANCED TESTING
+# ============================================
+
+# Test with JSON pretty print (using jq if installed)
+curl "http://localhost:8080/api/cities?country=ID&query=jakarta" | jq
+
+# Test response time
+curl -w "@curl-format.txt" -o /dev/null -s "http://localhost:8080/api/cities?country=ID&query=jakarta"
+
+# Concurrent requests test (10 requests)
+for i in {1..10}; do
+  curl "http://localhost:8080/api/cities?country=ID&query=jakarta" &
+done
+wait
+
+
+# ============================================
+# ERROR TESTING
+# ============================================
+
+# Missing query parameter
+curl "http://localhost:8080/api/cities?country=ID"
+
+# Missing country parameter
+curl "http://localhost:8080/api/states?city=Jakarta"
+
+# Invalid country code
+curl "http://localhost:8080/api/cities?country=XX&query=test"

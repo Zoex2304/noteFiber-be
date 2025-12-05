@@ -1,0 +1,6342 @@
+﻿Generated Time    : 2025-12-05 18:22:42
+Technology Stack  : go
+Target Paths      : D:\notetaker\notefiber-BE
+Excluded Folders  : vendor, bin
+Config Bypass     : False
+Total Files       : 66
+Output Location   : D:\notetaker\notefiber-BE\docs\collection_go_20251205_182242.txt
+
+FILE: D:\notetaker\notefiber-BE\go.mod
+RELATIVE PATH: go.mod
+module ai-notetaking-be
+
+go 1.24.0
+
+require (
+	github.com/ThreeDotsLabs/watermill v1.4.7
+	github.com/gofiber/fiber/v2 v2.52.8
+	github.com/golang-jwt/jwt/v5 v5.3.0
+	github.com/midtrans/midtrans-go v1.3.8
+	github.com/pgvector/pgvector-go v0.3.0
+	golang.org/x/crypto v0.37.0
+	golang.org/x/oauth2 v0.33.0
+)
+
+require (
+	cloud.google.com/go/compute/metadata v0.3.0 // indirect
+	github.com/gabriel-vasile/mimetype v1.4.8 // indirect
+	github.com/go-playground/locales v0.14.1 // indirect
+	github.com/go-playground/universal-translator v0.18.1 // indirect
+	github.com/jackc/pgpassfile v1.0.0 // indirect
+	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
+	github.com/jackc/puddle/v2 v2.2.2 // indirect
+	github.com/leodido/go-urn v1.4.0 // indirect
+	github.com/lithammer/shortuuid/v3 v3.0.7 // indirect
+	github.com/oklog/ulid v1.3.1 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
+	golang.org/x/net v0.34.0 // indirect
+	golang.org/x/sync v0.13.0 // indirect
+	golang.org/x/text v0.24.0 // indirect
+)
+
+require (
+	github.com/andybalholm/brotli v1.1.0 // indirect
+	github.com/go-playground/validator/v10 v10.27.0
+	github.com/google/uuid v1.6.0
+	github.com/jackc/pgx/v5 v5.7.5
+	github.com/joho/godotenv v1.5.1
+	github.com/klauspost/compress v1.17.9 // indirect
+	github.com/mattn/go-colorable v0.1.13 // indirect
+	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/mattn/go-runewidth v0.0.16 // indirect
+	github.com/rivo/uniseg v0.2.0 // indirect
+	github.com/valyala/bytebufferpool v1.0.0 // indirect
+	github.com/valyala/fasthttp v1.51.0 // indirect
+	github.com/valyala/tcplisten v1.0.0 // indirect
+	golang.org/x/sys v0.32.0 // indirect
+)
+
+FILE: D:\notetaker\notefiber-BE\go.sum
+RELATIVE PATH: go.sum
+cloud.google.com/go/compute/metadata v0.3.0 h1:Tz+eQXMEqDIKRsmY3cHTL6FVaynIjX2QxYC4trgAKZc=
+cloud.google.com/go/compute/metadata v0.3.0/go.mod h1:zFmK7XCadkQkj6TtorcaGlCW1hT1fIilQDwofLpJ20k=
+entgo.io/ent v0.14.3 h1:wokAV/kIlH9TeklJWGGS7AYJdVckr0DloWjIcO9iIIQ=
+entgo.io/ent v0.14.3/go.mod h1:aDPE/OziPEu8+OWbzy4UlvWmD2/kbRuWfK2A40hcxJM=
+github.com/ThreeDotsLabs/watermill v1.4.7 h1:LiF4wMP400/psRTdHL/IcV1YIv9htHYFggbe2d6cLeI=
+github.com/ThreeDotsLabs/watermill v1.4.7/go.mod h1:Ks20MyglVnqjpha1qq0kjaQ+J9ay7bdnjszQ4cW9FMU=
+github.com/andybalholm/brotli v1.1.0 h1:eLKJA0d02Lf0mVpIDgYnqXcUn0GqVmEFny3VuID1U3M=
+github.com/andybalholm/brotli v1.1.0/go.mod h1:sms7XGricyQI9K10gOSf56VKKWS4oLer58Q+mhRPtnY=
+github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
+github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/gabriel-vasile/mimetype v1.4.8 h1:FfZ3gj38NjllZIeJAmMhr+qKL8Wu+nOoI3GqacKw1NM=
+github.com/gabriel-vasile/mimetype v1.4.8/go.mod h1:ByKUIKGjh1ODkGM1asKUbQZOLGrPjydw3hYPU2YU9t8=
+github.com/go-pg/pg/v10 v10.11.0 h1:CMKJqLgTrfpE/aOVeLdybezR2om071Vh38OLZjsyMI0=
+github.com/go-pg/pg/v10 v10.11.0/go.mod h1:4BpHRoxE61y4Onpof3x1a2SQvi9c+q1dJnrNdMjsroA=
+github.com/go-pg/zerochecker v0.2.0 h1:pp7f72c3DobMWOb2ErtZsnrPaSvHd2W4o9//8HtF4mU=
+github.com/go-pg/zerochecker v0.2.0/go.mod h1:NJZ4wKL0NmTtz0GKCoJ8kym6Xn/EQzXRl2OnAe7MmDo=
+github.com/go-playground/assert/v2 v2.2.0 h1:JvknZsQTYeFEAhQwI4qEt9cyV5ONwRHC+lYKSsYSR8s=
+github.com/go-playground/assert/v2 v2.2.0/go.mod h1:VDjEfimB/XKnb+ZQfWdccd7VUvScMdVu0Titje2rxJ4=
+github.com/go-playground/locales v0.14.1 h1:EWaQ/wswjilfKLTECiXz7Rh+3BjFhfDFKv/oXslEjJA=
+github.com/go-playground/locales v0.14.1/go.mod h1:hxrqLVvrK65+Rwrd5Fc6F2O76J/NuW9t0sjnWqG1slY=
+github.com/go-playground/universal-translator v0.18.1 h1:Bcnm0ZwsGyWbCzImXv+pAJnYK9S473LQFuzCbDbfSFY=
+github.com/go-playground/universal-translator v0.18.1/go.mod h1:xekY+UJKNuX9WP91TpwSH2VMlDf28Uj24BCp08ZFTUY=
+github.com/go-playground/validator/v10 v10.27.0 h1:w8+XrWVMhGkxOaaowyKH35gFydVHOvC0/uWoy2Fzwn4=
+github.com/go-playground/validator/v10 v10.27.0/go.mod h1:I5QpIEbmr8On7W0TktmJAumgzX4CA1XNl4ZmDuVHKKo=
+github.com/gofiber/fiber/v2 v2.52.8 h1:xl4jJQ0BV5EJTA2aWiKw/VddRpHrKeZLF0QPUxqn0x4=
+github.com/gofiber/fiber/v2 v2.52.8/go.mod h1:YEcBbO/FB+5M1IZNBP9FO3J9281zgPAreiI1oqg8nDw=
+github.com/golang-jwt/jwt/v5 v5.3.0 h1:pv4AsKCKKZuqlgs5sUmn4x8UlGa0kEVt/puTpKx9vvo=
+github.com/golang-jwt/jwt/v5 v5.3.0/go.mod h1:fxCRLWMO43lRc8nhHWY6LGqRcf+1gQWArsqaEUEa5bE=
+github.com/google/uuid v1.2.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
+github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=
+github.com/google/uuid v1.6.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
+github.com/jackc/pgpassfile v1.0.0 h1:/6Hmqy13Ss2zCq62VdNG8tM1wchn8zjSGOBJ6icpsIM=
+github.com/jackc/pgpassfile v1.0.0/go.mod h1:CEx0iS5ambNFdcRtxPj5JhEz+xB6uRky5eyVu/W2HEg=
+github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 h1:iCEnooe7UlwOQYpKFhBabPMi4aNAfoODPEFNiAnClxo=
+github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761/go.mod h1:5TJZWKEWniPve33vlWYSoGYefn3gLQRzjfDlhSJ9ZKM=
+github.com/jackc/pgx/v5 v5.7.5 h1:JHGfMnQY+IEtGM63d+NGMjoRpysB2JBwDr5fsngwmJs=
+github.com/jackc/pgx/v5 v5.7.5/go.mod h1:aruU7o91Tc2q2cFp5h4uP3f6ztExVpyVv88Xl/8Vl8M=
+github.com/jackc/puddle/v2 v2.2.2 h1:PR8nw+E/1w0GLuRFSmiioY6UooMp6KJv0/61nB7icHo=
+github.com/jackc/puddle/v2 v2.2.2/go.mod h1:vriiEXHvEE654aYKXXjOvZM39qJ0q+azkZFrfEOc3H4=
+github.com/jinzhu/inflection v1.0.0 h1:K317FqzuhWc8YvSVlFMCCUb36O/S9MCKRDI7QkRKD/E=
+github.com/jinzhu/inflection v1.0.0/go.mod h1:h+uFLlag+Qp1Va5pdKtLDYj+kHp5pxUVkryuEj+Srlc=
+github.com/jinzhu/now v1.1.5 h1:/o9tlHleP7gOFmsnYNz3RGnqzefHA47wQpKrrdTIwXQ=
+github.com/jinzhu/now v1.1.5/go.mod h1:d3SSVoowX0Lcu0IBviAWJpolVfI5UJVZZ7cO71lE/z8=
+github.com/jmoiron/sqlx v1.3.5 h1:vFFPA71p1o5gAeqtEAwLU4dnX2napprKtHr7PYIcN3g=
+github.com/jmoiron/sqlx v1.3.5/go.mod h1:nRVWtLre0KfCLJvgxzCsLVMogSvQ1zNJtpYr2Ccp0mQ=
+github.com/joho/godotenv v1.5.1 h1:7eLL/+HRGLY0ldzfGMeQkb7vMd0as4CfYvUVzLqw0N0=
+github.com/joho/godotenv v1.5.1/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa6DnEwAbqwq4=
+github.com/klauspost/compress v1.17.9 h1:6KIumPrER1LHsvBVuDa0r5xaG0Es51mhhB9BQB2qeMA=
+github.com/klauspost/compress v1.17.9/go.mod h1:Di0epgTjJY877eYKx5yC51cX2A2Vl2ibi7bDH9ttBbw=
+github.com/leodido/go-urn v1.4.0 h1:WT9HwE9SGECu3lg4d/dIA+jxlljEa1/ffXKmRjqdmIQ=
+github.com/leodido/go-urn v1.4.0/go.mod h1:bvxc+MVxLKB4z00jd1z+Dvzr47oO32F/QSNjSBOlFxI=
+github.com/lib/pq v1.10.9 h1:YXG7RB+JIjhP29X+OtkiDnYaXQwpS4JEWq7dtCCRUEw=
+github.com/lib/pq v1.10.9/go.mod h1:AlVN5x4E4T544tWzH6hKfbfQvm3HdbOxrmggDNAPY9o=
+github.com/lithammer/shortuuid/v3 v3.0.7 h1:trX0KTHy4Pbwo/6ia8fscyHoGA+mf1jWbPJVuvyJQQ8=
+github.com/lithammer/shortuuid/v3 v3.0.7/go.mod h1:vMk8ke37EmiewwolSO1NLW8vP4ZaKlRuDIi8tWWmAts=
+github.com/mattn/go-colorable v0.1.13 h1:fFA4WZxdEF4tXPZVKMLwD8oUnCTTo08duU7wxecdEvA=
+github.com/mattn/go-colorable v0.1.13/go.mod h1:7S9/ev0klgBDR4GtXTXX8a3vIGJpMovkB8vQcUbaXHg=
+github.com/mattn/go-isatty v0.0.16/go.mod h1:kYGgaQfpe5nmfYZH+SKPsOc2e4SrIfOl2e/yFXSvRLM=
+github.com/mattn/go-isatty v0.0.20 h1:xfD0iDuEKnDkl03q4limB+vH+GxLEtL/jb4xVJSWWEY=
+github.com/mattn/go-isatty v0.0.20/go.mod h1:W+V8PltTTMOvKvAeJH7IuucS94S2C6jfK/D7dTCTo3Y=
+github.com/mattn/go-runewidth v0.0.16 h1:E5ScNMtiwvlvB5paMFdw9p4kSQzbXFikJ5SQO6TULQc=
+github.com/mattn/go-runewidth v0.0.16/go.mod h1:Jdepj2loyihRzMpdS35Xk/zdY8IAYHsh153qUoGf23w=
+github.com/midtrans/midtrans-go v1.3.8 h1:r6eq51LJwbMQ05dBF3Twg99u45G3pLxP5INYoqOoNzU=
+github.com/midtrans/midtrans-go v1.3.8/go.mod h1:5hN2oiZDP3/SwSBxHPTg8eC/RVoRE9DXQOY1Ah9au10=
+github.com/oklog/ulid v1.3.1 h1:EGfNDEx6MqHz8B3uNV6QAib1UR2Lm97sHi3ocA6ESJ4=
+github.com/oklog/ulid v1.3.1/go.mod h1:CirwcVhetQ6Lv90oh/F+FBtV6XMibvdAFo93nm5qn4U=
+github.com/pgvector/pgvector-go v0.3.0 h1:Ij+Yt78R//uYqs3Zk35evZFvr+G0blW0OUN+Q2D1RWc=
+github.com/pgvector/pgvector-go v0.3.0/go.mod h1:duFy+PXWfW7QQd5ibqutBO4GxLsUZ9RVXhFZGIBsWSA=
+github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
+github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
+github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
+github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
+github.com/rivo/uniseg v0.2.0 h1:S1pD9weZBuJdFmowNwbpi7BJ8TNftyUImj/0WQi72jY=
+github.com/rivo/uniseg v0.2.0/go.mod h1:J6wj4VEh+S6ZtnVlnTBMWIodfgj8LQOQFoIToxlJtxc=
+github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
+github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
+github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
+github.com/stretchr/testify v1.9.0 h1:HtqpIVDClZ4nwg75+f6Lvsy/wHu+3BoSGCbBAcpTsTg=
+github.com/stretchr/testify v1.9.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
+github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc h1:9lRDQMhESg+zvGYmW5DyG0UqvY96Bu5QYsTLvCHdrgo=
+github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc/go.mod h1:bciPuU6GHm1iF1pBvUfxfsH0Wmnc2VbpgvbI9ZWuIRs=
+github.com/uptrace/bun v1.1.12 h1:sOjDVHxNTuM6dNGaba0wUuz7KvDE1BmNu9Gqs2gJSXQ=
+github.com/uptrace/bun v1.1.12/go.mod h1:NPG6JGULBeQ9IU6yHp7YGELRa5Agmd7ATZdz4tGZ6z0=
+github.com/uptrace/bun/dialect/pgdialect v1.1.12 h1:m/CM1UfOkoBTglGO5CUTKnIKKOApOYxkcP2qn0F9tJk=
+github.com/uptrace/bun/dialect/pgdialect v1.1.12/go.mod h1:Ij6WIxQILxLlL2frUBxUBOZJtLElD2QQNDcu/PWDHTc=
+github.com/uptrace/bun/driver/pgdriver v1.1.12 h1:3rRWB1GK0psTJrHwxzNfEij2MLibggiLdTqjTtfHc1w=
+github.com/uptrace/bun/driver/pgdriver v1.1.12/go.mod h1:ssYUP+qwSEgeDDS1xm2XBip9el1y9Mi5mTAvLoiADLM=
+github.com/valyala/bytebufferpool v1.0.0 h1:GqA5TC/0021Y/b9FG4Oi9Mr3q7XYx6KllzawFIhcdPw=
+github.com/valyala/bytebufferpool v1.0.0/go.mod h1:6bBcMArwyJ5K/AmCkWv1jt77kVWyCJ6HpOuEn7z0Csc=
+github.com/valyala/fasthttp v1.51.0 h1:8b30A5JlZ6C7AS81RsWjYMQmrZG6feChmgAolCl1SqA=
+github.com/valyala/fasthttp v1.51.0/go.mod h1:oI2XroL+lI7vdXyYoQk03bXBThfFl2cVdIA3Xl7cH8g=
+github.com/valyala/tcplisten v1.0.0 h1:rBHj/Xf+E1tRGZyWIWwJDiRY0zc1Js+CV5DqwacVSA8=
+github.com/valyala/tcplisten v1.0.0/go.mod h1:T0xQ8SeCZGxckz9qRXTfG43PvQ/mcWh7FwZEA7Ioqkc=
+github.com/vmihailenco/bufpool v0.1.11 h1:gOq2WmBrq0i2yW5QJ16ykccQ4wH9UyEsgLm6czKAd94=
+github.com/vmihailenco/bufpool v0.1.11/go.mod h1:AFf/MOy3l2CFTKbxwt0mp2MwnqjNEs5H/UxrkA5jxTQ=
+github.com/vmihailenco/msgpack/v5 v5.3.5 h1:5gO0H1iULLWGhs2H5tbAHIZTV8/cYafcFOr9znI5mJU=
+github.com/vmihailenco/msgpack/v5 v5.3.5/go.mod h1:7xyJ9e+0+9SaZT0Wt1RGleJXzli6Q/V5KbhBonMG9jc=
+github.com/vmihailenco/tagparser v0.1.2 h1:gnjoVuB/kljJ5wICEEOpx98oXMWPLj22G67Vbd1qPqc=
+github.com/vmihailenco/tagparser v0.1.2/go.mod h1:OeAg3pn3UbLjkWt+rN9oFYB6u/cQgqMEUPoW2WPyhdI=
+github.com/vmihailenco/tagparser/v2 v2.0.0 h1:y09buUbR+b5aycVFQs/g70pqKVZNBmxwAhO7/IwNM9g=
+github.com/vmihailenco/tagparser/v2 v2.0.0/go.mod h1:Wri+At7QHww0WTrCBeu4J6bNtoV6mEfg5OIWRZA9qds=
+github.com/x448/float16 v0.8.4 h1:qLwI1I70+NjRFUR3zs1JPUCgaCXSh3SW62uAKT1mSBM=
+github.com/x448/float16 v0.8.4/go.mod h1:14CWIYCyZA/cWjXOioeEpHeN/83MdbZDRQHoFcYsOfg=
+golang.org/x/crypto v0.37.0 h1:kJNSjF/Xp7kU0iB2Z+9viTPMW4EqqsrywMXLJOOsXSE=
+golang.org/x/crypto v0.37.0/go.mod h1:vg+k43peMZ0pUMhYmVAWysMK35e6ioLh3wB8ZCAfbVc=
+golang.org/x/net v0.34.0 h1:Mb7Mrk043xzHgnRM88suvJFwzVrRfHEHJEl5/71CKw0=
+golang.org/x/net v0.34.0/go.mod h1:di0qlW3YNM5oh6GqDGQr92MyTozJPmybPK4Ev/Gm31k=
+golang.org/x/oauth2 v0.33.0 h1:4Q+qn+E5z8gPRJfmRy7C2gGG3T4jIprK6aSYgTXGRpo=
+golang.org/x/oauth2 v0.33.0/go.mod h1:lzm5WQJQwKZ3nwavOZ3IS5Aulzxi68dUSgRHujetwEA=
+golang.org/x/sync v0.13.0 h1:AauUjRAJ9OSnvULf/ARrrVywoJDy0YS2AwQ98I37610=
+golang.org/x/sync v0.13.0/go.mod h1:1dzgHSNfp02xaA81J2MS99Qcpr2w7fw1gpm99rleRqA=
+golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+golang.org/x/sys v0.6.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+golang.org/x/sys v0.32.0 h1:s77OFDvIQeibCmezSnk/q6iAfkdiQaJi4VzroCFrN20=
+golang.org/x/sys v0.32.0/go.mod h1:BJP2sWEmIv4KK5OTEluFJCKSidICx8ciO85XgH3Ak8k=
+golang.org/x/text v0.24.0 h1:dd5Bzh4yt5KYA8f9CJHCP4FB4D51c2c6JvN37xJJkJ0=
+golang.org/x/text v0.24.0/go.mod h1:L8rBsPeo2pSS+xqN0d5u2ikmjtmoJbDBT1b7nHvFCdU=
+gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
+gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
+gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
+gopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
+gorm.io/driver/postgres v1.5.4 h1:Iyrp9Meh3GmbSuyIAGyjkN+n9K+GHX9b9MqsTL4EJCo=
+gorm.io/driver/postgres v1.5.4/go.mod h1:Bgo89+h0CRcdA33Y6frlaHHVuTdOf87pmyzwW9C/BH0=
+gorm.io/gorm v1.25.5 h1:zR9lOiiYf09VNh5Q1gphfyia1JpiClIWG9hQaxB/mls=
+gorm.io/gorm v1.25.5/go.mod h1:hbnx/Oo0ChWMn1BIhpy1oYozzpM15i4YPuHDmfYtwg8=
+mellium.im/sasl v0.3.1 h1:wE0LW6g7U83vhvxjC1IY8DnXM+EU095yeo8XClvCdfo=
+mellium.im/sasl v0.3.1/go.mod h1:xm59PUYpZHhgQ9ZqoJ5QaCqzWMi8IeS49dhp6plPCzw=
+
+FILE: D:\notetaker\notefiber-BE\list_models.go
+RELATIVE PATH: list_models.go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+)
+
+func main() {
+	fmt.Println("=================================")
+	fmt.Println("  List Available Gemini Models")
+	fmt.Println("=================================")
+	
+	var apiKey string
+	fmt.Print("\nEnter your Gemini API Key: ")
+	fmt.Scanln(&apiKey)
+	
+	if apiKey == "" {
+		fmt.Println("âŒ API Key cannot be empty!")
+		return
+	}
+	
+	// List models from v1beta
+	fmt.Println("\n=== Available Models (v1beta) ===")
+	listModels(apiKey, "v1beta")
+	
+	// List models from v1
+	fmt.Println("\n=== Available Models (v1) ===")
+	listModels(apiKey, "v1")
+}
+
+func listModels(apiKey, version string) {
+	url := fmt.Sprintf("https://generativelanguage.googleapis.com/%s/models?key=%s", version, apiKey)
+	
+	res, err := http.Get(url)
+	if err != nil {
+		fmt.Println("âŒ Error:", err)
+		return
+	}
+	
+	body, _ := io.ReadAll(res.Body)
+	
+	if res.StatusCode != 200 {
+		fmt.Printf("âŒ Status: %d\n", res.StatusCode)
+		fmt.Println("Response:", string(body))
+		return
+	}
+	
+	var result map[string]interface{}
+	json.Unmarshal(body, &result)
+	
+	models := result["models"].([]interface{})
+	
+	fmt.Printf("\nFound %d models:\n\n", len(models))
+	
+	for _, m := range models {
+		model := m.(map[string]interface{})
+		name := model["name"].(string)
+		
+		// Check supported methods
+		methods := []string{}
+		if supportedMethods, ok := model["supportedGenerationMethods"].([]interface{}); ok {
+			for _, method := range supportedMethods {
+				methods = append(methods, method.(string))
+			}
+		}
+		
+		// Filter only models that support generateContent
+		hasGenerateContent := false
+		for _, method := range methods {
+			if method == "generateContent" {
+				hasGenerateContent = true
+				break
+			}
+		}
+		
+		if hasGenerateContent {
+			fmt.Printf("âœ… %s\n", name)
+			fmt.Printf("   Methods: %v\n\n", methods)
+		}
+	}
+}
+FILE: D:\notetaker\notefiber-BE\test_gemini.go
+RELATIVE PATH: test_gemini.go
+package main
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+)
+
+func testChat(apiKey string) {
+	fmt.Println("\n=== Testing Gemini Chat (gemini-2.0-flash) ===")
+	
+	payload := map[string]interface{}{
+		"contents": []map[string]interface{}{
+			{
+				"parts": []map[string]string{
+					{"text": "Hello! Say 'Working!' if you can read this."},
+				},
+			},
+		},
+	}
+	
+	payloadJson, _ := json.Marshal(payload)
+	
+	// VERIFIED: v1beta endpoint with gemini-2.0-flash (from ListModels)
+	req, _ := http.NewRequest(
+		"POST",
+		"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+		bytes.NewBuffer(payloadJson),
+	)
+	
+	req.Header.Set("x-goog-api-key", apiKey)
+	req.Header.Set("Content-Type", "application/json")
+	
+	client := &http.Client{}
+	res, err := client.Do(req)
+	if err != nil {
+		fmt.Println("âŒ Error:", err)
+		return
+	}
+	
+	body, _ := io.ReadAll(res.Body)
+	
+	if res.StatusCode != 200 {
+		fmt.Printf("âŒ Status: %d\n", res.StatusCode)
+		fmt.Println("Response:", string(body))
+		return
+	}
+	
+	var result map[string]interface{}
+	json.Unmarshal(body, &result)
+	
+	candidates := result["candidates"].([]interface{})
+	content := candidates[0].(map[string]interface{})["content"].(map[string]interface{})
+	parts := content["parts"].([]interface{})
+	text := parts[0].(map[string]interface{})["text"].(string)
+	
+	fmt.Println("âœ… Chat Response:", text)
+}
+
+func testEmbedding(apiKey string) {
+	fmt.Println("\n=== Testing Gemini Embedding (text-embedding-004) ===")
+	
+	payload := map[string]interface{}{
+		"model": "models/text-embedding-004",
+		"content": map[string]interface{}{
+			"parts": []map[string]string{
+				{"text": "Hello world"},
+			},
+		},
+	}
+	
+	payloadJson, _ := json.Marshal(payload)
+	
+	// OFFICIAL: v1beta endpoint with text-embedding-004
+	req, _ := http.NewRequest(
+		"POST",
+		"https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent",
+		bytes.NewBuffer(payloadJson),
+	)
+	
+	req.Header.Set("x-goog-api-key", apiKey)
+	req.Header.Set("Content-Type", "application/json")
+	
+	client := &http.Client{}
+	res, err := client.Do(req)
+	if err != nil {
+		fmt.Println("âŒ Error:", err)
+		return
+	}
+	
+	body, _ := io.ReadAll(res.Body)
+	
+	if res.StatusCode != 200 {
+		fmt.Printf("âŒ Status: %d\n", res.StatusCode)
+		fmt.Println("Response:", string(body))
+		return
+	}
+	
+	var result map[string]interface{}
+	json.Unmarshal(body, &result)
+	
+	embedding := result["embedding"].(map[string]interface{})
+	values := embedding["values"].([]interface{})
+	
+	fmt.Printf("âœ… Embedding Generated: %d dimensions\n", len(values))
+	fmt.Printf("   First 5 values: %.4f, %.4f, %.4f, %.4f, %.4f\n", 
+		values[0].(float64), values[1].(float64), values[2].(float64), 
+		values[3].(float64), values[4].(float64))
+}
+
+func main() {
+	fmt.Println("=================================")
+	fmt.Println("  Gemini API Testing Tool")
+	fmt.Println("  Based on Official Docs")
+	fmt.Println("=================================")
+	
+	var apiKey string
+	fmt.Print("\nEnter your Gemini API Key: ")
+	fmt.Scanln(&apiKey)
+	
+	if apiKey == "" {
+		fmt.Println("âŒ API Key cannot be empty!")
+		return
+	}
+	
+	testChat(apiKey)
+	testEmbedding(apiKey)
+	
+	fmt.Println("\n=================================")
+	fmt.Println("  Testing Complete!")
+	fmt.Println("=================================")
+	fmt.Println("\nModels tested:")
+	fmt.Println("  â€¢ Chat: gemini-1.5-flash")
+	fmt.Println("  â€¢ Embedding: text-embedding-004")
+}
+FILE: D:\notetaker\notefiber-BE\cmd\rest\main.go
+RELATIVE PATH: cmd\rest\main.go
+// FILE: cmd/rest/main.go
+package main
+
+import (
+	"ai-notetaking-be/internal/controller"
+	"ai-notetaking-be/internal/pkg/serverutils"
+	"ai-notetaking-be/internal/repository"
+	"ai-notetaking-be/internal/service"
+	"ai-notetaking-be/pkg/database"
+	"context"
+	"fmt"
+	"log"
+	"os"
+
+	"github.com/ThreeDotsLabs/watermill"
+	"github.com/ThreeDotsLabs/watermill/pubsub/gochannel"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/joho/godotenv"
+)
+
+func main() {
+	godotenv.Load()
+	app := fiber.New(fiber.Config{
+		BodyLimit: 10 * 1024 * 1024,
+	})
+
+	app.Use(cors.New())
+
+	app.Use(serverutils.ErrorHandlerMiddleware())
+
+	db := database.ConnectDB(os.Getenv("DB_CONNECTION_STRING"))
+
+	// --- Repositories ---
+	exampleRepository := repository.NewExampleRepository(db)
+	notebookRepository := repository.NewNotebookRepository(db)
+	noteRepository := repository.NewNoteRepository(db)
+	noteEmbeddingRepository := repository.NewNoteEmbeddingRepository(db)
+	chatSessionRepository := repository.NewChatSessionRepository(db)
+	chatMessageRepository := repository.NewChatMessageRepository(db)
+	chatMessageRawRepository := repository.NewChatMessageRawRepository(db)
+
+	// User, Sub, Log Repos
+	userRepository := repository.NewUserRepository(db)
+	subscriptionRepository := repository.NewSubscriptionRepository(db)
+	logRepository := repository.NewLogRepository(db) // Correctly initialized
+
+	// --- Event Bus ---
+	watermillLogger := watermill.NewStdLogger(false, false)
+	pubSub := gochannel.NewGoChannel(
+		gochannel.Config{},
+		watermillLogger,
+	)
+	publisherService := service.NewPublisherService(
+		os.Getenv("EMBED_NOTE_CONTENT_TOPIC_NAME"),
+		pubSub,
+	)
+	consumerService := service.NewConsumerService(
+		pubSub,
+		os.Getenv("EMBED_NOTE_CONTENT_TOPIC_NAME"),
+		noteRepository,
+		noteEmbeddingRepository,
+		notebookRepository,
+		db,
+	)
+
+	// --- Services ---
+	exampleService := service.NewExampleService(exampleRepository)
+	notebookService := service.NewNotebookService(
+		notebookRepository,
+		noteRepository,
+		db,
+		publisherService,
+		noteEmbeddingRepository,
+	)
+	noteService := service.NewNoteService(noteRepository, publisherService, noteEmbeddingRepository, db)
+	chatbotService := service.NewChatbotService(
+		db,
+		chatSessionRepository,
+		chatMessageRepository,
+		chatMessageRawRepository,
+		noteEmbeddingRepository,
+	)
+
+	// Business Services
+	authService := service.NewAuthService(userRepository)
+	paymentService := service.NewPaymentService(subscriptionRepository, userRepository)
+	userService := service.NewUserService(userRepository)
+	
+	// FIXED: Passed 3 arguments as required by NewAdminService
+	adminService := service.NewAdminService(userRepository, subscriptionRepository, logRepository)
+	
+	oauthService := service.NewOAuthService(userRepository)
+
+	// --- Controllers ---
+	exampleController := controller.NewExampleController(exampleService)
+	notebookController := controller.NewNotebookController(notebookService)
+	noteController := controller.NewNoteController(noteService)
+	chatbotController := controller.NewChatbotController(chatbotService)
+
+	authController := controller.NewAuthController(authService)
+	paymentController := controller.NewPaymentController(paymentService)
+	userController := controller.NewUserController(userService)
+	adminController := controller.NewAdminController(adminService)
+	oauthController := controller.NewOAuthController(oauthService)
+
+	// --- Routes ---
+	api := app.Group("/api")
+	exampleController.RegisterRoutes(api)
+	notebookController.RegisterRoutes(api)
+	noteController.RegisterRoutes(api)
+	chatbotController.RegisterRoutes(api)
+	authController.RegisterRoutes(api)
+	paymentController.RegisterRoutes(api)
+	userController.RegisterRoutes(api)
+	adminController.RegisterRoutes(api)
+	oauthController.RegisterRoutes(api)
+
+	// --- Background Consumers ---
+	err := consumerService.Consume(context.Background())
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Server is running")
+	log.Fatal(app.Listen(":3000"))
+}
+FILE: D:\notetaker\notefiber-BE\internal\constant\chatbot_constant.go
+RELATIVE PATH: internal\constant\chatbot_constant.go
+package constant
+
+const (
+	ChatMessageRoleUser  = "user"
+	ChatMessageRoleModel = "model"
+
+	// UPDATED: Added strict instruction to cite sources (Note Title & Notebook Title)
+	ChatMessageRawInitialUserPromptV1 = `You are a chatbot assistant that will answer your user question based on references provided. You must answer based on user next chat language even the reference is in different language. There reference I provide will have reference number, never recall the reference using number since the number is only for raw chat session. This chat session is raw session that will be formatted again later. I'll give you reference before you answering. IMPORTANT: When answering based on provided references, you MUST explicitly mention the source (Note Title and Notebook Title) found in the reference text to support your answer. You must answer don't know if you don't have enough reference.`
+
+	ChatMessageRawInitialModelPromptV1 = `Understood. I will answer your questions based solely on the provided references, and I will indicate if I do not have enough information to answer. I will also adapt my responses to the language you use in your subsequent turns. I will not refer to the references by their numbers, but I WILL explicitly mention the Note Title and Notebook Title as sources when I use information from them.\n`
+
+	DecideUseRAGMessageRawInitialUserPromptV1 = `You are a chatbot assistant that will answer your user question based on references provided. In this session, you will provide true or false data. True if you can answer directly without other information, false otherwise.`
+
+	DecideUseRAGMessageRawInitialModelPromptV1 = `Okay, I understand. I will answer "True" if I can definitively answer the user's question based solely on my existing knowledge, and "False" if I cannot. I will not attempt to make educated guesses or provide potentially inaccurate information. I will wait for your question.\n`
+)
+FILE: D:\notetaker\notefiber-BE\internal\controller\admin_controller.go
+RELATIVE PATH: internal\controller\admin_controller.go
+// FILE: internal/controller/admin_controller.go
+package controller
+
+import (
+	"ai-notetaking-be/internal/dto"
+	"ai-notetaking-be/internal/pkg/serverutils"
+	"ai-notetaking-be/internal/service"
+	"strconv"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
+)
+
+type IAdminController interface {
+	RegisterRoutes(r fiber.Router)
+	GetDashboardStats(ctx *fiber.Ctx) error
+	GetUserGrowth(ctx *fiber.Ctx) error
+	GetAllUsers(ctx *fiber.Ctx) error
+	GetUserDetail(ctx *fiber.Ctx) error
+	UpdateUserStatus(ctx *fiber.Ctx) error
+	GetTransactions(ctx *fiber.Ctx) error
+	GetLogs(ctx *fiber.Ctx) error
+	GetLogDetail(ctx *fiber.Ctx) error
+}
+
+type adminController struct {
+	service service.IAdminService
+}
+
+func NewAdminController(service service.IAdminService) IAdminController {
+	return &adminController{service: service}
+}
+
+// Middleware to check for Admin Role
+// This logic assumes JWT claims have "role": "admin"
+func (c *adminController) adminMiddleware(ctx *fiber.Ctx) error {
+    // For now, assume this middleware logic is handled or copy the helper function
+    // For simplicity in this file block, I'll refer to the previously established middleware pattern.
+    // If you need the full middleware code again, I can provide it.
+    // Assuming standard JWT middleware is applied before or inside routes.
+    return serverutils.JwtMiddleware(ctx) 
+}
+
+func (c *adminController) RegisterRoutes(r fiber.Router) {
+	h := r.Group("/admin")
+	// h.Use(c.adminMiddleware) // Ensure middleware is applied
+
+	// Dashboard
+	h.Get("/dashboard", c.GetDashboardStats)
+	h.Get("/growth", c.GetUserGrowth) 
+
+	// Users
+	h.Get("/users", c.GetAllUsers) 
+	h.Get("/users/:id", c.GetUserDetail) 
+	h.Put("/users/:id/status", c.UpdateUserStatus)
+
+	// Transactions
+	h.Get("/transactions", c.GetTransactions)
+
+	// Logs
+	h.Get("/logs", c.GetLogs)
+	h.Get("/logs/:id", c.GetLogDetail)
+}
+
+func (c *adminController) GetDashboardStats(ctx *fiber.Ctx) error {
+	stats, err := c.service.GetDashboardStats(ctx.Context())
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(serverutils.ErrorResponse(500, err.Error()))
+	}
+	return ctx.JSON(serverutils.SuccessResponse("Dashboard stats", stats))
+}
+
+func (c *adminController) GetUserGrowth(ctx *fiber.Ctx) error {
+	stats, err := c.service.GetUserGrowth(ctx.Context())
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(serverutils.ErrorResponse(500, err.Error()))
+	}
+	return ctx.JSON(serverutils.SuccessResponse("User growth stats", stats))
+}
+
+func (c *adminController) GetAllUsers(ctx *fiber.Ctx) error {
+	page, _ := strconv.Atoi(ctx.Query("page", "1"))
+	limit, _ := strconv.Atoi(ctx.Query("limit", "10"))
+	search := ctx.Query("q", "")
+
+	users, err := c.service.GetAllUsers(ctx.Context(), page, limit, search)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(serverutils.ErrorResponse(500, err.Error()))
+	}
+	return ctx.JSON(serverutils.SuccessResponse("User list", users))
+}
+
+func (c *adminController) GetUserDetail(ctx *fiber.Ctx) error {
+	idParam := ctx.Params("id")
+	userId, _ := uuid.Parse(idParam)
+
+	user, err := c.service.GetUserDetail(ctx.Context(), userId)
+	if err != nil {
+		return ctx.Status(fiber.StatusNotFound).JSON(serverutils.ErrorResponse(404, "User not found"))
+	}
+	return ctx.JSON(serverutils.SuccessResponse("User detail", user))
+}
+
+func (c *adminController) UpdateUserStatus(ctx *fiber.Ctx) error {
+	idParam := ctx.Params("id")
+	userId, err := uuid.Parse(idParam)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(serverutils.ErrorResponse(400, "Invalid User ID"))
+	}
+
+	var req dto.UpdateUserStatusRequest
+	if err := ctx.BodyParser(&req); err != nil {
+		return err
+	}
+
+	err = c.service.UpdateUserStatus(ctx.Context(), userId, req.Status)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(serverutils.ErrorResponse(500, err.Error()))
+	}
+	return ctx.JSON(serverutils.SuccessResponse[any]("User status updated", nil))
+}
+
+func (c *adminController) GetTransactions(ctx *fiber.Ctx) error {
+	page, _ := strconv.Atoi(ctx.Query("page", "1"))
+	limit, _ := strconv.Atoi(ctx.Query("limit", "10"))
+	status := ctx.Query("status", "") 
+
+	txs, err := c.service.GetTransactions(ctx.Context(), page, limit, status)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(serverutils.ErrorResponse(500, err.Error()))
+	}
+	return ctx.JSON(serverutils.SuccessResponse("Transactions", txs))
+}
+
+func (c *adminController) GetLogs(ctx *fiber.Ctx) error {
+	page, _ := strconv.Atoi(ctx.Query("page", "1"))
+	limit, _ := strconv.Atoi(ctx.Query("limit", "10"))
+	level := ctx.Query("level", "")
+
+	logs, err := c.service.GetSystemLogs(ctx.Context(), page, limit, level)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(serverutils.ErrorResponse(500, err.Error()))
+	}
+	return ctx.JSON(serverutils.SuccessResponse("System logs", logs))
+}
+
+func (c *adminController) GetLogDetail(ctx *fiber.Ctx) error {
+	idParam := ctx.Params("id")
+	logId, _ := uuid.Parse(idParam)
+
+	l, err := c.service.GetLogDetail(ctx.Context(), logId)
+	if err != nil {
+		return ctx.Status(fiber.StatusNotFound).JSON(serverutils.ErrorResponse(404, "Log not found"))
+	}
+	return ctx.JSON(serverutils.SuccessResponse("Log detail", l))
+}
+FILE: D:\notetaker\notefiber-BE\internal\controller\auth_controller.go
+RELATIVE PATH: internal\controller\auth_controller.go
+// FILE: internal/controller/auth_controller.go
+package controller
+
+import (
+	"ai-notetaking-be/internal/dto"
+	"ai-notetaking-be/internal/service"
+
+	"github.com/gofiber/fiber/v2"
+)
+
+type IAuthController interface {
+	RegisterRoutes(r fiber.Router)
+	Register(ctx *fiber.Ctx) error
+	Login(ctx *fiber.Ctx) error
+	ForgotPassword(ctx *fiber.Ctx) error
+	ResetPassword(ctx *fiber.Ctx) error
+	VerifyEmail(ctx *fiber.Ctx) error
+	Logout(ctx *fiber.Ctx) error // New
+}
+
+type authController struct {
+	service service.IAuthService
+}
+
+func NewAuthController(service service.IAuthService) IAuthController {
+	return &authController{service: service}
+}
+
+func (c *authController) RegisterRoutes(r fiber.Router) {
+	h := r.Group("/auth")
+	h.Post("/register", c.Register)
+	h.Post("/verify-email", c.VerifyEmail)
+	h.Post("/login", c.Login)
+	h.Post("/forgot-password", c.ForgotPassword)
+	h.Post("/reset-password", c.ResetPassword)
+	h.Post("/logout", c.Logout) // New Route
+}
+
+func (c *authController) Register(ctx *fiber.Ctx) error {
+	var req dto.RegisterRequest
+	if err := ctx.BodyParser(&req); err != nil {
+		return err
+	}
+
+	res, err := c.service.Register(ctx.Context(), &req)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"success": false,
+			"code":    400,
+			"message": err.Error(),
+		})
+	}
+	return ctx.JSON(fiber.Map{
+		"success": true,
+		"code":    200,
+		"message": "User registered successfully. Check console for OTP.",
+		"data":    res,
+	})
+}
+
+func (c *authController) VerifyEmail(ctx *fiber.Ctx) error {
+	var req dto.VerifyEmailRequest
+	if err := ctx.BodyParser(&req); err != nil {
+		return err
+	}
+
+	err := c.service.VerifyEmail(ctx.Context(), &req)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"success": false,
+			"code":    400,
+			"message": err.Error(),
+		})
+	}
+
+	return ctx.JSON(fiber.Map{
+		"success": true,
+		"code":    200,
+		"message": "Email verified successfully",
+		"data":    nil,
+	})
+}
+
+func (c *authController) Login(ctx *fiber.Ctx) error {
+	var req dto.LoginRequest
+	if err := ctx.BodyParser(&req); err != nil {
+		return err
+	}
+
+	res, err := c.service.Login(ctx.Context(), &req)
+	if err != nil {
+		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"success": false,
+			"code":    401,
+			"message": err.Error(),
+		})
+	}
+	return ctx.JSON(fiber.Map{
+		"success": true,
+		"code":    200,
+		"message": "Login successful",
+		"data":    res,
+	})
+}
+
+func (c *authController) ForgotPassword(ctx *fiber.Ctx) error {
+	var req dto.ForgotPasswordRequest
+	if err := ctx.BodyParser(&req); err != nil {
+		return err
+	}
+
+	c.service.ForgotPassword(ctx.Context(), &req)
+	return ctx.JSON(fiber.Map{
+		"success": true,
+		"code":    200,
+		"message": "If email exists, reset token sent",
+		"data":    nil,
+	})
+}
+
+func (c *authController) ResetPassword(ctx *fiber.Ctx) error {
+	var req dto.ResetPasswordRequest
+	if err := ctx.BodyParser(&req); err != nil {
+		return err
+	}
+
+	err := c.service.ResetPassword(ctx.Context(), &req)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"success": false,
+			"code":    400,
+			"message": err.Error(),
+		})
+	}
+	return ctx.JSON(fiber.Map{
+		"success": true,
+		"code":    200,
+		"message": "Password reset successful",
+		"data":    nil,
+	})
+}
+
+func (c *authController) Logout(ctx *fiber.Ctx) error {
+	// Stateless JWT logout is handled on client side by removing token.
+	// We just return success here.
+	return ctx.JSON(fiber.Map{
+		"success": true,
+		"code":    200,
+		"message": "Logged out successfully",
+		"data":    nil,
+	})
+}
+FILE: D:\notetaker\notefiber-BE\internal\controller\chatbot_controller.go
+RELATIVE PATH: internal\controller\chatbot_controller.go
+package controller
+
+import (
+	"ai-notetaking-be/internal/dto"
+	"ai-notetaking-be/internal/pkg/serverutils"
+	"ai-notetaking-be/internal/service"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
+)
+
+type IChatbotController interface {
+	RegisterRoutes(r fiber.Router)
+	CreateSession(ctx *fiber.Ctx) error
+	GetAllSessions(ctx *fiber.Ctx) error
+	GetChatHistory(ctx *fiber.Ctx) error
+	SendChat(ctx *fiber.Ctx) error
+	DeleteSession(ctx *fiber.Ctx) error
+}
+
+type chatbotController struct {
+	chatbotService service.IChatbotService
+}
+
+func NewChatbotController(chatbotService service.IChatbotService) IChatbotController {
+	return &chatbotController{
+		chatbotService: chatbotService,
+	}
+}
+
+func (c *chatbotController) RegisterRoutes(r fiber.Router) {
+	h := r.Group("/chatbot/v1")
+	h.Get("sessions", c.GetAllSessions)
+	h.Get("chat-history", c.GetChatHistory)
+	h.Post("create-session", c.CreateSession)
+	h.Post("send-chat", c.SendChat)
+	h.Delete("delete-session", c.DeleteSession)
+}
+
+func (c *chatbotController) CreateSession(ctx *fiber.Ctx) error {
+	res, err := c.chatbotService.CreateSession(ctx.Context())
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(serverutils.SuccessResponse("Success create session", res))
+}
+
+func (c *chatbotController) GetAllSessions(ctx *fiber.Ctx) error {
+	res, err := c.chatbotService.GetAllSessions(ctx.Context())
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(serverutils.SuccessResponse("Success get all sessions", res))
+}
+
+func (c *chatbotController) GetChatHistory(ctx *fiber.Ctx) error {
+	idStr := ctx.Query("chat_session_id")
+	sessionId, _ := uuid.Parse(idStr)
+
+	res, err := c.chatbotService.GetChatHistory(ctx.Context(), sessionId)
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(serverutils.SuccessResponse("Success get chat history", res))
+}
+
+func (c *chatbotController) SendChat(ctx *fiber.Ctx) error {
+	var request dto.SendChatRequest
+
+	err := ctx.BodyParser(&request)
+	if err != nil {
+		return err
+	}
+
+	if err = serverutils.ValidateRequest(request); err != nil {
+		return err
+	}
+
+	res, err := c.chatbotService.SendChat(ctx.Context(), &request)
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(serverutils.SuccessResponse("Success send chat", res))
+}
+
+func (c *chatbotController) DeleteSession(ctx *fiber.Ctx) error {
+	var request dto.DeleteSessionRequest
+
+	err := ctx.BodyParser(&request)
+	if err != nil {
+		return err
+	}
+
+	if err = serverutils.ValidateRequest(request); err != nil {
+		return err
+	}
+
+	err = c.chatbotService.DeleteSession(ctx.Context(), &request)
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(serverutils.SuccessResponse[any]("Success delete session", nil))
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\controller\example_controller.go
+RELATIVE PATH: internal\controller\example_controller.go
+package controller
+
+import (
+	"ai-notetaking-be/internal/dto"
+	"ai-notetaking-be/internal/pkg/serverutils"
+	"ai-notetaking-be/internal/service"
+
+	"github.com/gofiber/fiber/v2"
+)
+
+type IExampleController interface {
+	RegisterRoutes(r fiber.Router)
+	HelloWorld(ctx *fiber.Ctx) error
+}
+
+type exampleController struct {
+	service service.IExampleService
+}
+
+func NewExampleController(service service.IExampleService) IExampleController {
+	return &exampleController{service: service}
+}
+
+func (c *exampleController) RegisterRoutes(r fiber.Router) {
+	h := r.Group("/example/v1")
+	h.Post("/hello-world", c.HelloWorld)
+}
+
+func (c *exampleController) HelloWorld(ctx *fiber.Ctx) error {
+	var req dto.HelloWorldRequest
+	if err := ctx.BodyParser(&req); err != nil {
+		return err
+	}
+
+	err := serverutils.ValidateRequest(req)
+	if err != nil {
+		return err
+	}
+
+	res, err := c.service.HelloWorld(ctx.Context(), &req)
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(serverutils.SuccessResponse("Success", res))
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\controller\notebook_controller.go
+RELATIVE PATH: internal\controller\notebook_controller.go
+package controller
+
+import (
+	"ai-notetaking-be/internal/dto"
+	"ai-notetaking-be/internal/pkg/serverutils"
+	"ai-notetaking-be/internal/service"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
+)
+
+type INotebookController interface {
+	RegisterRoutes(r fiber.Router)
+	Create(ctx *fiber.Ctx) error
+	Show(ctx *fiber.Ctx) error
+	Update(ctx *fiber.Ctx) error
+	Delete(ctx *fiber.Ctx) error
+}
+
+type notebookController struct {
+	service service.INotebookService
+}
+
+func NewNotebookController(service service.INotebookService) INotebookController {
+	return &notebookController{service: service}
+}
+
+func (c *notebookController) RegisterRoutes(r fiber.Router) {
+	h := r.Group("/notebook/v1")
+	h.Get("", c.GetAll)
+	h.Post("", c.Create)
+	h.Get(":id", c.Show)
+	h.Put(":id", c.Update)
+	h.Delete(":id", c.Delete)
+	h.Put(":id/move", c.MoveNotebook)
+}
+
+func (c *notebookController) GetAll(ctx *fiber.Ctx) error {
+	res, err := c.service.GetAll(ctx.Context())
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(serverutils.SuccessResponse("Success get all notebook", res))
+}
+
+func (c *notebookController) Create(ctx *fiber.Ctx) error {
+	var req dto.CreateNotebookRequest
+	if err := ctx.BodyParser(&req); err != nil {
+		return err
+	}
+
+	err := serverutils.ValidateRequest(req)
+	if err != nil {
+		return err
+	}
+
+	res, err := c.service.Create(ctx.Context(), &req)
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(serverutils.SuccessResponse("Success create notebook", res))
+}
+
+func (c *notebookController) Show(ctx *fiber.Ctx) error {
+	idParam := ctx.Params("id")
+	id, _ := uuid.Parse(idParam)
+
+	res, err := c.service.Show(ctx.Context(), id)
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(serverutils.SuccessResponse("Success show notebook", res))
+}
+
+func (c *notebookController) Update(ctx *fiber.Ctx) error {
+	idParam := ctx.Params("id")
+	id, _ := uuid.Parse(idParam)
+
+	var req dto.UpdateNotebookRequest
+	if err := ctx.BodyParser(&req); err != nil {
+		return err
+	}
+	req.Id = id
+
+	res, err := c.service.Update(ctx.Context(), &req)
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(serverutils.SuccessResponse("Success update notebook", res))
+}
+
+func (c *notebookController) Delete(ctx *fiber.Ctx) error {
+	idParam := ctx.Params("id")
+	id, _ := uuid.Parse(idParam)
+
+	err := c.service.Delete(ctx.Context(), id)
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(serverutils.SuccessResponse[any]("Success delete notebook", nil))
+}
+
+func (c *notebookController) MoveNotebook(ctx *fiber.Ctx) error {
+	idParam := ctx.Params("id")
+	id, _ := uuid.Parse(idParam)
+
+	var req dto.MoveNotebookRequest
+	if err := ctx.BodyParser(&req); err != nil {
+		return err
+	}
+	req.Id = id
+
+	res, err := c.service.MoveNotebook(ctx.Context(), &req)
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(serverutils.SuccessResponse("Success move notebook", res))
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\controller\note_controller.go
+RELATIVE PATH: internal\controller\note_controller.go
+package controller
+
+import (
+	"ai-notetaking-be/internal/dto"
+	"ai-notetaking-be/internal/pkg/serverutils"
+	"ai-notetaking-be/internal/service"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
+)
+
+type INoteController interface {
+	RegisterRoutes(r fiber.Router)
+	Create(ctx *fiber.Ctx) error
+	Show(ctx *fiber.Ctx) error
+	Update(ctx *fiber.Ctx) error
+	Delete(ctx *fiber.Ctx) error
+	MoveNote(ctx *fiber.Ctx) error
+	SemanticSearch(ctx *fiber.Ctx) error
+}
+
+type noteController struct {
+	noteService service.INoteService
+}
+
+func NewNoteController(noteService service.INoteService) INoteController {
+	return &noteController{
+		noteService: noteService,
+	}
+}
+
+func (c *noteController) RegisterRoutes(r fiber.Router) {
+	h := r.Group("/note/v1")
+	h.Get("semantic-search", c.SemanticSearch)
+	h.Post("", c.Create)
+	h.Get(":id", c.Show)
+	h.Put(":id", c.Update)
+	h.Put(":id/move", c.MoveNote)
+	h.Delete(":id", c.Delete)
+}
+
+func (c *noteController) Create(ctx *fiber.Ctx) error {
+	var req dto.CreateNoteRequest
+	if err := ctx.BodyParser(&req); err != nil {
+		return err
+	}
+
+	err := serverutils.ValidateRequest(req)
+	if err != nil {
+		return err
+	}
+
+	res, err := c.noteService.Create(ctx.Context(), &req)
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(serverutils.SuccessResponse("Success create note", res))
+}
+
+func (c *noteController) Show(ctx *fiber.Ctx) error {
+	idParam := ctx.Params("id")
+	id, _ := uuid.Parse(idParam)
+	res, err := c.noteService.Show(ctx.Context(), id)
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(serverutils.SuccessResponse("Success show note", res))
+}
+
+func (c *noteController) Update(ctx *fiber.Ctx) error {
+	idParam := ctx.Params("id")
+	id, _ := uuid.Parse(idParam)
+
+	var req dto.UpdateNoteRequest
+	if err := ctx.BodyParser(&req); err != nil {
+		return err
+	}
+	req.Id = id
+
+	err := serverutils.ValidateRequest(req)
+	if err != nil {
+		return err
+	}
+
+	res, err := c.noteService.Update(ctx.Context(), &req)
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(serverutils.SuccessResponse("Success update note", res))
+}
+
+func (c *noteController) Delete(ctx *fiber.Ctx) error {
+	idParam := ctx.Params("id")
+	id, _ := uuid.Parse(idParam)
+
+	err := c.noteService.Delete(ctx.Context(), id)
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(serverutils.SuccessResponse[any]("Success delete note", nil))
+}
+
+func (c *noteController) MoveNote(ctx *fiber.Ctx) error {
+	idParam := ctx.Params("id")
+	id, _ := uuid.Parse(idParam)
+
+	var req dto.MoveNoteRequest
+	if err := ctx.BodyParser(&req); err != nil {
+		return err
+	}
+	req.Id = id
+
+	err := serverutils.ValidateRequest(req)
+	if err != nil {
+		return err
+	}
+
+	res, err := c.noteService.MoveNote(ctx.Context(), &req)
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(serverutils.SuccessResponse("Success move note", res))
+}
+
+func (c *noteController) SemanticSearch(ctx *fiber.Ctx) error {
+	q := ctx.Query("q", "")
+
+	res, err := c.noteService.SemanticSearch(ctx.Context(), q)
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(serverutils.SuccessResponse("Success semantic search notes", res))
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\controller\oauth_controller.go
+RELATIVE PATH: internal\controller\oauth_controller.go
+// FILE: internal/controller/oauth_controller.go
+package controller
+
+import (
+	"ai-notetaking-be/internal/pkg/serverutils"
+	"ai-notetaking-be/internal/service"
+
+	"github.com/gofiber/fiber/v2"
+)
+
+type IOAuthController interface {
+	RegisterRoutes(r fiber.Router)
+	Login(ctx *fiber.Ctx) error
+	Callback(ctx *fiber.Ctx) error
+}
+
+type oauthController struct {
+	service service.IOAuthService
+}
+
+func NewOAuthController(service service.IOAuthService) IOAuthController {
+	return &oauthController{service: service}
+}
+
+func (c *oauthController) RegisterRoutes(r fiber.Router) {
+	// e.g., /auth/google
+	h := r.Group("/auth")
+	h.Get("/:provider", c.Login)
+	h.Get("/:provider/callback", c.Callback)
+}
+
+func (c *oauthController) Login(ctx *fiber.Ctx) error {
+	provider := ctx.Params("provider")
+	url, err := c.service.GetLoginURL(provider)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(serverutils.ErrorResponse(400, err.Error()))
+	}
+	// Redirect user to Google
+	return ctx.Redirect(url)
+}
+
+func (c *oauthController) Callback(ctx *fiber.Ctx) error {
+	provider := ctx.Params("provider")
+	code := ctx.Query("code")
+	// state := ctx.Query("state") // validate state if needed
+
+	if code == "" {
+		return ctx.Status(fiber.StatusBadRequest).JSON(serverutils.ErrorResponse(400, "Missing code"))
+	}
+
+	res, err := c.service.HandleCallback(ctx.Context(), provider, code)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(serverutils.ErrorResponse(500, err.Error()))
+	}
+
+	// Success: Return JWT or Redirect to Frontend with Token
+	return ctx.JSON(serverutils.SuccessResponse("OAuth login successful", res))
+}
+FILE: D:\notetaker\notefiber-BE\internal\controller\payment_controller.go
+RELATIVE PATH: internal\controller\payment_controller.go
+// FILE: internal/controller/payment_controller.go
+package controller
+
+import (
+	"ai-notetaking-be/internal/dto"
+	"ai-notetaking-be/internal/pkg/serverutils"
+	"ai-notetaking-be/internal/service"
+	"fmt"
+	"os"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
+)
+
+type IPaymentController interface {
+	RegisterRoutes(r fiber.Router)
+	GetPlans(ctx *fiber.Ctx) error
+	Checkout(ctx *fiber.Ctx) error
+	Webhook(ctx *fiber.Ctx) error
+	GetStatus(ctx *fiber.Ctx) error // New
+	CancelSubscription(ctx *fiber.Ctx) error // New
+}
+
+type paymentController struct {
+	service service.IPaymentService
+}
+
+func NewPaymentController(service service.IPaymentService) IPaymentController {
+	return &paymentController{service: service}
+}
+
+func (c *paymentController) RegisterRoutes(r fiber.Router) {
+	h := r.Group("/payment")
+	h.Post("/midtrans/notification", c.Webhook)
+	h.Get("/plans", c.GetPlans)
+	
+	// Protected Routes
+	h.Post("/checkout", c.authMiddleware, c.Checkout)
+	h.Get("/status", c.authMiddleware, c.GetStatus)
+	h.Post("/cancel", c.authMiddleware, c.CancelSubscription)
+}
+
+func (c *paymentController) authMiddleware(ctx *fiber.Ctx) error {
+	authHeader := ctx.Get("Authorization")
+	if len(authHeader) < 7 || authHeader[:7] != "Bearer " {
+		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"message": "Missing token"})
+	}
+	tokenStr := authHeader[7:]
+
+	token, err := jwt.Parse(tokenStr, func(t *jwt.Token) (interface{}, error) {
+		return []byte(os.Getenv("JWT_SECRET")), nil
+	})
+
+	if err != nil || !token.Valid {
+		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"message": "Invalid token"})
+	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"message": "Invalid claims"})
+	}
+
+	ctx.Locals("user_id", claims["user_id"])
+	return ctx.Next()
+}
+
+func (c *paymentController) GetPlans(ctx *fiber.Ctx) error {
+	res, err := c.service.GetPlans(ctx.Context())
+	if err != nil {
+		return err
+	}
+	return ctx.JSON(serverutils.SuccessResponse("Success fetching plans", res))
+}
+
+func (c *paymentController) Checkout(ctx *fiber.Ctx) error {
+	var req dto.CheckoutRequest
+	if err := ctx.BodyParser(&req); err != nil {
+		return err
+	}
+	if err := serverutils.ValidateRequest(req); err != nil {
+		return err
+	}
+
+	userIdStr := ctx.Locals("user_id").(string)
+	userId, _ := uuid.Parse(userIdStr)
+
+	res, err := c.service.CreateSubscription(ctx.Context(), userId, &req)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(serverutils.ErrorResponse(500, err.Error()))
+	}
+	return ctx.JSON(serverutils.SuccessResponse("Subscription created", res))
+}
+
+func (c *paymentController) Webhook(ctx *fiber.Ctx) error {
+	var req dto.MidtransWebhookRequest
+	if err := ctx.BodyParser(&req); err != nil {
+		fmt.Printf("[WEBHOOK ERROR] Body parsing failed: %v\n", err)
+		return err
+	}
+
+	err := c.service.HandleNotification(ctx.Context(), &req)
+	if err != nil {
+		fmt.Printf("[WEBHOOK ERROR] Service handling failed: %v\n", err)
+	}
+
+	return ctx.SendStatus(fiber.StatusOK)
+}
+
+func (c *paymentController) GetStatus(ctx *fiber.Ctx) error {
+	userIdStr := ctx.Locals("user_id").(string)
+	userId, _ := uuid.Parse(userIdStr)
+
+	res, err := c.service.GetSubscriptionStatus(ctx.Context(), userId)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(serverutils.ErrorResponse(500, err.Error()))
+	}
+	return ctx.JSON(serverutils.SuccessResponse("Subscription status", res))
+}
+
+func (c *paymentController) CancelSubscription(ctx *fiber.Ctx) error {
+	userIdStr := ctx.Locals("user_id").(string)
+	userId, _ := uuid.Parse(userIdStr)
+
+	err := c.service.CancelSubscription(ctx.Context(), userId)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(serverutils.ErrorResponse(500, err.Error()))
+	}
+	return ctx.JSON(serverutils.SuccessResponse[any]("Subscription canceled", nil))
+}
+FILE: D:\notetaker\notefiber-BE\internal\controller\user_controller.go
+RELATIVE PATH: internal\controller\user_controller.go
+// FILE: internal/controller/user_controller.go
+package controller
+
+import (
+	"ai-notetaking-be/internal/dto"
+	"ai-notetaking-be/internal/pkg/serverutils"
+	"ai-notetaking-be/internal/service"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
+)
+
+type IUserController interface {
+	RegisterRoutes(r fiber.Router)
+	GetProfile(ctx *fiber.Ctx) error
+	UpdateProfile(ctx *fiber.Ctx) error
+	DeleteAccount(ctx *fiber.Ctx) error
+}
+
+type userController struct {
+	service service.IUserService
+}
+
+func NewUserController(service service.IUserService) IUserController {
+	return &userController{service: service}
+}
+
+func (c *userController) RegisterRoutes(r fiber.Router) {
+	h := r.Group("/user")
+	h.Use(serverutils.JwtMiddleware) // Ensure this middleware is available or reuse the one from payment controller logic
+	h.Get("/profile", c.GetProfile)
+	h.Put("/profile", c.UpdateProfile)
+	h.Delete("/account", c.DeleteAccount)
+}
+
+func (c *userController) GetProfile(ctx *fiber.Ctx) error {
+	userIdStr := ctx.Locals("user_id").(string)
+	userId, _ := uuid.Parse(userIdStr)
+
+	res, err := c.service.GetProfile(ctx.Context(), userId)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(serverutils.ErrorResponse(500, err.Error()))
+	}
+	return ctx.JSON(serverutils.SuccessResponse("User profile", res))
+}
+
+func (c *userController) UpdateProfile(ctx *fiber.Ctx) error {
+	userIdStr := ctx.Locals("user_id").(string)
+	userId, _ := uuid.Parse(userIdStr)
+
+	var req dto.UpdateProfileRequest
+	if err := ctx.BodyParser(&req); err != nil {
+		return err
+	}
+	if err := serverutils.ValidateRequest(req); err != nil {
+		return err
+	}
+
+	err := c.service.UpdateProfile(ctx.Context(), userId, &req)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(serverutils.ErrorResponse(500, err.Error()))
+	}
+	return ctx.JSON(serverutils.SuccessResponse[any]("Profile updated", nil))
+}
+
+func (c *userController) DeleteAccount(ctx *fiber.Ctx) error {
+	userIdStr := ctx.Locals("user_id").(string)
+	userId, _ := uuid.Parse(userIdStr)
+
+	err := c.service.DeleteAccount(ctx.Context(), userId)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(serverutils.ErrorResponse(500, err.Error()))
+	}
+	return ctx.JSON(serverutils.SuccessResponse[any]("Account deleted", nil))
+}
+FILE: D:\notetaker\notefiber-BE\internal\dto\admin_dto.go
+RELATIVE PATH: internal\dto\admin_dto.go
+// FILE: internal/dto/admin_dto.go
+package dto
+
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
+
+type AdminDashboardStats struct {
+	TotalUsers        int     `json:"total_users"`
+	ActiveUsers       int     `json:"active_users"`
+	TotalRevenue      float64 `json:"total_revenue"` // Estimated from subscriptions
+	ActiveSubscribers int     `json:"active_subscribers"`
+}
+
+type UserListResponse struct {
+	Id        uuid.UUID `json:"id"`
+	Email     string    `json:"email"`
+	FullName  string    `json:"full_name"`
+	Role      string    `json:"role"`
+	Status    string    `json:"status"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+type PaginationRequest struct {
+	Page  int `query:"page"`
+	Limit int `query:"limit"`
+}
+
+type UpdateUserStatusRequest struct {
+	Status string `json:"status" validate:"required,oneof=active blocked pending"`
+}
+FILE: D:\notetaker\notefiber-BE\internal\dto\admin_log_dto.go
+RELATIVE PATH: internal\dto\admin_log_dto.go
+// FILE: internal/dto/admin_log_dto.go
+package dto
+
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
+
+// --- Admin Transaction DTOs ---
+
+type TransactionListResponse struct {
+	Id                uuid.UUID `json:"id"`
+	UserId            uuid.UUID `json:"user_id"`
+	UserEmail         string    `json:"user_email"`
+	PlanName          string    `json:"plan_name"`
+	Amount            float64   `json:"amount"`
+	Status            string    `json:"status"`        // active, inactive
+	PaymentStatus     string    `json:"payment_status"` // paid, pending, failed
+	TransactionDate   time.Time `json:"transaction_date"`
+	MidtransOrderId   *string   `json:"midtrans_order_id"`
+}
+
+type TransactionDetailResponse struct {
+	TransactionListResponse
+	SnapRedirectUrl string `json:"snap_redirect_url,omitempty"`
+}
+
+// --- Admin Graph DTOs ---
+
+type UserGrowthStats struct {
+	Date  string `json:"date"`
+	Count int    `json:"count"`
+}
+
+// --- System Log DTOs ---
+
+type LogListResponse struct {
+	Id        uuid.UUID `json:"id"`
+	Level     string    `json:"level"`
+	Module    string    `json:"module"`
+	Message   string    `json:"message"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+type LogDetailResponse struct {
+	LogListResponse
+	Details map[string]interface{} `json:"details"`
+}
+
+// --- OAuth DTOs ---
+
+type OAuthLoginURLResponse struct {
+	URL string `json:"url"`
+}
+
+type OAuthCallbackRequest struct {
+	Code  string `json:"code" validate:"required"`
+	State string `json:"state"`
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\dto\auth_payment_dto.go
+RELATIVE PATH: internal\dto\auth_payment_dto.go
+// FILE: internal/dto/auth_payment_dto.go
+package dto
+
+import (
+	"github.com/google/uuid"
+)
+
+// --- Auth DTOs ---
+
+type RegisterRequest struct {
+	FullName string `json:"full_name" validate:"required,min=3"`
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required,min=8"`
+}
+
+type VerifyEmailRequest struct {
+	Email string `json:"email" validate:"required,email"`
+	Token string `json:"token" validate:"required,len=6"`
+}
+
+type RegisterResponse struct {
+	Id    uuid.UUID `json:"id"`
+	Email string    `json:"email"`
+}
+
+type LoginRequest struct {
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required"`
+}
+
+type LoginResponse struct {
+	AccessToken string  `json:"access_token"`
+	User        UserDTO `json:"user"`
+}
+
+type UserDTO struct {
+	Id       uuid.UUID `json:"id"`
+	Email    string    `json:"email"`
+	FullName string    `json:"full_name"`
+	Role     string    `json:"role"`
+}
+
+type ForgotPasswordRequest struct {
+	Email string `json:"email" validate:"required,email"`
+}
+
+type ResetPasswordRequest struct {
+	Token           string `json:"token" validate:"required"`
+	NewPassword     string `json:"new_password" validate:"required,min=8"`
+	ConfirmPassword string `json:"confirm_password" validate:"required,eqfield=NewPassword"`
+}
+
+// --- Payment DTOs ---
+
+type PlanResponse struct {
+	Id          uuid.UUID `json:"id"`
+	Name        string    `json:"name"`
+	Slug        string    `json:"slug"`
+	Price       float64   `json:"price"`
+	Description string    `json:"description"`
+	Features    []string  `json:"features"` // Helper to list enabled features
+}
+
+type CheckoutRequest struct {
+	PlanId uuid.UUID `json:"plan_id" validate:"required"`
+}
+
+type CheckoutResponse struct {
+	SubscriptionId  uuid.UUID `json:"subscription_id"`
+	SnapRedirectUrl string    `json:"snap_redirect_url"`
+	SnapToken       string    `json:"snap_token"`
+}
+
+type MidtransWebhookRequest struct {
+	TransactionStatus string `json:"transaction_status"`
+	OrderId           string `json:"order_id"`
+	FraudStatus       string `json:"fraud_status"`
+}
+FILE: D:\notetaker\notefiber-BE\internal\dto\chatbot_dto.go
+RELATIVE PATH: internal\dto\chatbot_dto.go
+package dto
+
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
+
+type CreateSessionResponse struct {
+	Id uuid.UUID `json:"id"`
+}
+
+type GetAllSessionsResponse struct {
+	Id        uuid.UUID  `json:"id"`
+	Title     string     `json:"title"`
+	CreatedAt time.Time  `json:"created_at"`
+	UpdatedAt *time.Time `json:"updated_at"`
+}
+
+type GetChatHistoryResponse struct {
+	Id        uuid.UUID `json:"id"`
+	Role      string    `json:"role"`
+	Chat      string    `json:"chat"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+type SendChatRequest struct {
+	ChatSessionId uuid.UUID `json:"chat_session_id" validate:"required"`
+	Chat          string    `json:"chat" validate:"required"`
+}
+
+type SendChatResponseChat struct {
+	Id        uuid.UUID `json:"id"`
+	Chat      string    `json:"chat"`
+	Role      string    `json:"role"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+type SendChatResponse struct {
+	ChatSessionId    uuid.UUID             `json:"chat_session_id"`
+	ChatSessionTitle string                `json:"title"`
+	Sent             *SendChatResponseChat `json:"sent"`
+	Reply            *SendChatResponseChat `json:"reply"`
+}
+
+type DeleteSessionRequest struct {
+	ChatSessionId uuid.UUID `json:"chat_session_id"`
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\dto\example_dto.go
+RELATIVE PATH: internal\dto\example_dto.go
+package dto
+
+type HelloWorldRequest struct {
+	Name string `json:"name" validate:"required,min=3"`
+}
+
+type HelloWorldResponse struct {
+	Message string `json:"message"`
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\dto\notebook_dto.go
+RELATIVE PATH: internal\dto\notebook_dto.go
+package dto
+
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
+
+type CreateNotebookRequest struct {
+	Name     string     `json:"name" validate:"required"`
+	ParentId *uuid.UUID `json:"parent_id"`
+}
+
+type CreateNotebookResponse struct {
+	Id uuid.UUID `json:"id"`
+}
+
+type ShowNotebookResponse struct {
+	Id        uuid.UUID  `json:"id"`
+	Name      string     `json:"name"`
+	ParentId  *uuid.UUID `json:"parent_id"`
+	CreatedAt time.Time  `json:"created_at"`
+	UpdatedAt *time.Time `json:"updated_at"`
+}
+
+type UpdateNotebookRequest struct {
+	Id   uuid.UUID
+	Name string `json:"name" validate:"required"`
+}
+
+type UpdateNotebookResponse struct {
+	Id uuid.UUID `json:"id"`
+}
+
+type MoveNotebookRequest struct {
+	Id       uuid.UUID
+	ParentId *uuid.UUID `json:"parent_id"`
+}
+
+type MoveNotebookResponse struct {
+	Id uuid.UUID `json:"id"`
+}
+
+type GetAllNotebookResponseNote struct {
+	Id        uuid.UUID  `json:"id"`
+	Title     string     `json:"title"`
+	Content   string     `json:"content"`
+	CreatedAt time.Time  `json:"created_at"`
+	UpdatedAt *time.Time `json:"updated_at"`
+}
+
+type GetAllNotebookResponse struct {
+	Id        uuid.UUID  `json:"id"`
+	Name      string     `json:"name"`
+	ParentId  *uuid.UUID `json:"parent_id"`
+	CreatedAt time.Time  `json:"created_at"`
+	UpdatedAt *time.Time `json:"updated_at"`
+
+	Notes []*GetAllNotebookResponseNote `json:"notes"`
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\dto\note_dto.go
+RELATIVE PATH: internal\dto\note_dto.go
+package dto
+
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
+
+type CreateNoteRequest struct {
+	Title      string    `json:"title" validate:"required"`
+	Content    string    `json:"content"`
+	NotebookId uuid.UUID `json:"notebook_id" validate:"required"`
+}
+
+type CreateNoteResponse struct {
+	Id uuid.UUID `json:"id"`
+}
+
+type ShowNoteResponse struct {
+	Id         uuid.UUID  `json:"id"`
+	Title      string     `json:"title"`
+	Content    string     `json:"content"`
+	NotebookId uuid.UUID  `json:"notebook_id"`
+	CreatedAt  time.Time  `json:"created_at"`
+	UpdatedAt  *time.Time `json:"updated_at"`
+}
+
+type UpdateNoteRequest struct {
+	Id      uuid.UUID
+	Title   string `json:"title" validate:"required"`
+	Content string `json:"content"`
+}
+
+type UpdateNoteResponse struct {
+	Id uuid.UUID `json:"id"`
+}
+
+type MoveNoteRequest struct {
+	Id         uuid.UUID
+	NotebookId uuid.UUID `json:"notebook_id" validate:"required"`
+}
+
+type MoveNoteResponse struct {
+	Id uuid.UUID `json:"id"`
+}
+
+type SemanticSearchResponse struct {
+	Id         uuid.UUID  `json:"id"`
+	Title      string     `json:"title"`
+	Content    string     `json:"content"`
+	NotebookId uuid.UUID  `json:"notebook_id"`
+	CreatedAt  time.Time  `json:"created_at"`
+	UpdatedAt  *time.Time `json:"updated_at"`
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\dto\publisher_dto.go
+RELATIVE PATH: internal\dto\publisher_dto.go
+package dto
+
+import "github.com/google/uuid"
+
+type PublishEmbedNoteMessage struct {
+	NoteId uuid.UUID `json:"note_id"`
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\dto\user_dto.go
+RELATIVE PATH: internal\dto\user_dto.go
+// FILE: internal/dto/user_dto.go
+package dto
+
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
+
+type UserProfileResponse struct {
+	Id           uuid.UUID `json:"id"`
+	Email        string    `json:"email"`
+	FullName     string    `json:"full_name"`
+	Role         string    `json:"role"`
+	Status       string    `json:"status"`
+	AiDailyUsage int       `json:"ai_daily_usage"`
+	CreatedAt    time.Time `json:"created_at"`
+}
+
+type UpdateProfileRequest struct {
+	FullName string `json:"full_name" validate:"required,min=3"`
+	Email    string `json:"email" validate:"omitempty,email"` // Added optional email update
+}
+
+type SubscriptionStatusResponse struct {
+	PlanName           string    `json:"plan_name"`
+	Status             string    `json:"status"`
+	CurrentPeriodEnd   time.Time `json:"current_period_end"`
+	AiDailyCreditLimit int       `json:"ai_daily_credit_limit"`
+	IsActive           bool      `json:"is_active"`
+}
+FILE: D:\notetaker\notefiber-BE\internal\entity\admin_entities.go
+RELATIVE PATH: internal\entity\admin_entities.go
+// FILE: internal/entity/admin_entities.go
+package entity
+
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
+
+type SystemLog struct {
+	Id        uuid.UUID
+	Level     string
+	Module    string
+	Message   string
+	Details   map[string]interface{} // JSONB
+	CreatedAt time.Time
+}
+
+// TransactionDetail is a projection for listing payments (Joined data)
+type TransactionDetail struct {
+	Id              uuid.UUID
+	UserId          uuid.UUID
+	UserEmail       string
+	PlanName        string
+	Amount          float64
+	Status          string
+	PaymentStatus   string
+	MidtransOrderId *string
+	CreatedAt       time.Time
+}
+FILE: D:\notetaker\notefiber-BE\internal\entity\chat_message_entity.go
+RELATIVE PATH: internal\entity\chat_message_entity.go
+package entity
+
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
+
+type ChatMessage struct {
+	Id            uuid.UUID
+	Chat          string
+	Role          string
+	ChatSessionId uuid.UUID
+	CreatedAt     time.Time
+	UpdatedAt     *time.Time
+	DeletedAt     *time.Time
+	IsDeleted     bool
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\entity\chat_message_raw_entity.go
+RELATIVE PATH: internal\entity\chat_message_raw_entity.go
+package entity
+
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
+
+type ChatMessageRaw struct {
+	Id            uuid.UUID
+	Chat          string
+	Role          string
+	ChatSessionId uuid.UUID
+	CreatedAt     time.Time
+	UpdatedAt     *time.Time
+	DeletedAt     *time.Time
+	IsDeleted     bool
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\entity\chat_session_entity.go
+RELATIVE PATH: internal\entity\chat_session_entity.go
+package entity
+
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
+
+type ChatSession struct {
+	Id        uuid.UUID
+	Title     string
+	CreatedAt time.Time
+	UpdatedAt *time.Time
+	DeletedAt *time.Time
+	IsDeleted bool
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\entity\example_entity.go
+RELATIVE PATH: internal\entity\example_entity.go
+package entity
+
+type Example struct {
+	Message string `json:"message"`
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\entity\notebook_entity.go
+RELATIVE PATH: internal\entity\notebook_entity.go
+package entity
+
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
+
+type Notebook struct {
+	Id        uuid.UUID
+	Name      string
+	ParentId  *uuid.UUID
+	CreatedAt time.Time
+	UpdatedAt *time.Time
+	DeletedAt *time.Time
+	IsDeleted bool
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\entity\note_embedding_entity.go
+RELATIVE PATH: internal\entity\note_embedding_entity.go
+package entity
+
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
+
+type NoteEmbedding struct {
+	Id             uuid.UUID
+	Document       string
+	EmbeddingValue []float32
+	NoteId         uuid.UUID
+	CreatedAt      time.Time
+	UpdatedAt      *time.Time
+	DeletedAt      *time.Time
+	IsDeleted      bool
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\entity\note_entity.go
+RELATIVE PATH: internal\entity\note_entity.go
+package entity
+
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
+
+type Note struct {
+	Id         uuid.UUID
+	Title      string
+	Content    string
+	NotebookId uuid.UUID
+	CreatedAt  time.Time
+	UpdatedAt  *time.Time
+	DeletedAt  *time.Time
+	IsDeleted  bool
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\entity\subscription_entity.go
+RELATIVE PATH: internal\entity\subscription_entity.go
+// FILE: internal/entity/subscription_entity.go
+package entity
+
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
+
+type SubscriptionStatus string
+type PaymentStatus string
+type BillingPeriod string
+
+const (
+	SubscriptionStatusActive   SubscriptionStatus = "active"
+	SubscriptionStatusInactive SubscriptionStatus = "inactive"
+	SubscriptionStatusCanceled SubscriptionStatus = "canceled"
+
+	PaymentStatusPending PaymentStatus = "pending"
+	PaymentStatusPaid    PaymentStatus = "success" // CHANGED: Must match DB Enum 'success'
+	PaymentStatusFailed  PaymentStatus = "failed"
+
+	BillingPeriodMonthly BillingPeriod = "monthly"
+	BillingPeriodYearly  BillingPeriod = "yearly"
+)
+
+type SubscriptionPlan struct {
+	Id                    uuid.UUID
+	Name                  string
+	Slug                  string
+	Description           string
+	Price                 float64
+	BillingPeriod         BillingPeriod
+	MaxNotes              *int
+	SemanticSearchEnabled bool
+	AiChatEnabled         bool
+	AiDailyCreditLimit    int
+}
+
+type UserSubscription struct {
+	Id                    uuid.UUID
+	UserId                uuid.UUID
+	PlanId                uuid.UUID
+	Status                SubscriptionStatus
+	CurrentPeriodStart    time.Time
+	CurrentPeriodEnd      time.Time
+	PaymentStatus         PaymentStatus
+	MidtransTransactionId *string
+	CreatedAt             time.Time
+	UpdatedAt             time.Time
+}
+FILE: D:\notetaker\notefiber-BE\internal\entity\user_entity.go
+RELATIVE PATH: internal\entity\user_entity.go
+// FILE: internal/entity/user_entity.go
+package entity
+
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
+
+type UserRole string
+type UserStatus string
+
+const (
+	UserRoleUser  UserRole = "user"
+	UserRoleAdmin UserRole = "admin"
+
+	UserStatusPending UserStatus = "pending"
+	UserStatusActive  UserStatus = "active"
+	UserStatusBlocked UserStatus = "blocked"
+)
+
+type User struct {
+	Id                    uuid.UUID
+	Email                 string
+	PasswordHash          *string
+	FullName              string
+	Role                  UserRole
+	Status                UserStatus
+	EmailVerified         bool
+	EmailVerifiedAt       *time.Time
+	CreatedAt             time.Time
+	UpdatedAt             time.Time
+	AiDailyUsage          int
+	AiDailyUsageLastReset time.Time
+}
+
+type PasswordResetToken struct {
+	Id        uuid.UUID
+	UserId    uuid.UUID
+	Token     string
+	ExpiresAt time.Time
+	Used      bool
+	CreatedAt time.Time
+}
+
+type UserProvider struct {
+	Id             uuid.UUID
+	UserId         uuid.UUID
+	ProviderName   string
+	ProviderUserId string
+	CreatedAt      time.Time
+}
+
+// Add this struct
+type EmailVerificationToken struct {
+	Id        uuid.UUID
+	UserId    uuid.UUID
+	Token     string
+	ExpiresAt time.Time
+	CreatedAt time.Time
+}
+FILE: D:\notetaker\notefiber-BE\internal\pkg\serverutils\base_response.go
+RELATIVE PATH: internal\pkg\serverutils\base_response.go
+package serverutils
+
+import "github.com/gofiber/fiber/v2"
+
+type BaseResponse[T any] struct {
+	Success bool          `json:"success"`
+	Code    int           `json:"code"`
+	Message string        `json:"message"`
+	Data    T             `json:"data,omitempty"`
+	Errors  []ErrorDetail `json:"errors,omitempty"`
+}
+
+func SuccessResponse[T any](message string, data T) BaseResponse[T] {
+	return BaseResponse[T]{
+		Success: true,
+		Code:    fiber.StatusOK,
+		Message: message,
+		Data:    data,
+	}
+}
+
+func SuccessWithCodeResponse[T any](message string, code int, data T) BaseResponse[T] {
+	return BaseResponse[T]{
+		Success: true,
+		Code:    code,
+		Message: message,
+		Data:    data,
+	}
+}
+
+func ErrorResponse(statusCode int, message string) BaseResponse[any] {
+	return BaseResponse[any]{
+		Success: false,
+		Code:    statusCode,
+		Message: message,
+		Data:    nil,
+	}
+}
+
+func ValidationErrorResponse(details []ErrorDetail) BaseResponse[any] {
+	return BaseResponse[any]{
+		Success: true,
+		Code:    fiber.StatusBadRequest,
+		Message: "Validation failed",
+		Errors:  details,
+	}
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\pkg\serverutils\errors.go
+RELATIVE PATH: internal\pkg\serverutils\errors.go
+package serverutils
+
+import "errors"
+
+var (
+	ErrNotFound = errors.New("not found")
+)
+
+FILE: D:\notetaker\notefiber-BE\internal\pkg\serverutils\error_middleware.go
+RELATIVE PATH: internal\pkg\serverutils\error_middleware.go
+package serverutils
+
+import (
+	"errors"
+	"fmt"
+	"log"
+	"runtime/debug"
+
+	"github.com/gofiber/fiber/v2"
+)
+
+func ErrorHandlerMiddleware() fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		defer func() {
+			if r := recover(); r != nil {
+				log.Printf("[PANIC RECOVERED] %v\n%s", r, debug.Stack())
+				_ = c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+					"error":   "Internal Server Error",
+					"message": fmt.Sprintf("%v", r),
+				})
+			}
+		}()
+
+		err := c.Next()
+		if err == nil {
+			return nil
+		}
+
+		if errors.Is(err, ErrNotFound) {
+			return c.Status(fiber.StatusNotFound).JSON(ErrorResponse(
+				fiber.StatusNotFound, "Entity not found",
+			))
+		}
+
+		if fiberErr, ok := err.(*fiber.Error); ok {
+			return c.Status(fiberErr.Code).JSON(ErrorResponse(
+				fiberErr.Code, fiberErr.Message,
+			))
+		}
+
+		if ve, ok := err.(*ValidationError); ok {
+			return c.Status(fiber.StatusBadRequest).JSON(ValidationErrorResponse(ve.ToErrorDetails()))
+		}
+
+		log.Printf("[ERROR] %v", err)
+		return c.Status(fiber.StatusInternalServerError).JSON(ErrorResponse(
+			fiber.StatusInternalServerError, err.Error(),
+		))
+	}
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\pkg\serverutils\error_response.go
+RELATIVE PATH: internal\pkg\serverutils\error_response.go
+package serverutils
+
+type ErrorDetail struct {
+	Field   string `json:"field,omitempty"`
+	Message string `json:"message,omitempty"`
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\pkg\serverutils\jwt_middleware.go
+RELATIVE PATH: internal\pkg\serverutils\jwt_middleware.go
+// FILE: internal/pkg/serverutils/jwt_middleware.go
+package serverutils
+
+import (
+	"os"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v5"
+)
+
+func JwtMiddleware(ctx *fiber.Ctx) error {
+	authHeader := ctx.Get("Authorization")
+	if len(authHeader) < 7 || authHeader[:7] != "Bearer " {
+		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"message": "Missing token"})
+	}
+	tokenStr := authHeader[7:]
+
+	token, err := jwt.Parse(tokenStr, func(t *jwt.Token) (interface{}, error) {
+		return []byte(os.Getenv("JWT_SECRET")), nil
+	})
+
+	if err != nil || !token.Valid {
+		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"message": "Invalid token"})
+	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"message": "Invalid claims"})
+	}
+
+	ctx.Locals("user_id", claims["user_id"])
+	return ctx.Next()
+}
+FILE: D:\notetaker\notefiber-BE\internal\pkg\serverutils\validation_error.go
+RELATIVE PATH: internal\pkg\serverutils\validation_error.go
+package serverutils
+
+type ValidationErrorDetail struct {
+	Field   string `json:"field,omitempty"`
+	Message string `json:"message"`
+}
+
+type ValidationError struct {
+	Details []ValidationErrorDetail
+}
+
+func (v *ValidationError) Error() string {
+	return "validation failed"
+}
+
+func NewValidationError(details []ValidationErrorDetail) *ValidationError {
+	return &ValidationError{Details: details}
+}
+
+func (v *ValidationError) ToErrorDetails() []ErrorDetail {
+	result := make([]ErrorDetail, len(v.Details))
+	for i, d := range v.Details {
+		result[i] = ErrorDetail{
+			Field:   d.Field,
+			Message: d.Message,
+		}
+	}
+	return result
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\pkg\serverutils\validator.go
+RELATIVE PATH: internal\pkg\serverutils\validator.go
+package serverutils
+
+import (
+	"github.com/go-playground/validator/v10"
+)
+
+var validate = validator.New()
+
+func ValidateRequest(req any) error {
+	err := validate.Struct(req)
+	if err == nil {
+		return nil
+	}
+
+	var details []ValidationErrorDetail
+	for _, err := range err.(validator.ValidationErrors) {
+		details = append(details, ValidationErrorDetail{
+			Field:   err.Field(),
+			Message: err.Tag(),
+		})
+	}
+
+	return NewValidationError(details)
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\repository\admin_log_repository.go
+RELATIVE PATH: internal\repository\admin_log_repository.go
+// FILE: internal/repository/admin_log_repository.go
+package repository
+
+import (
+	"ai-notetaking-be/internal/entity"
+	"ai-notetaking-be/internal/pkg/serverutils"
+	"ai-notetaking-be/pkg/database"
+	"context"
+	"fmt"
+
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+// --- EXTEND IUserRepository ---
+
+func (r *userRepository) SearchUsers(ctx context.Context, query string, limit, offset int) ([]*entity.User, error) {
+	sql := `
+		SELECT id, email, full_name, role, status, created_at 
+		FROM users 
+		WHERE email ILIKE $1 OR full_name ILIKE $1 
+		ORDER BY created_at DESC 
+		LIMIT $2 OFFSET $3
+	`
+	rows, err := r.db.Query(ctx, sql, "%"+query+"%", limit, offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []*entity.User
+	for rows.Next() {
+		var u entity.User
+		var roleStr, statusStr string
+		if err := rows.Scan(&u.Id, &u.Email, &u.FullName, &roleStr, &statusStr, &u.CreatedAt); err != nil {
+			return nil, err
+		}
+		u.Role = entity.UserRole(roleStr)
+		u.Status = entity.UserStatus(statusStr)
+		users = append(users, &u)
+	}
+	return users, nil
+}
+
+func (r *userRepository) GetUserGrowth(ctx context.Context) ([]map[string]interface{}, error) {
+	sql := `
+		SELECT to_char(created_at, 'YYYY-MM-DD') as date, COUNT(*) as count 
+		FROM users 
+		WHERE created_at > NOW() - INTERVAL '30 days' 
+		GROUP BY date 
+		ORDER BY date ASC
+	`
+	rows, err := r.db.Query(ctx, sql)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var stats []map[string]interface{}
+	for rows.Next() {
+		var date string
+		var count int
+		if err := rows.Scan(&date, &count); err != nil {
+			return nil, err
+		}
+		stats = append(stats, map[string]interface{}{"date": date, "count": count})
+	}
+	return stats, nil
+}
+
+// --- NEW LogRepository ---
+
+type ILogRepository interface {
+	Create(ctx context.Context, level, module, message string, details map[string]interface{}) error
+	GetAll(ctx context.Context, level string, limit, offset int) ([]*entity.SystemLog, error)
+	GetById(ctx context.Context, id uuid.UUID) (*entity.SystemLog, error)
+}
+
+type logRepository struct {
+	db database.DatabaseQueryer
+}
+
+func NewLogRepository(db *pgxpool.Pool) ILogRepository {
+	return &logRepository{db: db}
+}
+
+func (r *logRepository) Create(ctx context.Context, level, module, message string, details map[string]interface{}) error {
+	_, err := r.db.Exec(ctx, `
+		INSERT INTO system_logs (level, module, message, details) VALUES ($1, $2, $3, $4)
+	`, level, module, message, details)
+	return err
+}
+
+func (r *logRepository) GetAll(ctx context.Context, level string, limit, offset int) ([]*entity.SystemLog, error) {
+	baseQuery := `SELECT id, level, module, message, created_at FROM system_logs`
+	var args []interface{}
+	counter := 1
+
+	if level != "" {
+		baseQuery += fmt.Sprintf(" WHERE level = $%d", counter)
+		args = append(args, level)
+		counter++
+	}
+
+	baseQuery += fmt.Sprintf(" ORDER BY created_at DESC LIMIT $%d OFFSET $%d", counter, counter+1)
+	args = append(args, limit, offset)
+
+	rows, err := r.db.Query(ctx, baseQuery, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var logs []*entity.SystemLog
+	for rows.Next() {
+		var l entity.SystemLog
+		if err := rows.Scan(&l.Id, &l.Level, &l.Module, &l.Message, &l.CreatedAt); err != nil {
+			return nil, err
+		}
+		logs = append(logs, &l)
+	}
+	return logs, nil
+}
+
+func (r *logRepository) GetById(ctx context.Context, id uuid.UUID) (*entity.SystemLog, error) {
+	var l entity.SystemLog
+	err := r.db.QueryRow(ctx, `SELECT id, level, module, message, details, created_at FROM system_logs WHERE id = $1`, id).
+		Scan(&l.Id, &l.Level, &l.Module, &l.Message, &l.Details, &l.CreatedAt)
+	if err != nil {
+		return nil, serverutils.ErrNotFound
+	}
+	return &l, nil
+}
+
+// REMOVED: GetTransactions implementation (It is now in subscription_repository.go)
+FILE: D:\notetaker\notefiber-BE\internal\repository\chat_message_raw_repository.go
+RELATIVE PATH: internal\repository\chat_message_raw_repository.go
+package repository
+
+import (
+	"ai-notetaking-be/internal/entity"
+	"ai-notetaking-be/pkg/database"
+	"context"
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+type IChatMessageRawRepository interface {
+	UsingTx(ctx context.Context, tx database.DatabaseQueryer) IChatMessageRawRepository
+	Create(ctx context.Context, chatMessageRaw *entity.ChatMessageRaw) error
+	GetByChatSessionId(ctx context.Context, chatSessionId uuid.UUID) ([]*entity.ChatMessageRaw, error)
+	DeleteByChatSessionId(ctx context.Context, chatSessionId uuid.UUID) error
+}
+
+type chatMessageRawRepository struct {
+	db database.DatabaseQueryer
+}
+
+func (n *chatMessageRawRepository) UsingTx(ctx context.Context, tx database.DatabaseQueryer) IChatMessageRawRepository {
+	return &chatMessageRawRepository{
+		db: tx,
+	}
+}
+
+func (cs *chatMessageRawRepository) Create(ctx context.Context, chatMessageRaw *entity.ChatMessageRaw) error {
+	_, err := cs.db.Exec(
+		ctx,
+		`INSERT INTO chat_message_raw (id, role, chat, chat_session_id, created_at, updated_at, deleted_at, is_deleted) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+		chatMessageRaw.Id,
+		chatMessageRaw.Role,
+		chatMessageRaw.Chat,
+		chatMessageRaw.ChatSessionId,
+		chatMessageRaw.CreatedAt,
+		chatMessageRaw.UpdatedAt,
+		chatMessageRaw.DeletedAt,
+		chatMessageRaw.IsDeleted,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (cs *chatMessageRawRepository) GetByChatSessionId(ctx context.Context, chatSessionId uuid.UUID) ([]*entity.ChatMessageRaw, error) {
+	rows, err := cs.db.Query(
+		ctx,
+		`SELECT id, role, chat, chat_session_id, created_at, updated_at, deleted_at, is_deleted FROM chat_message_raw WHERE chat_session_id = $1 AND is_deleted = false ORDER BY created_at ASC`,
+		chatSessionId,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	res := make([]*entity.ChatMessageRaw, 0)
+	for rows.Next() {
+		var chatMessageRaw entity.ChatMessageRaw
+
+		err = rows.Scan(
+			&chatMessageRaw.Id,
+			&chatMessageRaw.Role,
+			&chatMessageRaw.Chat,
+			&chatMessageRaw.ChatSessionId,
+			&chatMessageRaw.CreatedAt,
+			&chatMessageRaw.UpdatedAt,
+			&chatMessageRaw.DeletedAt,
+			&chatMessageRaw.IsDeleted,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		res = append(res, &chatMessageRaw)
+	}
+
+	return res, nil
+}
+
+func (cs *chatMessageRawRepository) DeleteByChatSessionId(ctx context.Context, chatSessionId uuid.UUID) error {
+	_, err := cs.db.Exec(
+		ctx,
+		`UPDATE chat_message_raw SET is_deleted = true, deleted_at = $1 WHERE chat_session_id = $2`,
+		time.Now(),
+		chatSessionId,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func NewChatMessageRawRepository(db *pgxpool.Pool) IChatMessageRawRepository {
+	return &chatMessageRawRepository{
+		db: db,
+	}
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\repository\chat_message_repository.go
+RELATIVE PATH: internal\repository\chat_message_repository.go
+package repository
+
+import (
+	"ai-notetaking-be/internal/entity"
+	"ai-notetaking-be/pkg/database"
+	"context"
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+type IChatMessageRepository interface {
+	UsingTx(ctx context.Context, tx database.DatabaseQueryer) IChatMessageRepository
+	Create(ctx context.Context, chatMessage *entity.ChatMessage) error
+	GetByChatSessionId(ctx context.Context, chatSessionId uuid.UUID) ([]*entity.ChatMessage, error)
+	DeleteByChatSessionId(ctx context.Context, chatSessionId uuid.UUID) error
+}
+
+type chatMessageRepository struct {
+	db database.DatabaseQueryer
+}
+
+func (n *chatMessageRepository) UsingTx(ctx context.Context, tx database.DatabaseQueryer) IChatMessageRepository {
+	return &chatMessageRepository{
+		db: tx,
+	}
+}
+
+func (cs *chatMessageRepository) Create(ctx context.Context, chatMessage *entity.ChatMessage) error {
+	_, err := cs.db.Exec(
+		ctx,
+		`INSERT INTO chat_message (id, role, chat, chat_session_id, created_at, updated_at, deleted_at, is_deleted) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+		chatMessage.Id,
+		chatMessage.Role,
+		chatMessage.Chat,
+		chatMessage.ChatSessionId,
+		chatMessage.CreatedAt,
+		chatMessage.UpdatedAt,
+		chatMessage.DeletedAt,
+		chatMessage.IsDeleted,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (cs *chatMessageRepository) GetByChatSessionId(ctx context.Context, chatSessionId uuid.UUID) ([]*entity.ChatMessage, error) {
+	rows, err := cs.db.Query(
+		ctx,
+		`SELECT id, role, chat, chat_session_id, created_at, updated_at, deleted_at, is_deleted FROM chat_message WHERE chat_session_id = $1 AND is_deleted = false ORDER BY created_at ASC`,
+		chatSessionId,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	res := make([]*entity.ChatMessage, 0)
+	for rows.Next() {
+		var chatMessage entity.ChatMessage
+
+		err = rows.Scan(
+			&chatMessage.Id,
+			&chatMessage.Role,
+			&chatMessage.Chat,
+			&chatMessage.ChatSessionId,
+			&chatMessage.CreatedAt,
+			&chatMessage.UpdatedAt,
+			&chatMessage.DeletedAt,
+			&chatMessage.IsDeleted,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		res = append(res, &chatMessage)
+	}
+
+	return res, nil
+}
+
+func (cs *chatMessageRepository) DeleteByChatSessionId(ctx context.Context, chatSessionId uuid.UUID) error {
+	_, err := cs.db.Exec(
+		ctx,
+		`UPDATE chat_message SET is_deleted = true, deleted_at = $1 WHERE chat_session_id = $2`,
+		time.Now(),
+		chatSessionId,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func NewChatMessageRepository(db *pgxpool.Pool) IChatMessageRepository {
+	return &chatMessageRepository{
+		db: db,
+	}
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\repository\chat_session_repository.go
+RELATIVE PATH: internal\repository\chat_session_repository.go
+package repository
+
+import (
+	"ai-notetaking-be/internal/entity"
+	"ai-notetaking-be/pkg/database"
+	"context"
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+type IChatSessionRepository interface {
+	UsingTx(ctx context.Context, tx database.DatabaseQueryer) IChatSessionRepository
+	Create(ctx context.Context, chatSession *entity.ChatSession) error
+	GetAll(ctx context.Context) ([]*entity.ChatSession, error)
+	GetById(ctx context.Context, id uuid.UUID) (*entity.ChatSession, error)
+	Update(ctx context.Context, chatSession *entity.ChatSession) error
+	Delete(ctx context.Context, id uuid.UUID) error
+}
+
+type chatSessionRepository struct {
+	db database.DatabaseQueryer
+}
+
+func (n *chatSessionRepository) UsingTx(ctx context.Context, tx database.DatabaseQueryer) IChatSessionRepository {
+	return &chatSessionRepository{
+		db: tx,
+	}
+}
+
+func (cs *chatSessionRepository) Create(ctx context.Context, chatSession *entity.ChatSession) error {
+	_, err := cs.db.Exec(
+		ctx,
+		`INSERT INTO chat_session (id, title, created_at, updated_at, deleted_at, is_deleted) VALUES ($1, $2, $3, $4, $5, $6)`,
+		chatSession.Id,
+		chatSession.Title,
+		chatSession.CreatedAt,
+		chatSession.UpdatedAt,
+		chatSession.DeletedAt,
+		chatSession.IsDeleted,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (cs *chatSessionRepository) GetAll(ctx context.Context) ([]*entity.ChatSession, error) {
+	rows, err := cs.db.Query(
+		ctx,
+		`SELECT id, title, created_at, updated_at, deleted_at, is_deleted FROM chat_session WHERE is_deleted = false ORDER BY created_at DESC`,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	res := make([]*entity.ChatSession, 0)
+	for rows.Next() {
+		var chatSession entity.ChatSession
+
+		err = rows.Scan(
+			&chatSession.Id,
+			&chatSession.Title,
+			&chatSession.CreatedAt,
+			&chatSession.UpdatedAt,
+			&chatSession.DeletedAt,
+			&chatSession.IsDeleted,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		res = append(res, &chatSession)
+	}
+
+	return res, nil
+}
+
+func (cs *chatSessionRepository) GetById(ctx context.Context, id uuid.UUID) (*entity.ChatSession, error) {
+	row := cs.db.QueryRow(
+		ctx,
+		`SELECT id, title, created_at, updated_at, deleted_at, is_deleted FROM chat_session WHERE id = $1 AND is_deleted = false`,
+		id,
+	)
+
+	var result entity.ChatSession
+	err := row.Scan(
+		&result.Id,
+		&result.Title,
+		&result.CreatedAt,
+		&result.UpdatedAt,
+		&result.DeletedAt,
+		&result.IsDeleted,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &result, nil
+}
+
+func (cs *chatSessionRepository) Update(ctx context.Context, chatSession *entity.ChatSession) error {
+	_, err := cs.db.Exec(
+		ctx,
+		`UPDATE chat_session SET title = $1, updated_at = $2 WHERE id = $3`,
+		chatSession.Title,
+		chatSession.UpdatedAt,
+		chatSession.Id,
+	)
+	if err != nil {
+		return nil
+	}
+
+	return nil
+}
+
+func (cs *chatSessionRepository) Delete(ctx context.Context, id uuid.UUID) error {
+	_, err := cs.db.Exec(
+		ctx,
+		`UPDATE chat_session SET deleted_at = $1, is_deleted = true WHERE id = $2`,
+		time.Now(),
+		id,
+	)
+	if err != nil {
+		return nil
+	}
+
+	return nil
+}
+
+func NewChatSessionRepository(db *pgxpool.Pool) IChatSessionRepository {
+	return &chatSessionRepository{
+		db: db,
+	}
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\repository\example_repository.go
+RELATIVE PATH: internal\repository\example_repository.go
+package repository
+
+import (
+	"ai-notetaking-be/internal/entity"
+	"ai-notetaking-be/pkg/database"
+	"context"
+
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+type IExampleRepository interface {
+	UsingTx(ctx context.Context, tx database.DatabaseQueryer) IExampleRepository
+	Ping(ctx context.Context) (*entity.Example, error)
+}
+
+type exampleRepository struct {
+	db database.DatabaseQueryer
+}
+
+func (n *exampleRepository) UsingTx(ctx context.Context, tx database.DatabaseQueryer) IExampleRepository {
+	return &exampleRepository{
+		db: tx,
+	}
+}
+
+func (n *exampleRepository) Ping(ctx context.Context) (*entity.Example, error) {
+	row := n.db.QueryRow(
+		ctx,
+		`SELECT 'hello' AS "message"`,
+	)
+	var example entity.Example
+	err := row.Scan(
+		&example.Message,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &example, nil
+}
+
+func NewExampleRepository(db *pgxpool.Pool) IExampleRepository {
+	return &exampleRepository{
+		db: db,
+	}
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\repository\notebook_repository.go
+RELATIVE PATH: internal\repository\notebook_repository.go
+package repository
+
+import (
+	"ai-notetaking-be/internal/entity"
+	"ai-notetaking-be/internal/pkg/serverutils"
+	"ai-notetaking-be/pkg/database"
+	"context"
+	"errors"
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+type INotebookRepository interface {
+	UsingTx(ctx context.Context, tx database.DatabaseQueryer) INotebookRepository
+	GetAll(ctx context.Context) ([]*entity.Notebook, error)
+	Create(ctx context.Context, notebook *entity.Notebook) error
+	GetById(ctx context.Context, id uuid.UUID) (*entity.Notebook, error)
+	Update(ctx context.Context, notebook *entity.Notebook) error
+	DeleteById(ctx context.Context, id uuid.UUID) error
+	NullifyParentById(ctx context.Context, parentId uuid.UUID) error
+	UpdateParentId(ctx context.Context, id uuid.UUID, parentId *uuid.UUID) error
+}
+
+type notebookRepository struct {
+	db database.DatabaseQueryer
+}
+
+func (n *notebookRepository) UsingTx(ctx context.Context, tx database.DatabaseQueryer) INotebookRepository {
+	return &notebookRepository{
+		db: tx,
+	}
+}
+
+func (n *notebookRepository) GetAll(ctx context.Context) ([]*entity.Notebook, error) {
+	rows, err := n.db.Query(
+		ctx,
+		`SELECT id, name, parent_id, created_at, updated_at FROM notebook WHERE is_deleted = false ORDER BY name ASC`,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	result := make([]*entity.Notebook, 0)
+	for rows.Next() {
+		var notebook entity.Notebook
+		err = rows.Scan(
+			&notebook.Id,
+			&notebook.Name,
+			&notebook.ParentId,
+			&notebook.CreatedAt,
+			&notebook.UpdatedAt,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		result = append([]*entity.Notebook{&notebook}, result...)
+	}
+
+	return result, nil
+}
+
+func (n *notebookRepository) Create(ctx context.Context, notebook *entity.Notebook) error {
+	_, err := n.db.Exec(
+		ctx,
+		`INSERT INTO notebook (id, name, parent_id, created_at, updated_at, deleted_at, is_deleted) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+		notebook.Id,
+		notebook.Name,
+		notebook.ParentId,
+		notebook.CreatedAt,
+		notebook.UpdatedAt,
+		notebook.DeletedAt,
+		notebook.IsDeleted,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (n *notebookRepository) GetById(ctx context.Context, id uuid.UUID) (*entity.Notebook, error) {
+	row := n.db.QueryRow(
+		ctx,
+		`SELECT id, name, parent_id, created_at, updated_at, deleted_at, is_deleted FROM notebook n WHERE n.is_deleted = false AND n.id = $1`,
+		id,
+	)
+	var notebook entity.Notebook
+
+	err := row.Scan(
+		&notebook.Id,
+		&notebook.Name,
+		&notebook.ParentId,
+		&notebook.CreatedAt,
+		&notebook.UpdatedAt,
+		&notebook.DeletedAt,
+		&notebook.IsDeleted,
+	)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, serverutils.ErrNotFound
+		}
+		return nil, err
+	}
+
+	return &notebook, nil
+}
+
+func (n *notebookRepository) Update(ctx context.Context, notebook *entity.Notebook) error {
+	_, err := n.db.Exec(
+		ctx,
+		`
+		UPDATE notebook SET
+			name = $1,
+			parent_id = $2,
+			updated_at = $3
+		WHERE id = $4
+		`,
+		notebook.Name,
+		notebook.ParentId,
+		notebook.UpdatedAt,
+		notebook.Id,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (n *notebookRepository) DeleteById(ctx context.Context, id uuid.UUID) error {
+	_, err := n.db.Exec(
+		ctx,
+		`
+		UPDATE notebook SET is_deleted = true, deleted_at = $1 WHERE id = $2
+		`,
+		time.Now(),
+		id,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (n *notebookRepository) NullifyParentById(ctx context.Context, parentId uuid.UUID) error {
+	_, err := n.db.Exec(
+		ctx,
+		`
+		UPDATE notebook SET parent_id = null, updated_at = $1 WHERE parent_id = $2
+		`,
+		time.Now(),
+		parentId,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (n *notebookRepository) UpdateParentId(ctx context.Context, id uuid.UUID, parentId *uuid.UUID) error {
+	_, err := n.db.Exec(
+		ctx,
+		`
+		UPDATE notebook SET parent_id = $1, updated_at = $2 WHERE id = $3
+		`,
+		parentId,
+		time.Now(),
+		id,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func NewNotebookRepository(db *pgxpool.Pool) INotebookRepository {
+	return &notebookRepository{
+		db: db,
+	}
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\repository\note_embedding_repository.go
+RELATIVE PATH: internal\repository\note_embedding_repository.go
+package repository
+
+import (
+	"ai-notetaking-be/internal/entity"
+	"ai-notetaking-be/pkg/database"
+	"context"
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/pgvector/pgvector-go"
+)
+
+type INoteEmbeddingRepository interface {
+	UsingTx(ctx context.Context, tx database.DatabaseQueryer) INoteEmbeddingRepository
+	Create(ctx context.Context, noteEmbedding *entity.NoteEmbedding) error
+	DeleteByNoteId(ctx context.Context, noteId uuid.UUID) error
+	SemanticSearch(ctx context.Context, embeddingValues []float32) ([]*entity.NoteEmbedding, error)
+	DeleteByNotebookId(ctx context.Context, notebookId uuid.UUID) error
+	SearchSimilarity(ctx context.Context, embeddingValues []float32) ([]*entity.NoteEmbedding, error)
+}
+
+type noteEmbeddingRepository struct {
+	db database.DatabaseQueryer
+}
+
+func (n *noteEmbeddingRepository) UsingTx(ctx context.Context, tx database.DatabaseQueryer) INoteEmbeddingRepository {
+	return &noteEmbeddingRepository{
+		db: tx,
+	}
+}
+
+func (n *noteEmbeddingRepository) Create(ctx context.Context, noteEmbedding *entity.NoteEmbedding) error {
+	_, err := n.db.Exec(
+		ctx,
+		`INSERT INTO note_embedding (id, document, embedding_value, note_id, created_at, updated_at, deleted_at, is_deleted) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+		noteEmbedding.Id,
+		noteEmbedding.Document,
+		pgvector.NewVector(noteEmbedding.EmbeddingValue),
+		noteEmbedding.NoteId,
+		noteEmbedding.CreatedAt,
+		noteEmbedding.UpdatedAt,
+		noteEmbedding.DeletedAt,
+		noteEmbedding.IsDeleted,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (n *noteEmbeddingRepository) DeleteByNoteId(ctx context.Context, noteId uuid.UUID) error {
+	_, err := n.db.Exec(
+		ctx,
+		`UPDATE note_embedding SET deleted_at = $1, is_deleted = true WHERE note_id = $2`,
+		time.Now(),
+		noteId,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (n *noteEmbeddingRepository) SemanticSearch(ctx context.Context, embeddingValues []float32) ([]*entity.NoteEmbedding, error) {
+	rows, err := n.db.Query(
+		ctx,
+		`SELECT id, note_id FROM note_embedding WHERE is_deleted = false ORDER BY 1 - (embedding_value <=> $1) DESC LIMIT 5`,
+		pgvector.NewVector(embeddingValues),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close() // FIX: Always close rows
+
+	res := make([]*entity.NoteEmbedding, 0)
+	for rows.Next() {
+		var noteEmbedding entity.NoteEmbedding
+		err = rows.Scan(
+			&noteEmbedding.Id,
+			&noteEmbedding.NoteId,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		res = append(res, &noteEmbedding)
+	}
+
+	// FIX: Check for errors during iteration
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+func (n *noteEmbeddingRepository) SearchSimilarity(ctx context.Context, embeddingValues []float32) ([]*entity.NoteEmbedding, error) {
+	// CRITICAL FIX: Added threshold (> 0.5) to filter out irrelevant notes.
+	// 1 - (embedding_value <=> $1) is Cosine Similarity.
+	// Notes with similarity below 0.5 will be ignored.
+	rows, err := n.db.Query(
+		ctx,
+		`SELECT id, document 
+		 FROM note_embedding 
+		 WHERE is_deleted = false 
+		 AND (1 - (embedding_value <=> $1)) > 0.5 
+		 ORDER BY 1 - (embedding_value <=> $1) DESC 
+		 LIMIT 5`,
+		pgvector.NewVector(embeddingValues),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close() // FIX: Always close rows
+
+	res := make([]*entity.NoteEmbedding, 0)
+	for rows.Next() {
+		var noteEmbedding entity.NoteEmbedding
+		err = rows.Scan(
+			&noteEmbedding.Id,
+			&noteEmbedding.Document,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		res = append(res, &noteEmbedding)
+	}
+
+	// FIX: Check for errors during iteration
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+func (n *noteEmbeddingRepository) DeleteByNotebookId(ctx context.Context, notebookId uuid.UUID) error {
+	_, err := n.db.Exec(
+		ctx,
+		`UPDATE note_embedding SET is_deleted = true, deleted_at = $1 WHERE note_id IN (SELECT id FROM note WHERE notebook_id = $2 AND is_deleted = false)`,
+		time.Now(),
+		notebookId,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func NewNoteEmbeddingRepository(db *pgxpool.Pool) INoteEmbeddingRepository {
+	return &noteEmbeddingRepository{
+		db: db,
+	}
+}
+FILE: D:\notetaker\notefiber-BE\internal\repository\note_repository.go
+RELATIVE PATH: internal\repository\note_repository.go
+package repository
+
+import (
+	"ai-notetaking-be/internal/entity"
+	"ai-notetaking-be/internal/pkg/serverutils"
+	"ai-notetaking-be/pkg/database"
+	"context"
+	"errors"
+	"fmt"
+	"strings"
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+type INoteRepository interface {
+	UsingTx(ctx context.Context, tx database.DatabaseQueryer) INoteRepository
+	Create(ctx context.Context, note *entity.Note) error
+	GetById(ctx context.Context, id uuid.UUID) (*entity.Note, error)
+	GetByNotebookIds(ctx context.Context, ids []uuid.UUID) ([]*entity.Note, error)
+	Update(ctx context.Context, note *entity.Note) error
+	Delete(ctx context.Context, id uuid.UUID) error
+	DeleteByNotebookId(ctx context.Context, notebookId uuid.UUID) error
+	GetByIds(ctx context.Context, ids []uuid.UUID) ([]*entity.Note, error)
+}
+
+type noteRepository struct {
+	db database.DatabaseQueryer
+}
+
+func (n *noteRepository) UsingTx(ctx context.Context, tx database.DatabaseQueryer) INoteRepository {
+	return &noteRepository{
+		db: tx,
+	}
+}
+
+func (n *noteRepository) Create(ctx context.Context, note *entity.Note) error {
+	_, err := n.db.Exec(
+		ctx,
+		`INSERT INTO note (id, title, content, notebook_id, created_at, updated_at, deleted_at, is_deleted) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+		note.Id,
+		note.Title,
+		note.Content,
+		note.NotebookId,
+		note.CreatedAt,
+		note.UpdatedAt,
+		note.DeletedAt,
+		note.IsDeleted,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (n *noteRepository) GetById(ctx context.Context, id uuid.UUID) (*entity.Note, error) {
+	row := n.db.QueryRow(
+		ctx,
+		`SELECT id, title, content, notebook_id, created_at, updated_at FROM note WHERE id = $1 AND is_deleted = false`,
+		id,
+	)
+
+	var note entity.Note
+	err := row.Scan(
+		&note.Id,
+		&note.Title,
+		&note.Content,
+		&note.NotebookId,
+		&note.CreatedAt,
+		&note.UpdatedAt,
+	)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, serverutils.ErrNotFound
+		}
+		return nil, err
+	}
+
+	return &note, nil
+}
+
+func (n *noteRepository) Update(ctx context.Context, note *entity.Note) error {
+	_, err := n.db.Exec(
+		ctx,
+		`
+		UPDATE note SET
+			title = $1,
+			content = $2,
+			notebook_id = $3,
+			updated_at = $4
+		WHERE id = $5
+		`,
+		note.Title,
+		note.Content,
+		note.NotebookId,
+		note.UpdatedAt,
+		note.Id,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (n *noteRepository) Delete(ctx context.Context, id uuid.UUID) error {
+	_, err := n.db.Exec(
+		ctx,
+		`
+		UPDATE note SET
+			deleted_at = $1,
+			is_deleted = true
+		WHERE id = $2
+		`,
+		time.Now(),
+		id,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (n *noteRepository) DeleteByNotebookId(ctx context.Context, notebookId uuid.UUID) error {
+	_, err := n.db.Exec(
+		ctx,
+		`UPDATE note SET deleted_at = $1, is_deleted = true WHERE notebook_id = $2`,
+		time.Now(),
+		notebookId,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (n *noteRepository) GetByNotebookIds(ctx context.Context, ids []uuid.UUID) ([]*entity.Note, error) {
+	if len(ids) == 0 {
+		return make([]*entity.Note, 0), nil
+	}
+
+	idStr := make([]string, 0)
+	for _, id := range ids {
+		idStr = append(idStr, fmt.Sprintf("'%s'", id.String()))
+	}
+	idSqlFormat := strings.Join(idStr, ", ")
+
+	rows, err := n.db.Query(
+		ctx,
+		fmt.Sprintf(`SELECT id, title, content, notebook_id, created_at, updated_at FROM note WHERE notebook_id IN (%s) AND is_deleted = false`, idSqlFormat),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	result := make([]*entity.Note, 0)
+	for rows.Next() {
+		var note entity.Note
+
+		err = rows.Scan(
+			&note.Id,
+			&note.Title,
+			&note.Content,
+			&note.NotebookId,
+			&note.CreatedAt,
+			&note.UpdatedAt,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		result = append(result, &note)
+	}
+
+	return result, nil
+}
+
+func (n *noteRepository) GetByIds(ctx context.Context, ids []uuid.UUID) ([]*entity.Note, error) {
+	if len(ids) == 0 {
+		return make([]*entity.Note, 0), nil
+	}
+
+	idStr := make([]string, 0)
+	for _, id := range ids {
+		idStr = append(idStr, fmt.Sprintf("'%s'", id.String()))
+	}
+	idSqlFormat := strings.Join(idStr, ", ")
+
+	rows, err := n.db.Query(
+		ctx,
+		fmt.Sprintf(`SELECT id, title, content, notebook_id, created_at, updated_at FROM note WHERE id IN (%s) AND is_deleted = false`, idSqlFormat),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	result := make([]*entity.Note, 0)
+	for rows.Next() {
+		var note entity.Note
+
+		err = rows.Scan(
+			&note.Id,
+			&note.Title,
+			&note.Content,
+			&note.NotebookId,
+			&note.CreatedAt,
+			&note.UpdatedAt,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		result = append(result, &note)
+	}
+
+	return result, nil
+}
+
+func NewNoteRepository(db *pgxpool.Pool) INoteRepository {
+	return &noteRepository{
+		db: db,
+	}
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\repository\subscription_repository.go
+RELATIVE PATH: internal\repository\subscription_repository.go
+// FILE: internal/repository/subscription_repository.go
+package repository
+
+import (
+	"ai-notetaking-be/internal/entity"
+	"ai-notetaking-be/internal/pkg/serverutils"
+	"ai-notetaking-be/pkg/database"
+	"context"
+	"errors"
+	"fmt"
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+type ISubscriptionRepository interface {
+	GetAllPlans(ctx context.Context) ([]*entity.SubscriptionPlan, error)
+	GetPlanById(ctx context.Context, id uuid.UUID) (*entity.SubscriptionPlan, error)
+	CreateSubscription(ctx context.Context, sub *entity.UserSubscription) error
+	GetSubscriptionById(ctx context.Context, id uuid.UUID) (*entity.UserSubscription, error)
+	UpdateSubscriptionStatus(ctx context.Context, id uuid.UUID, status entity.SubscriptionStatus, paymentStatus entity.PaymentStatus) error
+	
+	// New Methods
+	GetActiveByUserId(ctx context.Context, userId uuid.UUID) (*entity.UserSubscription, *entity.SubscriptionPlan, error)
+	CancelSubscription(ctx context.Context, id uuid.UUID) error
+	GetTotalRevenue(ctx context.Context) (float64, error)
+	CountActiveSubscribers(ctx context.Context) (int, error)
+
+    // Admin Transaction Method
+    GetTransactions(ctx context.Context, status string, limit, offset int) ([]*entity.TransactionDetail, error)
+}
+
+type subscriptionRepository struct {
+	db database.DatabaseQueryer
+}
+
+func NewSubscriptionRepository(db *pgxpool.Pool) ISubscriptionRepository {
+	return &subscriptionRepository{db: db}
+}
+
+// ... Keep Existing Methods (GetAllPlans, GetPlanById, CreateSubscription, GetSubscriptionById, UpdateSubscriptionStatus) ...
+
+func (r *subscriptionRepository) GetAllPlans(ctx context.Context) ([]*entity.SubscriptionPlan, error) {
+	rows, err := r.db.Query(ctx, `SELECT id, name, slug, description, price, billing_period, max_notes, semantic_search_enabled, ai_chat_enabled, ai_daily_credit_limit FROM subscription_plans ORDER BY price ASC`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var plans []*entity.SubscriptionPlan
+	for rows.Next() {
+		var p entity.SubscriptionPlan
+		var bp string
+		err := rows.Scan(&p.Id, &p.Name, &p.Slug, &p.Description, &p.Price, &bp, &p.MaxNotes, &p.SemanticSearchEnabled, &p.AiChatEnabled, &p.AiDailyCreditLimit)
+		if err != nil {
+			return nil, err
+		}
+		p.BillingPeriod = entity.BillingPeriod(bp)
+		plans = append(plans, &p)
+	}
+	return plans, nil
+}
+
+func (r *subscriptionRepository) GetPlanById(ctx context.Context, id uuid.UUID) (*entity.SubscriptionPlan, error) {
+	row := r.db.QueryRow(ctx, `SELECT id, name, price, billing_period FROM subscription_plans WHERE id = $1`, id)
+	var p entity.SubscriptionPlan
+	var bp string
+	err := row.Scan(&p.Id, &p.Name, &p.Price, &bp)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return nil, serverutils.ErrNotFound
+	}
+	p.BillingPeriod = entity.BillingPeriod(bp)
+	return &p, err
+}
+
+func (r *subscriptionRepository) CreateSubscription(ctx context.Context, sub *entity.UserSubscription) error {
+	_, err := r.db.Exec(ctx, `
+		INSERT INTO user_subscriptions (id, user_id, plan_id, status, current_period_start, current_period_end, payment_status, created_at, updated_at)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+	`, sub.Id, sub.UserId, sub.PlanId, sub.Status, sub.CurrentPeriodStart, sub.CurrentPeriodEnd, sub.PaymentStatus, sub.CreatedAt, sub.UpdatedAt)
+	return err
+}
+
+func (r *subscriptionRepository) GetSubscriptionById(ctx context.Context, id uuid.UUID) (*entity.UserSubscription, error) {
+	row := r.db.QueryRow(ctx, `SELECT id, user_id, plan_id, status, payment_status FROM user_subscriptions WHERE id = $1`, id)
+	var s entity.UserSubscription
+	err := row.Scan(&s.Id, &s.UserId, &s.PlanId, &s.Status, &s.PaymentStatus)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return nil, serverutils.ErrNotFound
+	}
+	return &s, err
+}
+
+func (r *subscriptionRepository) UpdateSubscriptionStatus(ctx context.Context, id uuid.UUID, status entity.SubscriptionStatus, paymentStatus entity.PaymentStatus) error {
+	ct, err := r.db.Exec(ctx, `UPDATE user_subscriptions SET status = $1, payment_status = $2, updated_at = $3 WHERE id = $4`, status, paymentStatus, time.Now(), id)
+	if err != nil {
+		return err
+	}
+	if ct.RowsAffected() == 0 {
+		return fmt.Errorf("no subscription found with id %s to update", id)
+	}
+	return nil
+}
+
+// --- NEW METHODS ---
+
+func (r *subscriptionRepository) GetActiveByUserId(ctx context.Context, userId uuid.UUID) (*entity.UserSubscription, *entity.SubscriptionPlan, error) {
+	// Join with plans to get details
+	query := `
+		SELECT 
+			us.id, us.status, us.current_period_end, 
+			sp.name, sp.ai_daily_credit_limit 
+		FROM user_subscriptions us
+		JOIN subscription_plans sp ON us.plan_id = sp.id
+		WHERE us.user_id = $1 AND us.status = 'active' AND us.current_period_end > NOW()
+		ORDER BY us.created_at DESC
+		LIMIT 1
+	`
+	row := r.db.QueryRow(ctx, query, userId)
+
+	var sub entity.UserSubscription
+	var plan entity.SubscriptionPlan
+	
+	// We only scan partial fields needed for status display
+	err := row.Scan(&sub.Id, &sub.Status, &sub.CurrentPeriodEnd, &plan.Name, &plan.AiDailyCreditLimit)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return nil, nil, nil // No active subscription
+	}
+	if err != nil {
+		return nil, nil, err
+	}
+	return &sub, &plan, nil
+}
+
+func (r *subscriptionRepository) CancelSubscription(ctx context.Context, id uuid.UUID) error {
+	_, err := r.db.Exec(ctx, `UPDATE user_subscriptions SET status = 'canceled', updated_at = $1 WHERE id = $2`, time.Now(), id)
+	return err
+}
+
+func (r *subscriptionRepository) GetTotalRevenue(ctx context.Context) (float64, error) {
+	// Sum price of all plans linked to PAID subscriptions
+	query := `
+		SELECT COALESCE(SUM(sp.price), 0)
+		FROM user_subscriptions us
+		JOIN subscription_plans sp ON us.plan_id = sp.id
+		WHERE us.payment_status = 'success'
+	`
+	var revenue float64
+	err := r.db.QueryRow(ctx, query).Scan(&revenue)
+	return revenue, err
+}
+
+func (r *subscriptionRepository) CountActiveSubscribers(ctx context.Context) (int, error) {
+	var count int
+	err := r.db.QueryRow(ctx, `SELECT COUNT(*) FROM user_subscriptions WHERE status = 'active'`).Scan(&count)
+	return count, err
+}
+
+// Implementation of GetTransactions
+func (r *subscriptionRepository) GetTransactions(ctx context.Context, status string, limit, offset int) ([]*entity.TransactionDetail, error) {
+	// A JOIN query to fetch transaction info
+	sql := `
+		SELECT us.id, us.user_id, u.email, sp.name, sp.price, us.status, us.payment_status, us.created_at, us.midtrans_transaction_id
+		FROM user_subscriptions us
+		JOIN users u ON us.user_id = u.id
+		JOIN subscription_plans sp ON us.plan_id = sp.id
+	`
+	var args []interface{}
+	counter := 1
+
+	if status != "" {
+		sql += fmt.Sprintf(" WHERE us.payment_status = $%d", counter)
+		args = append(args, status)
+		counter++
+	}
+
+	sql += fmt.Sprintf(" ORDER BY us.created_at DESC LIMIT $%d OFFSET $%d", counter, counter+1)
+	args = append(args, limit, offset)
+
+	rows, err := r.db.Query(ctx, sql, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var txs []*entity.TransactionDetail
+	for rows.Next() {
+		var t entity.TransactionDetail
+		// Use generic string scanning for enums to avoid type mismatch in projection
+		var statusStr, payStatusStr string
+		if err := rows.Scan(&t.Id, &t.UserId, &t.UserEmail, &t.PlanName, &t.Amount, &statusStr, &payStatusStr, &t.CreatedAt, &t.MidtransOrderId); err != nil {
+			return nil, err
+		}
+		t.Status = statusStr
+		t.PaymentStatus = payStatusStr
+		txs = append(txs, &t)
+	}
+	return txs, nil
+}
+FILE: D:\notetaker\notefiber-BE\internal\repository\user_repository.go
+RELATIVE PATH: internal\repository\user_repository.go
+// FILE: internal/repository/user_repository.go
+package repository
+
+import (
+	"ai-notetaking-be/internal/entity"
+	"ai-notetaking-be/internal/pkg/serverutils"
+	"ai-notetaking-be/pkg/database"
+	"context"
+	"errors"
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+type IUserRepository interface {
+	UsingTx(ctx context.Context, tx database.DatabaseQueryer) IUserRepository
+	Create(ctx context.Context, user *entity.User) error
+	GetByEmail(ctx context.Context, email string) (*entity.User, error)
+	GetById(ctx context.Context, id uuid.UUID) (*entity.User, error)
+	CreatePasswordResetToken(ctx context.Context, token *entity.PasswordResetToken) error
+	GetPasswordResetToken(ctx context.Context, tokenString string) (*entity.PasswordResetToken, error)
+	MarkTokenUsed(ctx context.Context, id uuid.UUID) error
+	UpdatePassword(ctx context.Context, userId uuid.UUID, hash string) error
+
+	// OTP Methods
+	CreateVerificationToken(ctx context.Context, token *entity.EmailVerificationToken) error
+	GetVerificationToken(ctx context.Context, userId uuid.UUID, token string) (*entity.EmailVerificationToken, error)
+	DeleteVerificationToken(ctx context.Context, id uuid.UUID) error
+	ActivateUser(ctx context.Context, userId uuid.UUID) error
+
+	// New Profile & Admin Methods
+	Update(ctx context.Context, user *entity.User) error
+	Delete(ctx context.Context, id uuid.UUID) error
+	GetAll(ctx context.Context, limit, offset int) ([]*entity.User, error)
+	Count(ctx context.Context) (int, error)
+	CountByStatus(ctx context.Context, status entity.UserStatus) (int, error)
+	UpdateStatus(ctx context.Context, id uuid.UUID, status entity.UserStatus) error
+
+	// Search & Stats (Implemented in admin_log_repository.go)
+	SearchUsers(ctx context.Context, query string, limit, offset int) ([]*entity.User, error)
+	GetUserGrowth(ctx context.Context) ([]map[string]interface{}, error)
+}
+
+type userRepository struct {
+	db database.DatabaseQueryer
+}
+
+func NewUserRepository(db *pgxpool.Pool) IUserRepository {
+	return &userRepository{db: db}
+}
+
+func (r *userRepository) UsingTx(ctx context.Context, tx database.DatabaseQueryer) IUserRepository {
+	return &userRepository{db: tx}
+}
+
+// ... Existing methods (Create, GetByEmail, GetById, OTP methods, etc.) are assumed to be here ...
+// ... I am appending the new methods below ...
+
+func (r *userRepository) Create(ctx context.Context, user *entity.User) error {
+	_, err := r.db.Exec(ctx, `
+		INSERT INTO users (id, email, password_hash, full_name, role, status, email_verified, created_at, updated_at)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+	`, user.Id, user.Email, user.PasswordHash, user.FullName, user.Role, user.Status, user.EmailVerified, user.CreatedAt, user.UpdatedAt)
+	return err
+}
+
+func (r *userRepository) GetByEmail(ctx context.Context, email string) (*entity.User, error) {
+	row := r.db.QueryRow(ctx, `SELECT id, email, password_hash, full_name, role, status FROM users WHERE email = $1`, email)
+	var user entity.User
+	err := row.Scan(&user.Id, &user.Email, &user.PasswordHash, &user.FullName, &user.Role, &user.Status)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return nil, nil
+	}
+	return &user, err
+}
+
+func (r *userRepository) GetById(ctx context.Context, id uuid.UUID) (*entity.User, error) {
+	row := r.db.QueryRow(ctx, `SELECT id, email, full_name, role, status, ai_daily_usage, created_at FROM users WHERE id = $1`, id)
+	var user entity.User
+	err := row.Scan(&user.Id, &user.Email, &user.FullName, &user.Role, &user.Status, &user.AiDailyUsage, &user.CreatedAt)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return nil, serverutils.ErrNotFound
+	}
+	return &user, err
+}
+
+func (r *userRepository) CreatePasswordResetToken(ctx context.Context, token *entity.PasswordResetToken) error {
+	_, err := r.db.Exec(ctx, `
+		INSERT INTO password_reset_tokens (id, user_id, token, expires_at, used, created_at)
+		VALUES ($1, $2, $3, $4, $5, $6)
+	`, token.Id, token.UserId, token.Token, token.ExpiresAt, token.Used, token.CreatedAt)
+	return err
+}
+
+func (r *userRepository) GetPasswordResetToken(ctx context.Context, tokenString string) (*entity.PasswordResetToken, error) {
+	row := r.db.QueryRow(ctx, `SELECT id, user_id, token, expires_at, used FROM password_reset_tokens WHERE token = $1`, tokenString)
+	var t entity.PasswordResetToken
+	err := row.Scan(&t.Id, &t.UserId, &t.Token, &t.ExpiresAt, &t.Used)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return nil, serverutils.ErrNotFound
+	}
+	return &t, err
+}
+
+func (r *userRepository) MarkTokenUsed(ctx context.Context, id uuid.UUID) error {
+	_, err := r.db.Exec(ctx, `UPDATE password_reset_tokens SET used = true WHERE id = $1`, id)
+	return err
+}
+
+func (r *userRepository) UpdatePassword(ctx context.Context, userId uuid.UUID, hash string) error {
+	_, err := r.db.Exec(ctx, `UPDATE users SET password_hash = $1, updated_at = $2 WHERE id = $3`, hash, time.Now(), userId)
+	return err
+}
+
+func (r *userRepository) CreateVerificationToken(ctx context.Context, token *entity.EmailVerificationToken) error {
+	_, err := r.db.Exec(ctx, `
+		INSERT INTO email_verification_tokens (id, user_id, token, expires_at, created_at)
+		VALUES ($1, $2, $3, $4, $5)
+	`, token.Id, token.UserId, token.Token, token.ExpiresAt, token.CreatedAt)
+	return err
+}
+
+func (r *userRepository) GetVerificationToken(ctx context.Context, userId uuid.UUID, token string) (*entity.EmailVerificationToken, error) {
+	row := r.db.QueryRow(ctx, `
+		SELECT id, user_id, token, expires_at, created_at 
+		FROM email_verification_tokens 
+		WHERE user_id = $1 AND token = $2
+	`, userId, token)
+
+	var t entity.EmailVerificationToken
+	err := row.Scan(&t.Id, &t.UserId, &t.Token, &t.ExpiresAt, &t.CreatedAt)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return nil, serverutils.ErrNotFound
+	}
+	return &t, err
+}
+
+func (r *userRepository) DeleteVerificationToken(ctx context.Context, id uuid.UUID) error {
+	_, err := r.db.Exec(ctx, `DELETE FROM email_verification_tokens WHERE id = $1`, id)
+	return err
+}
+
+func (r *userRepository) ActivateUser(ctx context.Context, userId uuid.UUID) error {
+	_, err := r.db.Exec(ctx, `
+		UPDATE users 
+		SET status = 'active', email_verified = true, email_verified_at = $1, updated_at = $2 
+		WHERE id = $3
+	`, time.Now(), time.Now(), userId)
+	return err
+}
+
+// --- NEW METHODS ---
+
+func (r *userRepository) Update(ctx context.Context, user *entity.User) error {
+	_, err := r.db.Exec(ctx, `UPDATE users SET full_name = $1, updated_at = $2 WHERE id = $3`, user.FullName, time.Now(), user.Id)
+	return err
+}
+
+func (r *userRepository) Delete(ctx context.Context, id uuid.UUID) error {
+	// Soft delete or Hard delete? Usually hard delete for "Delete Account" request unless regulated otherwise.
+	// Schema doesn't have deleted_at for users, assuming Hard Delete.
+	_, err := r.db.Exec(ctx, `DELETE FROM users WHERE id = $1`, id)
+	return err
+}
+
+func (r *userRepository) GetAll(ctx context.Context, limit, offset int) ([]*entity.User, error) {
+	rows, err := r.db.Query(ctx, `SELECT id, email, full_name, role, status, created_at FROM users ORDER BY created_at DESC LIMIT $1 OFFSET $2`, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []*entity.User
+	for rows.Next() {
+		var u entity.User
+		err := rows.Scan(&u.Id, &u.Email, &u.FullName, &u.Role, &u.Status, &u.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, &u)
+	}
+	return users, nil
+}
+
+func (r *userRepository) Count(ctx context.Context) (int, error) {
+	var count int
+	err := r.db.QueryRow(ctx, `SELECT COUNT(*) FROM users`).Scan(&count)
+	return count, err
+}
+
+func (r *userRepository) CountByStatus(ctx context.Context, status entity.UserStatus) (int, error) {
+	var count int
+	err := r.db.QueryRow(ctx, `SELECT COUNT(*) FROM users WHERE status = $1`, status).Scan(&count)
+	return count, err
+}
+
+func (r *userRepository) UpdateStatus(ctx context.Context, id uuid.UUID, status entity.UserStatus) error {
+	_, err := r.db.Exec(ctx, `UPDATE users SET status = $1, updated_at = $2 WHERE id = $3`, status, time.Now(), id)
+	return err
+}
+FILE: D:\notetaker\notefiber-BE\internal\service\admin_service.go
+RELATIVE PATH: internal\service\admin_service.go
+// FILE: internal/service/admin_service.go
+package service
+
+import (
+	"ai-notetaking-be/internal/dto"
+	"ai-notetaking-be/internal/entity"
+	"ai-notetaking-be/internal/repository"
+	"context"
+
+	"github.com/google/uuid"
+)
+
+type IAdminService interface {
+	GetDashboardStats(ctx context.Context) (*dto.AdminDashboardStats, error)
+	GetUserGrowth(ctx context.Context) ([]*dto.UserGrowthStats, error)
+	
+	// User Management
+	GetAllUsers(ctx context.Context, page, limit int, search string) ([]*dto.UserListResponse, error)
+	GetUserDetail(ctx context.Context, userId uuid.UUID) (*dto.UserProfileResponse, error)
+	UpdateUserStatus(ctx context.Context, userId uuid.UUID, status string) error
+	
+	// Transaction Management
+	GetTransactions(ctx context.Context, page, limit int, status string) ([]*dto.TransactionListResponse, error)
+	
+	// Logs
+	GetSystemLogs(ctx context.Context, page, limit int, level string) ([]*dto.LogListResponse, error)
+	GetLogDetail(ctx context.Context, logId uuid.UUID) (*dto.LogDetailResponse, error)
+}
+
+type adminService struct {
+	userRepo repository.IUserRepository
+	subRepo  repository.ISubscriptionRepository
+	logRepo  repository.ILogRepository
+}
+
+func NewAdminService(
+	userRepo repository.IUserRepository, 
+	subRepo repository.ISubscriptionRepository,
+	logRepo repository.ILogRepository,
+) IAdminService {
+	return &adminService{
+		userRepo: userRepo,
+		subRepo:  subRepo,
+		logRepo:  logRepo,
+	}
+}
+
+func (s *adminService) GetDashboardStats(ctx context.Context) (*dto.AdminDashboardStats, error) {
+	totalUsers, err := s.userRepo.Count(ctx)
+	if err != nil { return nil, err }
+
+	activeUsers, err := s.userRepo.CountByStatus(ctx, entity.UserStatusActive)
+	if err != nil { return nil, err }
+
+	totalRevenue, err := s.subRepo.GetTotalRevenue(ctx)
+	if err != nil { return nil, err }
+
+	activeSubs, err := s.subRepo.CountActiveSubscribers(ctx)
+	if err != nil { return nil, err }
+
+	return &dto.AdminDashboardStats{
+		TotalUsers:        totalUsers,
+		ActiveUsers:       activeUsers,
+		TotalRevenue:      totalRevenue,
+		ActiveSubscribers: activeSubs,
+	}, nil
+}
+
+func (s *adminService) GetUserGrowth(ctx context.Context) ([]*dto.UserGrowthStats, error) {
+	stats, err := s.userRepo.GetUserGrowth(ctx)
+	if err != nil {
+		return nil, err
+	}
+	var res []*dto.UserGrowthStats
+	for _, st := range stats {
+		res = append(res, &dto.UserGrowthStats{
+			Date:  st["date"].(string),
+			Count: int(st["count"].(int64)),
+		})
+	}
+	return res, nil
+}
+
+func (s *adminService) GetAllUsers(ctx context.Context, page, limit int, search string) ([]*dto.UserListResponse, error) {
+	if page < 1 { page = 1 }
+	if limit < 1 { limit = 10 }
+	offset := (page - 1) * limit
+
+	var users []*entity.User
+	var err error
+
+	if search != "" {
+		users, err = s.userRepo.SearchUsers(ctx, search, limit, offset)
+	} else {
+		users, err = s.userRepo.GetAll(ctx, limit, offset)
+	}
+	
+	if err != nil {
+		return nil, err
+	}
+
+	var res []*dto.UserListResponse
+	for _, u := range users {
+		res = append(res, &dto.UserListResponse{
+			Id:        u.Id,
+			Email:     u.Email,
+			FullName:  u.FullName,
+			Role:      string(u.Role),
+			Status:    string(u.Status),
+			CreatedAt: u.CreatedAt,
+		})
+	}
+	return res, nil
+}
+
+func (s *adminService) GetUserDetail(ctx context.Context, userId uuid.UUID) (*dto.UserProfileResponse, error) {
+	user, err := s.userRepo.GetById(ctx, userId)
+	if err != nil {
+		return nil, err
+	}
+	return &dto.UserProfileResponse{
+		Id:           user.Id,
+		Email:        user.Email,
+		FullName:     user.FullName,
+		Role:         string(user.Role),
+		Status:       string(user.Status),
+		AiDailyUsage: user.AiDailyUsage,
+		CreatedAt:    user.CreatedAt,
+	}, nil
+}
+
+func (s *adminService) UpdateUserStatus(ctx context.Context, userId uuid.UUID, status string) error {
+	// Log the action
+	_ = s.logRepo.Create(ctx, "INFO", "ADMIN", "Updated user status", map[string]interface{}{"userId": userId, "status": status})
+	return s.userRepo.UpdateStatus(ctx, userId, entity.UserStatus(status))
+}
+
+func (s *adminService) GetTransactions(ctx context.Context, page, limit int, status string) ([]*dto.TransactionListResponse, error) {
+	if page < 1 { page = 1 }
+	if limit < 1 { limit = 10 }
+	offset := (page - 1) * limit
+
+	txs, err := s.subRepo.GetTransactions(ctx, status, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+
+	var res []*dto.TransactionListResponse
+	for _, t := range txs {
+		res = append(res, &dto.TransactionListResponse{
+			Id:              t.Id,
+			UserId:          t.UserId,
+			UserEmail:       t.UserEmail,
+			PlanName:        t.PlanName,
+			Amount:          t.Amount,
+			Status:          t.Status,
+			PaymentStatus:   t.PaymentStatus,
+			TransactionDate: t.CreatedAt,
+			MidtransOrderId: t.MidtransOrderId,
+		})
+	}
+	return res, nil
+}
+
+func (s *adminService) GetSystemLogs(ctx context.Context, page, limit int, level string) ([]*dto.LogListResponse, error) {
+	if page < 1 { page = 1 }
+	if limit < 1 { limit = 10 }
+	offset := (page - 1) * limit
+
+	logs, err := s.logRepo.GetAll(ctx, level, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+
+	var res []*dto.LogListResponse
+	for _, l := range logs {
+		res = append(res, &dto.LogListResponse{
+			Id:        l.Id,
+			Level:     l.Level,
+			Module:    l.Module,
+			Message:   l.Message,
+			CreatedAt: l.CreatedAt,
+		})
+	}
+	return res, nil
+}
+
+func (s *adminService) GetLogDetail(ctx context.Context, logId uuid.UUID) (*dto.LogDetailResponse, error) {
+	l, err := s.logRepo.GetById(ctx, logId)
+	if err != nil {
+		return nil, err
+	}
+	return &dto.LogDetailResponse{
+		LogListResponse: dto.LogListResponse{
+			Id:        l.Id,
+			Level:     l.Level,
+			Module:    l.Module,
+			Message:   l.Message,
+			CreatedAt: l.CreatedAt,
+		},
+		Details: l.Details,
+	}, nil
+}
+FILE: D:\notetaker\notefiber-BE\internal\service\auth_service.go
+RELATIVE PATH: internal\service\auth_service.go
+// FILE: internal/service/auth_service.go
+package service
+
+import (
+	"ai-notetaking-be/internal/dto"
+	"ai-notetaking-be/internal/entity"
+	"ai-notetaking-be/internal/repository"
+	"context"
+	"crypto/rand"
+	"errors"
+	"fmt"
+	"math/big"
+	"os"
+	"time"
+
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
+)
+
+type IAuthService interface {
+	Register(ctx context.Context, req *dto.RegisterRequest) (*dto.RegisterResponse, error)
+	Login(ctx context.Context, req *dto.LoginRequest) (*dto.LoginResponse, error)
+	ForgotPassword(ctx context.Context, req *dto.ForgotPasswordRequest) error
+	ResetPassword(ctx context.Context, req *dto.ResetPasswordRequest) error
+	VerifyEmail(ctx context.Context, req *dto.VerifyEmailRequest) error // New
+}
+
+type authService struct {
+	userRepo repository.IUserRepository
+}
+
+func NewAuthService(userRepo repository.IUserRepository) IAuthService {
+	return &authService{userRepo: userRepo}
+}
+
+// Helper to generate secure 6-digit OTP
+func generateOTP() (string, error) {
+	n, err := rand.Int(rand.Reader, big.NewInt(1000000))
+	if err != nil {
+		return "", err
+	}
+	return fmt.Sprintf("%06d", n), nil
+}
+
+func (s *authService) Register(ctx context.Context, req *dto.RegisterRequest) (*dto.RegisterResponse, error) {
+	// 1. Check for existing user
+	existing, _ := s.userRepo.GetByEmail(ctx, req.Email)
+	if existing != nil {
+		// FIXED: Return a standard error for duplicate email
+		return nil, errors.New("email already registered")
+	}
+
+	// 2. Hash password
+	hash, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, err
+	}
+	hashStr := string(hash)
+
+	// 3. Create User Entity
+	user := &entity.User{
+		Id:            uuid.New(),
+		Email:         req.Email,
+		FullName:      req.FullName,
+		PasswordHash:  &hashStr,
+		Role:          entity.UserRoleUser,
+		Status:        entity.UserStatusPending,
+		EmailVerified: false,
+		CreatedAt:     time.Now(),
+		UpdatedAt:     time.Now(),
+	}
+
+	// 4. Save to DB
+	err = s.userRepo.Create(ctx, user)
+	if err != nil {
+		return nil, err
+	}
+
+	// 5. --- OTP Generation Logic ---
+	otpCode, err := generateOTP()
+	if err != nil {
+		return nil, err
+	}
+
+	verificationToken := &entity.EmailVerificationToken{
+		Id:        uuid.New(),
+		UserId:    user.Id,
+		Token:     otpCode,
+		ExpiresAt: time.Now().Add(15 * time.Minute), // OTP valid for 15 mins
+		CreatedAt: time.Now(),
+	}
+
+	err = s.userRepo.CreateVerificationToken(ctx, verificationToken)
+	if err != nil {
+		return nil, err
+	}
+
+	// TODO: Replace this Println with actual Email Service (e.g., SMTP, SendGrid)
+	fmt.Printf(">>> [MOCK EMAIL] OTP for %s is: %s <<<\n", user.Email, otpCode)
+
+	return &dto.RegisterResponse{Id: user.Id, Email: user.Email}, nil
+}
+
+func (s *authService) VerifyEmail(ctx context.Context, req *dto.VerifyEmailRequest) error {
+	user, err := s.userRepo.GetByEmail(ctx, req.Email)
+	if err != nil || user == nil {
+		return errors.New("user not found")
+	}
+
+	if user.Status == entity.UserStatusActive {
+		return nil // Already verified, idempotent success
+	}
+
+	tokenEntity, err := s.userRepo.GetVerificationToken(ctx, user.Id, req.Token)
+	if err != nil {
+		return errors.New("invalid otp code")
+	}
+
+	if time.Now().After(tokenEntity.ExpiresAt) {
+		return errors.New("otp code expired")
+	}
+
+	// Activate User
+	err = s.userRepo.ActivateUser(ctx, user.Id)
+	if err != nil {
+		return err
+	}
+
+	// Clean up used token
+	_ = s.userRepo.DeleteVerificationToken(ctx, tokenEntity.Id)
+
+	return nil
+}
+
+func (s *authService) Login(ctx context.Context, req *dto.LoginRequest) (*dto.LoginResponse, error) {
+	// 1. Check if user exists
+	user, err := s.userRepo.GetByEmail(ctx, req.Email)
+	if err != nil || user == nil {
+		// Robust handling: return generic error to prevent enumeration
+		return nil, errors.New("invalid credentials")
+	}
+
+	// 2. Check if user has a password (might be OAuth only)
+	if user.PasswordHash == nil {
+		return nil, errors.New("user registered via OAuth")
+	}
+
+	// Optional: Block login if email is not verified?
+	// if user.Status == entity.UserStatusPending {
+	// 	return nil, errors.New("please verify your email first")
+	// }
+
+	// 3. Compare passwords
+	err = bcrypt.CompareHashAndPassword([]byte(*user.PasswordHash), []byte(req.Password))
+	if err != nil {
+		return nil, errors.New("invalid credentials")
+	}
+
+	// 4. Check if user is active
+	if user.Status == entity.UserStatusBlocked {
+		return nil, errors.New("user account is blocked")
+	}
+
+	// 5. Generate JWT
+	claims := jwt.MapClaims{
+		"user_id": user.Id.String(),
+		"role":    user.Role,
+		"exp":     time.Now().Add(time.Hour * 24).Unix(),
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	secret := os.Getenv("JWT_SECRET")
+	if secret == "" {
+		secret = "default_secret" // Fallback for dev
+	}
+	signedToken, err := token.SignedString([]byte(secret))
+	if err != nil {
+		return nil, err
+	}
+
+	return &dto.LoginResponse{
+		AccessToken: signedToken,
+		User: dto.UserDTO{
+			Id:       user.Id,
+			Email:    user.Email,
+			FullName: user.FullName,
+			Role:     string(user.Role),
+		},
+	}, nil
+}
+
+func (s *authService) ForgotPassword(ctx context.Context, req *dto.ForgotPasswordRequest) error {
+	user, err := s.userRepo.GetByEmail(ctx, req.Email)
+	if err != nil || user == nil {
+		return nil // Fail silently for security
+	}
+
+	token := uuid.New().String()
+	resetToken := &entity.PasswordResetToken{
+		Id:        uuid.New(),
+		UserId:    user.Id,
+		Token:     token,
+		ExpiresAt: time.Now().Add(1 * time.Hour),
+		CreatedAt: time.Now(),
+		Used:      false,
+	}
+
+	err = s.userRepo.CreatePasswordResetToken(ctx, resetToken)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *authService) ResetPassword(ctx context.Context, req *dto.ResetPasswordRequest) error {
+	tokenEntity, err := s.userRepo.GetPasswordResetToken(ctx, req.Token)
+	if err != nil {
+		return errors.New("invalid or expired token")
+	}
+
+	if tokenEntity.Used || time.Now().After(tokenEntity.ExpiresAt) {
+		return errors.New("token expired or already used")
+	}
+
+	hash, err := bcrypt.GenerateFromPassword([]byte(req.NewPassword), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+
+	err = s.userRepo.UpdatePassword(ctx, tokenEntity.UserId, string(hash))
+	if err != nil {
+		return err
+	}
+
+	return s.userRepo.MarkTokenUsed(ctx, tokenEntity.Id)
+}
+FILE: D:\notetaker\notefiber-BE\internal\service\chatbot_service.go
+RELATIVE PATH: internal\service\chatbot_service.go
+package service
+
+import (
+	"ai-notetaking-be/internal/constant"
+	"ai-notetaking-be/internal/dto"
+	"ai-notetaking-be/internal/entity"
+	"ai-notetaking-be/internal/repository"
+	"ai-notetaking-be/pkg/chatbot"
+	"ai-notetaking-be/pkg/embedding"
+	"context"
+	"fmt"
+	"os"
+	"strings"
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+type IChatbotService interface {
+	CreateSession(ctx context.Context) (*dto.CreateSessionResponse, error)
+	GetAllSessions(ctx context.Context) ([]*dto.GetAllSessionsResponse, error)
+	GetChatHistory(ctx context.Context, sessionId uuid.UUID) ([]*dto.GetChatHistoryResponse, error)
+	SendChat(ctx context.Context, request *dto.SendChatRequest) (*dto.SendChatResponse, error)
+	DeleteSession(ctx context.Context, request *dto.DeleteSessionRequest) error
+}
+
+type chatbotService struct {
+	db                       *pgxpool.Pool
+	chatSessionRepository    repository.IChatSessionRepository
+	chatMessageRepository    repository.IChatMessageRepository
+	chatMessageRawRepository repository.IChatMessageRawRepository
+	noteEmbeddingRepository  repository.INoteEmbeddingRepository
+}
+
+func (cs *chatbotService) CreateSession(ctx context.Context) (*dto.CreateSessionResponse, error) {
+
+	now := time.Now()
+	chatSession := entity.ChatSession{
+		Id:        uuid.New(),
+		Title:     "Unnamed session",
+		CreatedAt: now,
+	}
+	chatMessage := entity.ChatMessage{
+		Id:            uuid.New(),
+		Chat:          "Hi, how can I help you ?",
+		Role:          constant.ChatMessageRoleModel,
+		ChatSessionId: chatSession.Id,
+		CreatedAt:     now,
+	}
+	chatMessageRawUser := entity.ChatMessageRaw{
+		Id:            uuid.New(),
+		Chat:          constant.ChatMessageRawInitialUserPromptV1,
+		Role:          constant.ChatMessageRoleUser,
+		ChatSessionId: chatSession.Id,
+		CreatedAt:     now,
+	}
+	chatMessageRawModel := entity.ChatMessageRaw{
+		Id:            uuid.New(),
+		Chat:          constant.ChatMessageRawInitialModelPromptV1,
+		Role:          constant.ChatMessageRoleModel,
+		ChatSessionId: chatSession.Id,
+		CreatedAt:     now.Add(1 * time.Second),
+	}
+
+	tx, err := cs.db.Begin(ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer tx.Rollback(ctx)
+
+	chatSessionRepository := cs.chatSessionRepository.UsingTx(ctx, tx)
+	chatMessageRepository := cs.chatMessageRepository.UsingTx(ctx, tx)
+	chatMessageRawRepository := cs.chatMessageRawRepository.UsingTx(ctx, tx)
+
+	err = chatSessionRepository.Create(ctx, &chatSession)
+	if err != nil {
+		return nil, err
+	}
+	err = chatMessageRepository.Create(ctx, &chatMessage)
+	if err != nil {
+		return nil, err
+	}
+	err = chatMessageRawRepository.Create(ctx, &chatMessageRawUser)
+	if err != nil {
+		return nil, err
+	}
+	err = chatMessageRawRepository.Create(ctx, &chatMessageRawModel)
+	if err != nil {
+		return nil, err
+	}
+
+	err = tx.Commit(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return &dto.CreateSessionResponse{
+		Id: chatSession.Id,
+	}, nil
+}
+
+func (cs *chatbotService) GetAllSessions(ctx context.Context) ([]*dto.GetAllSessionsResponse, error) {
+	chatSessions, err := cs.chatSessionRepository.GetAll(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	response := make([]*dto.GetAllSessionsResponse, 0)
+	for _, chatSession := range chatSessions {
+		response = append(response, &dto.GetAllSessionsResponse{
+			Id:        chatSession.Id,
+			Title:     chatSession.Title,
+			CreatedAt: chatSession.CreatedAt,
+			UpdatedAt: chatSession.UpdatedAt,
+		})
+	}
+
+	return response, nil
+}
+
+func (cs *chatbotService) GetChatHistory(ctx context.Context, sessionId uuid.UUID) ([]*dto.GetChatHistoryResponse, error) {
+	_, err := cs.chatSessionRepository.GetById(ctx, sessionId)
+	if err != nil {
+		return nil, err
+	}
+
+	chatMessages, err := cs.chatMessageRepository.GetByChatSessionId(ctx, sessionId)
+	if err != nil {
+		return nil, err
+	}
+
+	response := make([]*dto.GetChatHistoryResponse, 0)
+	for _, chatMessage := range chatMessages {
+		response = append(response, &dto.GetChatHistoryResponse{
+			Id:        chatMessage.Id,
+			Role:      chatMessage.Role,
+			Chat:      chatMessage.Chat,
+			CreatedAt: chatMessage.CreatedAt,
+		})
+	}
+
+	return response, nil
+}
+
+func (cs *chatbotService) SendChat(ctx context.Context, request *dto.SendChatRequest) (*dto.SendChatResponse, error) {
+	tx, err := cs.db.Begin(ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer tx.Rollback(ctx)
+
+	chatSessionRepository := cs.chatSessionRepository.UsingTx(ctx, tx)
+	chatMessageRepository := cs.chatMessageRepository.UsingTx(ctx, tx)
+	chatMessageRawRepository := cs.chatMessageRawRepository.UsingTx(ctx, tx)
+	noteEmbeddingRepository := cs.noteEmbeddingRepository.UsingTx(ctx, tx)
+
+	chatSession, err := chatSessionRepository.GetById(ctx, request.ChatSessionId)
+	if err != nil {
+		return nil, err
+	}
+
+	existingRawChats, err := chatMessageRawRepository.GetByChatSessionId(ctx, request.ChatSessionId)
+	if err != nil {
+		return nil, err
+	}
+	updateSessionTitle := len(existingRawChats) == 2
+
+	now := time.Now()
+
+	chatMessage := entity.ChatMessage{
+		Id:            uuid.New(),
+		Chat:          request.Chat,
+		Role:          constant.ChatMessageRoleUser,
+		ChatSessionId: request.ChatSessionId,
+		CreatedAt:     now,
+	}
+
+	embeddingRes, err := embedding.GetGeminiEmbedding(
+		os.Getenv("GOOGLE_GEMINI_API_KEY"),
+		request.Chat,
+		"RETRIEVAL_QUERY",
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	decideUseRAGChatHistories := make([]*chatbot.ChatHistory, 0)
+	for i, rawChat := range existingRawChats {
+		if i == 0 {
+			decideUseRAGChatHistories = append(decideUseRAGChatHistories, &chatbot.ChatHistory{
+				Chat: constant.DecideUseRAGMessageRawInitialUserPromptV1,
+				Role: constant.ChatMessageRoleUser,
+			})
+			continue
+		} else if i == 1 {
+			decideUseRAGChatHistories = append(decideUseRAGChatHistories, &chatbot.ChatHistory{
+				Chat: constant.DecideUseRAGMessageRawInitialModelPromptV1,
+				Role: constant.ChatMessageRoleModel,
+			})
+			continue
+		}
+
+		decideUseRAGChatHistories = append(decideUseRAGChatHistories, &chatbot.ChatHistory{
+			Chat: rawChat.Chat,
+			Role: rawChat.Role,
+		})
+	}
+
+	useRag, err := chatbot.DecideToUseRAG(
+		ctx,
+		os.Getenv("GOOGLE_GEMINI_API_KEY"),
+		decideUseRAGChatHistories,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	strBuilder := strings.Builder{}
+	if useRag {
+		noteEmbeddings, err := noteEmbeddingRepository.SearchSimilarity(
+			ctx,
+			embeddingRes.Embedding.Values,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		for i, noteEmbedding := range noteEmbeddings {
+			strBuilder.WriteString(fmt.Sprintf("Reference %d\n", i+1))
+			strBuilder.WriteString(noteEmbedding.Document)
+			strBuilder.WriteString("\n\n")
+		}
+	}
+
+	strBuilder.WriteString("User next question: ")
+	strBuilder.WriteString(request.Chat)
+	strBuilder.WriteString("\n\n")
+	strBuilder.WriteString("Your answer ?")
+	chatMessageRaw := entity.ChatMessageRaw{
+		Id:            uuid.New(),
+		Chat:          strBuilder.String(),
+		Role:          constant.ChatMessageRoleUser,
+		ChatSessionId: request.ChatSessionId,
+		CreatedAt:     now,
+	}
+
+	existingRawChats = append(
+		existingRawChats,
+		&chatMessageRaw,
+	)
+
+	geminiReq := make([]*chatbot.ChatHistory, 0)
+	for _, existingRawChat := range existingRawChats {
+		geminiReq = append(geminiReq, &chatbot.ChatHistory{
+			Chat: existingRawChat.Chat,
+			Role: existingRawChat.Role,
+		})
+	}
+
+	reply, err := chatbot.GetGeminiResponse(
+		ctx,
+		os.Getenv("GOOGLE_GEMINI_API_KEY"),
+		geminiReq,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	chatMessageModel := entity.ChatMessage{
+		Id:            uuid.New(),
+		Chat:          reply,
+		Role:          constant.ChatMessageRoleModel,
+		ChatSessionId: request.ChatSessionId,
+		CreatedAt:     now.Add(1 * time.Millisecond),
+	}
+	chatMessageModelRaw := entity.ChatMessageRaw{
+		Id:            uuid.New(),
+		Chat:          reply,
+		Role:          constant.ChatMessageRoleModel,
+		ChatSessionId: request.ChatSessionId,
+		CreatedAt:     now.Add(1 * time.Millisecond),
+	}
+
+	chatMessageRepository.Create(ctx, &chatMessage)
+	chatMessageRepository.Create(ctx, &chatMessageModel)
+	chatMessageRawRepository.Create(ctx, &chatMessageRaw)
+	chatMessageRawRepository.Create(ctx, &chatMessageModelRaw)
+
+	if updateSessionTitle {
+		chatSession.Title = request.Chat
+		chatSession.UpdatedAt = &now
+		err = chatSessionRepository.Update(ctx, chatSession)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	err = tx.Commit(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return &dto.SendChatResponse{
+		ChatSessionId:    chatSession.Id,
+		ChatSessionTitle: chatSession.Title,
+		Sent: &dto.SendChatResponseChat{
+			Id:        chatMessage.Id,
+			Chat:      chatMessage.Chat,
+			Role:      chatMessage.Role,
+			CreatedAt: chatMessage.CreatedAt,
+		},
+		Reply: &dto.SendChatResponseChat{
+			Id:        chatMessageModel.Id,
+			Chat:      chatMessageModel.Chat,
+			Role:      chatMessageModel.Role,
+			CreatedAt: chatMessageModel.CreatedAt,
+		},
+	}, nil
+}
+
+func (cs *chatbotService) DeleteSession(ctx context.Context, request *dto.DeleteSessionRequest) error {
+
+	tx, err := cs.db.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback(ctx)
+
+	chatSessionRepository := cs.chatSessionRepository.UsingTx(ctx, tx)
+	chatMessageRepository := cs.chatMessageRepository.UsingTx(ctx, tx)
+	chatMessageRawRepository := cs.chatMessageRawRepository.UsingTx(ctx, tx)
+
+	_, err = chatSessionRepository.GetById(ctx, request.ChatSessionId)
+	if err != nil {
+		return err
+	}
+
+	err = cs.chatSessionRepository.Delete(ctx, request.ChatSessionId)
+	if err != nil {
+		return err
+	}
+
+	err = chatMessageRepository.DeleteByChatSessionId(ctx, request.ChatSessionId)
+	if err != nil {
+		return err
+	}
+
+	err = chatMessageRawRepository.DeleteByChatSessionId(ctx, request.ChatSessionId)
+	if err != nil {
+		return err
+	}
+
+	err = tx.Commit(ctx)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func NewChatbotService(
+	db *pgxpool.Pool,
+	chatSessionRepository repository.IChatSessionRepository,
+	chatMessageRepository repository.IChatMessageRepository,
+	chatMessageRawRepository repository.IChatMessageRawRepository,
+	noteEmbeddingRepository repository.INoteEmbeddingRepository,
+) IChatbotService {
+	return &chatbotService{
+		db:                       db,
+		chatSessionRepository:    chatSessionRepository,
+		chatMessageRepository:    chatMessageRepository,
+		chatMessageRawRepository: chatMessageRawRepository,
+		noteEmbeddingRepository:  noteEmbeddingRepository,
+	}
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\service\consumer_service.go
+RELATIVE PATH: internal\service\consumer_service.go
+package service
+
+import (
+	"ai-notetaking-be/internal/dto"
+	"ai-notetaking-be/internal/entity"
+	"ai-notetaking-be/internal/repository"
+	"ai-notetaking-be/pkg/embedding"
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+	"time"
+
+	"github.com/ThreeDotsLabs/watermill/message"
+	"github.com/ThreeDotsLabs/watermill/pubsub/gochannel"
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+type IConsumerService interface {
+	Consume(ctx context.Context) error
+}
+
+type consumerService struct {
+	notebookRepository      repository.INotebookRepository
+	noteRepository          repository.INoteRepository
+	noteEmbeddingRepository repository.INoteEmbeddingRepository
+	pubSub                  *gochannel.GoChannel
+	topicName               string
+
+	db *pgxpool.Pool
+}
+
+func (cs *consumerService) Consume(ctx context.Context) error {
+	messages, err := cs.pubSub.Subscribe(ctx, cs.topicName)
+	if err != nil {
+		return err
+	}
+
+	go func() {
+		for msg := range messages {
+			cs.processMessage(ctx, msg)
+		}
+	}()
+
+	return nil
+}
+
+func (cs *consumerService) processMessage(ctx context.Context, msg *message.Message) {
+	// CRITICAL FIX: Proper error handling without defer Nack
+	var payload dto.PublishEmbedNoteMessage
+	err := json.Unmarshal(msg.Payload, &payload)
+	if err != nil {
+		log.Printf("[ERROR] Failed to unmarshal message: %v", err)
+		msg.Ack() // Ack invalid messages to prevent infinite retry
+		return
+	}
+
+	log.Printf("[INFO] Processing note embedding for NoteId: %s", payload.NoteId)
+
+	note, err := cs.noteRepository.GetById(ctx, payload.NoteId)
+	if err != nil {
+		log.Printf("[ERROR] Failed to get note %s: %v", payload.NoteId, err)
+		msg.Nack() // Nack for retriable errors
+		return
+	}
+
+	notebook, err := cs.notebookRepository.GetById(ctx, note.NotebookId)
+	if err != nil {
+		log.Printf("[ERROR] Failed to get notebook %s: %v", note.NotebookId, err)
+		msg.Nack()
+		return
+	}
+
+	noteUpdatedAt := "-"
+	if note.UpdatedAt != nil {
+		noteUpdatedAt = note.UpdatedAt.Format(time.RFC3339)
+	}
+	content := fmt.Sprintf(`Note Title: %s
+Notebook Title: %s
+
+%s
+
+Created At: %s
+Updated At: %s`,
+		note.Title,
+		notebook.Name,
+		note.Content,
+		note.CreatedAt.Format(time.RFC3339),
+		noteUpdatedAt,
+	)
+
+	log.Printf("[INFO] Generating embedding for note %s (content length: %d)", payload.NoteId, len(content))
+	res, err := embedding.GetGeminiEmbedding(
+		os.Getenv("GOOGLE_GEMINI_API_KEY"),
+		content,
+		"RETRIEVAL_DOCUMENT",
+	)
+	if err != nil {
+		log.Printf("[ERROR] Failed to generate embedding for note %s: %v", payload.NoteId, err)
+		msg.Nack()
+		return
+	}
+
+	log.Printf("[INFO] Embedding generated successfully (dimensions: %d)", len(res.Embedding.Values))
+
+	noteEmbedding := entity.NoteEmbedding{
+		Id:             uuid.New(),
+		Document:       content,
+		EmbeddingValue: res.Embedding.Values,
+		NoteId:         note.Id,
+		CreatedAt:      time.Now(),
+	}
+
+	tx, err := cs.db.Begin(ctx)
+	if err != nil {
+		log.Printf("[ERROR] Failed to begin transaction: %v", err)
+		msg.Nack()
+		return
+	}
+	defer tx.Rollback(ctx)
+
+	noteEmbeddingRepository := cs.noteEmbeddingRepository.UsingTx(ctx, tx)
+	
+	log.Printf("[INFO] Deleting old embeddings for note %s", payload.NoteId)
+	err = noteEmbeddingRepository.DeleteByNoteId(ctx, note.Id)
+	if err != nil {
+		log.Printf("[ERROR] Failed to delete old embeddings: %v", err)
+		msg.Nack()
+		return
+	}
+
+	log.Printf("[INFO] Creating new embedding for note %s", payload.NoteId)
+	err = noteEmbeddingRepository.Create(ctx, &noteEmbedding)
+	if err != nil {
+		log.Printf("[ERROR] Failed to create embedding: %v", err)
+		msg.Nack()
+		return
+	}
+
+	err = tx.Commit(ctx)
+	if err != nil {
+		log.Printf("[ERROR] Failed to commit transaction: %v", err)
+		msg.Nack()
+		return
+	}
+
+	log.Printf("[SUCCESS] Note embedding processed successfully for NoteId: %s", payload.NoteId)
+	msg.Ack() // CRITICAL FIX: Only Ack on success
+}
+
+func NewConsumerService(
+	pubSub *gochannel.GoChannel,
+	topicName string,
+	noteRepository repository.INoteRepository,
+	noteEmbeddingRepository repository.INoteEmbeddingRepository,
+	notebookRepository repository.INotebookRepository,
+	db *pgxpool.Pool,
+) IConsumerService {
+	return &consumerService{
+		pubSub:                  pubSub,
+		topicName:               topicName,
+		noteRepository:          noteRepository,
+		noteEmbeddingRepository: noteEmbeddingRepository,
+		notebookRepository:      notebookRepository,
+		db:                      db,
+	}
+}
+FILE: D:\notetaker\notefiber-BE\internal\service\example_service.go
+RELATIVE PATH: internal\service\example_service.go
+package service
+
+import (
+	"ai-notetaking-be/internal/dto"
+	"ai-notetaking-be/internal/repository"
+	"context"
+	"fmt"
+)
+
+type IExampleService interface {
+	HelloWorld(ctx context.Context, req *dto.HelloWorldRequest) (*dto.HelloWorldResponse, error)
+}
+
+type exampleService struct {
+	exampleRepository repository.IExampleRepository
+}
+
+func NewExampleService(exampleRepository repository.IExampleRepository) IExampleService {
+	return &exampleService{
+		exampleRepository: exampleRepository,
+	}
+}
+
+func (c *exampleService) HelloWorld(ctx context.Context, req *dto.HelloWorldRequest) (*dto.HelloWorldResponse, error) {
+	_, err := c.exampleRepository.Ping(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return &dto.HelloWorldResponse{
+		Message: fmt.Sprintf(`Hello %s`, req.Name),
+	}, nil
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\service\notebook_service.go
+RELATIVE PATH: internal\service\notebook_service.go
+package service
+
+import (
+	"ai-notetaking-be/internal/dto"
+	"ai-notetaking-be/internal/entity"
+	"ai-notetaking-be/internal/repository"
+	"context"
+	"encoding/json"
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+type INotebookService interface {
+	GetAll(ctx context.Context) ([]*dto.GetAllNotebookResponse, error)
+	Create(ctx context.Context, req *dto.CreateNotebookRequest) (*dto.CreateNotebookResponse, error)
+	Show(ctx context.Context, id uuid.UUID) (*dto.ShowNotebookResponse, error)
+	Update(ctx context.Context, req *dto.UpdateNotebookRequest) (*dto.UpdateNotebookResponse, error)
+	Delete(ctx context.Context, id uuid.UUID) error
+	MoveNotebook(ctx context.Context, req *dto.MoveNotebookRequest) (*dto.MoveNotebookResponse, error)
+}
+
+type notebookService struct {
+	notebookRepository      repository.INotebookRepository
+	noteRepository          repository.INoteRepository
+	noteEmbeddingRepository repository.INoteEmbeddingRepository
+	publisherService        IPublisherService
+	db                      *pgxpool.Pool
+}
+
+func NewNotebookService(
+	notebookRepository repository.INotebookRepository,
+	noteRepository repository.INoteRepository,
+	db *pgxpool.Pool,
+	publisherService IPublisherService,
+	noteEmbeddingRepository repository.INoteEmbeddingRepository,
+) INotebookService {
+	return &notebookService{
+		notebookRepository:      notebookRepository,
+		noteRepository:          noteRepository,
+		db:                      db,
+		publisherService:        publisherService,
+		noteEmbeddingRepository: noteEmbeddingRepository,
+	}
+}
+
+func (c *notebookService) GetAll(ctx context.Context) ([]*dto.GetAllNotebookResponse, error) {
+	notebooks, err := c.notebookRepository.GetAll(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	ids := make([]uuid.UUID, 0)
+	result := make([]*dto.GetAllNotebookResponse, 0)
+	for _, notebook := range notebooks {
+		res := dto.GetAllNotebookResponse{
+			Id:        notebook.Id,
+			Name:      notebook.Name,
+			ParentId:  notebook.ParentId,
+			CreatedAt: notebook.CreatedAt,
+			UpdatedAt: notebook.UpdatedAt,
+			Notes:     make([]*dto.GetAllNotebookResponseNote, 0),
+		}
+
+		result = append([]*dto.GetAllNotebookResponse{&res}, result...)
+		ids = append(ids, notebook.Id)
+	}
+
+	notes, err := c.noteRepository.GetByNotebookIds(ctx, ids)
+	if err != nil {
+		return nil, err
+	}
+
+	for i := 0; i < len(result); i++ {
+		for j := 0; j < len(notes); j++ {
+			if notes[j].NotebookId == result[i].Id {
+				result[i].Notes = append(result[i].Notes, &dto.GetAllNotebookResponseNote{
+					Id:        notes[j].Id,
+					Title:     notes[j].Title,
+					Content:   notes[j].Content,
+					CreatedAt: notes[j].CreatedAt,
+					UpdatedAt: notes[j].UpdatedAt,
+				})
+			}
+		}
+	}
+
+	return result, nil
+}
+
+func (c *notebookService) Create(ctx context.Context, req *dto.CreateNotebookRequest) (*dto.CreateNotebookResponse, error) {
+	notebook := entity.Notebook{
+		Id:        uuid.New(),
+		Name:      req.Name,
+		ParentId:  req.ParentId,
+		CreatedAt: time.Now(),
+	}
+
+	err := c.notebookRepository.Create(ctx, &notebook)
+	if err != nil {
+		return nil, err
+	}
+
+	return &dto.CreateNotebookResponse{
+		Id: notebook.Id,
+	}, nil
+}
+
+func (c *notebookService) Show(ctx context.Context, id uuid.UUID) (*dto.ShowNotebookResponse, error) {
+	notebook, err := c.notebookRepository.GetById(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	res := dto.ShowNotebookResponse{
+		Id:        notebook.Id,
+		Name:      notebook.Name,
+		ParentId:  notebook.ParentId,
+		CreatedAt: notebook.CreatedAt,
+		UpdatedAt: notebook.UpdatedAt,
+	}
+
+	return &res, nil
+}
+
+func (c *notebookService) Update(ctx context.Context, req *dto.UpdateNotebookRequest) (*dto.UpdateNotebookResponse, error) {
+	notebook, err := c.notebookRepository.GetById(ctx, req.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	now := time.Now()
+	notebook.Name = req.Name
+	notebook.UpdatedAt = &now
+
+	err = c.notebookRepository.Update(ctx, notebook)
+	if err != nil {
+		return nil, err
+	}
+
+	notes, err := c.noteRepository.GetByNotebookIds(ctx, []uuid.UUID{notebook.Id})
+	if err != nil {
+		return nil, err
+	}
+
+	for _, note := range notes {
+		msg := dto.PublishEmbedNoteMessage{
+			NoteId: note.Id,
+		}
+		msgJson, err := json.Marshal(msg)
+		if err != nil {
+			return nil, err
+		}
+		err = c.publisherService.Publish(
+			ctx,
+			msgJson,
+		)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	res := dto.UpdateNotebookResponse{
+		Id: notebook.Id,
+	}
+
+	return &res, nil
+}
+
+func (c *notebookService) Delete(ctx context.Context, id uuid.UUID) error {
+	_, err := c.notebookRepository.GetById(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	tx, err := c.db.BeginTx(ctx, pgx.TxOptions{})
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback(ctx)
+
+	notebookRepo := c.notebookRepository.UsingTx(ctx, tx)
+	noteRepo := c.noteRepository.UsingTx(ctx, tx)
+	noteEmbeddingRepo := c.noteEmbeddingRepository.UsingTx(ctx, tx)
+
+	err = notebookRepo.DeleteById(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	err = noteEmbeddingRepo.DeleteByNotebookId(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	err = notebookRepo.NullifyParentById(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	err = noteRepo.DeleteByNotebookId(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	err = tx.Commit(ctx)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *notebookService) MoveNotebook(ctx context.Context, req *dto.MoveNotebookRequest) (*dto.MoveNotebookResponse, error) {
+	_, err := c.notebookRepository.GetById(ctx, req.Id)
+	if err != nil {
+		return nil, err
+	}
+	if req.ParentId != nil {
+		_, err = c.notebookRepository.GetById(ctx, *req.ParentId)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	err = c.notebookRepository.UpdateParentId(ctx, req.Id, req.ParentId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &dto.MoveNotebookResponse{
+		Id: req.Id,
+	}, nil
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\service\note_service.go
+RELATIVE PATH: internal\service\note_service.go
+package service
+
+import (
+	"ai-notetaking-be/internal/dto"
+	"ai-notetaking-be/internal/entity"
+	"ai-notetaking-be/internal/repository"
+	"ai-notetaking-be/pkg/embedding"
+	"context"
+	"encoding/json"
+	"os"
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+type INoteService interface {
+	Create(ctx context.Context, req *dto.CreateNoteRequest) (*dto.CreateNoteResponse, error)
+	Show(ctx context.Context, id uuid.UUID) (*dto.ShowNoteResponse, error)
+	Update(ctx context.Context, req *dto.UpdateNoteRequest) (*dto.UpdateNoteResponse, error)
+	Delete(ctx context.Context, id uuid.UUID) error
+	MoveNote(ctx context.Context, req *dto.MoveNoteRequest) (*dto.MoveNoteResponse, error)
+	SemanticSearch(ctx context.Context, search string) ([]*dto.SemanticSearchResponse, error)
+}
+
+type noteService struct {
+	noteRepository          repository.INoteRepository
+	noteEmbeddingRepository repository.INoteEmbeddingRepository
+	publisherService        IPublisherService
+	db                      *pgxpool.Pool
+}
+
+func NewNoteService(
+	noteRepository repository.INoteRepository,
+	publisherService IPublisherService,
+	noteEmbeddingRepository repository.INoteEmbeddingRepository,
+	db *pgxpool.Pool,
+) INoteService {
+	return &noteService{
+		noteRepository:          noteRepository,
+		noteEmbeddingRepository: noteEmbeddingRepository,
+		publisherService:        publisherService,
+		db:                      db,
+	}
+}
+
+func (c *noteService) Create(ctx context.Context, req *dto.CreateNoteRequest) (*dto.CreateNoteResponse, error) {
+	note := entity.Note{
+		Id:         uuid.New(),
+		Title:      req.Title,
+		Content:    req.Content,
+		NotebookId: req.NotebookId,
+		CreatedAt:  time.Now(),
+	}
+
+	err := c.noteRepository.Create(ctx, &note)
+	if err != nil {
+		return nil, err
+	}
+
+	msgPayload := dto.PublishEmbedNoteMessage{
+		NoteId: note.Id,
+	}
+	msgJson, err := json.Marshal(msgPayload)
+	if err != nil {
+		return nil, err
+	}
+
+	err = c.publisherService.Publish(ctx, msgJson)
+	if err != nil {
+		return nil, err
+	}
+
+	return &dto.CreateNoteResponse{
+		Id: note.Id,
+	}, nil
+}
+
+func (c *noteService) Show(ctx context.Context, id uuid.UUID) (*dto.ShowNoteResponse, error) {
+	note, err := c.noteRepository.GetById(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	res := dto.ShowNoteResponse{
+		Id:         note.Id,
+		Title:      note.Title,
+		Content:    note.Content,
+		NotebookId: note.NotebookId,
+		CreatedAt:  note.CreatedAt,
+		UpdatedAt:  note.UpdatedAt,
+	}
+
+	return &res, nil
+}
+
+func (c *noteService) Update(ctx context.Context, req *dto.UpdateNoteRequest) (*dto.UpdateNoteResponse, error) {
+	note, err := c.noteRepository.GetById(ctx, req.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	now := time.Now()
+
+	note.Title = req.Title
+	note.Content = req.Content
+	note.UpdatedAt = &now
+
+	err = c.noteRepository.Update(ctx, note)
+	if err != nil {
+		return nil, err
+	}
+
+	payload := dto.PublishEmbedNoteMessage{
+		NoteId: note.Id,
+	}
+	payloadJson, err := json.Marshal(payload)
+	if err != nil {
+		return nil, err
+	}
+	err = c.publisherService.Publish(ctx, payloadJson)
+	if err != nil {
+		return nil, err
+	}
+
+	return &dto.UpdateNoteResponse{
+		Id: note.Id,
+	}, nil
+}
+
+func (c *noteService) Delete(ctx context.Context, id uuid.UUID) error {
+	_, err := c.noteRepository.GetById(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	tx, err := c.db.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback(ctx)
+
+	noteRepository := c.noteRepository.UsingTx(ctx, tx)
+	noteEmbeddingRepository := c.noteEmbeddingRepository.UsingTx(ctx, tx)
+
+	err = noteRepository.Delete(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	err = noteEmbeddingRepository.DeleteByNoteId(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	err = tx.Commit(ctx)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *noteService) MoveNote(ctx context.Context, req *dto.MoveNoteRequest) (*dto.MoveNoteResponse, error) {
+	note, err := c.noteRepository.GetById(ctx, req.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	now := time.Now()
+	note.NotebookId = req.NotebookId
+	note.UpdatedAt = &now
+
+	err = c.noteRepository.Update(ctx, note)
+	if err != nil {
+		return nil, err
+	}
+
+	payload := dto.PublishEmbedNoteMessage{
+		NoteId: note.Id,
+	}
+	payloadJson, err := json.Marshal(payload)
+	if err != nil {
+		return nil, err
+	}
+	err = c.publisherService.Publish(ctx, payloadJson)
+	if err != nil {
+		return nil, err
+	}
+
+	return &dto.MoveNoteResponse{
+		Id: note.Id,
+	}, nil
+}
+
+func (c *noteService) SemanticSearch(ctx context.Context, search string) ([]*dto.SemanticSearchResponse, error) {
+	embeddingRes, err := embedding.GetGeminiEmbedding(
+		os.Getenv("GOOGLE_GEMINI_API_KEY"),
+		search,
+		"RETRIEVAL_QUERY",
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	noteEmbeddings, err := c.noteEmbeddingRepository.SemanticSearch(ctx, embeddingRes.Embedding.Values)
+	if err != nil {
+		return nil, err
+	}
+
+	ids := make([]uuid.UUID, 0)
+	for _, noteEmbedding := range noteEmbeddings {
+		ids = append(ids, noteEmbedding.NoteId)
+	}
+
+	notes, err := c.noteRepository.GetByIds(ctx, ids)
+	if err != nil {
+		return nil, err
+	}
+
+	response := make([]*dto.SemanticSearchResponse, 0)
+	for _, noteEmbedding := range noteEmbeddings {
+		for _, note := range notes {
+			if noteEmbedding.NoteId == note.Id {
+				response = append(response, &dto.SemanticSearchResponse{
+					Id:         note.Id,
+					Title:      note.Title,
+					Content:    note.Content,
+					NotebookId: note.NotebookId,
+					CreatedAt:  note.CreatedAt,
+					UpdatedAt:  note.UpdatedAt,
+				})
+			}
+		}
+	}
+
+	return response, nil
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\service\oauth_service.go
+RELATIVE PATH: internal\service\oauth_service.go
+// FILE: internal/service/oauth_service.go
+package service
+
+import (
+	"ai-notetaking-be/internal/dto"
+	"ai-notetaking-be/internal/entity"
+	"ai-notetaking-be/internal/repository"
+	"context"
+	"crypto/rand"
+	"encoding/base64"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"time"
+
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
+)
+
+type IOAuthService interface {
+	GetLoginURL(provider string) (string, error)
+	HandleCallback(ctx context.Context, provider string, code string) (*dto.LoginResponse, error)
+}
+
+type oauthService struct {
+	userRepo   repository.IUserRepository
+	googleConf *oauth2.Config
+}
+
+func NewOAuthService(userRepo repository.IUserRepository) IOAuthService {
+	// Initialize Google OAuth Config
+	// In production, these should be strictly loaded from ENV
+	conf := &oauth2.Config{
+		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
+		ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
+		RedirectURL:  os.Getenv("GOOGLE_REDIRECT_URL"), // e.g., http://localhost:3000/api/auth/google/callback
+		Scopes: []string{
+			"https://www.googleapis.com/auth/userinfo.email",
+			"https://www.googleapis.com/auth/userinfo.profile",
+		},
+		Endpoint: google.Endpoint,
+	}
+
+	return &oauthService{
+		userRepo:   userRepo,
+		googleConf: conf,
+	}
+}
+
+func (s *oauthService) GetLoginURL(provider string) (string, error) {
+	if provider != "google" {
+		return "", errors.New("unsupported provider")
+	}
+	
+	// Generate random state
+	b := make([]byte, 16)
+	rand.Read(b)
+	state := base64.URLEncoding.EncodeToString(b)
+	
+	// Return the URL
+	return s.googleConf.AuthCodeURL(state), nil
+}
+
+func (s *oauthService) HandleCallback(ctx context.Context, provider string, code string) (*dto.LoginResponse, error) {
+	if provider != "google" {
+		return nil, errors.New("unsupported provider")
+	}
+
+	// 1. Exchange Code for Token
+	token, err := s.googleConf.Exchange(ctx, code)
+	if err != nil {
+		return nil, fmt.Errorf("code exchange failed: %v", err)
+	}
+
+	// 2. Fetch User Info
+	resp, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
+	if err != nil {
+		return nil, fmt.Errorf("failed getting user info: %v", err)
+	}
+	defer resp.Body.Close()
+
+	content, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed reading response: %v", err)
+	}
+
+	var googleUser struct {
+		ID            string `json:"id"`
+		Email         string `json:"email"`
+		VerifiedEmail bool   `json:"verified_email"`
+		Name          string `json:"name"`
+		Picture       string `json:"picture"`
+	}
+
+	if err := json.Unmarshal(content, &googleUser); err != nil {
+		return nil, err
+	}
+
+	// 3. Find or Create User in DB
+	user, err := s.userRepo.GetByEmail(ctx, googleUser.Email)
+	if err != nil {
+		// Database error
+		return nil, err
+	}
+
+	if user == nil {
+		// Create new user
+		newUser := &entity.User{
+			Id:            uuid.New(),
+			Email:         googleUser.Email,
+			FullName:      googleUser.Name,
+			PasswordHash:  nil, // No password for OAuth
+			Role:          entity.UserRoleUser,
+			Status:        entity.UserStatusActive,
+			EmailVerified: true,
+			CreatedAt:     time.Now(),
+			UpdatedAt:     time.Now(),
+		}
+		if err := s.userRepo.Create(ctx, newUser); err != nil {
+			return nil, err
+		}
+		user = newUser
+	}
+
+	// 4. Generate JWT
+	claims := jwt.MapClaims{
+		"user_id": user.Id.String(),
+		"role":    user.Role,
+		"exp":     time.Now().Add(time.Hour * 24).Unix(),
+	}
+	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	secret := os.Getenv("JWT_SECRET")
+	signedToken, err := jwtToken.SignedString([]byte(secret))
+	if err != nil {
+		return nil, err
+	}
+
+	return &dto.LoginResponse{
+		AccessToken: signedToken,
+		User: dto.UserDTO{
+			Id:       user.Id,
+			Email:    user.Email,
+			FullName: user.FullName,
+			Role:     string(user.Role),
+		},
+	}, nil
+}
+FILE: D:\notetaker\notefiber-BE\internal\service\payment_service.go
+RELATIVE PATH: internal\service\payment_service.go
+// FILE: internal/service/payment_service.go
+package service
+
+import (
+	"ai-notetaking-be/internal/dto"
+	"ai-notetaking-be/internal/entity"
+	"ai-notetaking-be/internal/repository"
+	"context"
+	"errors"
+	"fmt"
+	"os"
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/midtrans/midtrans-go"
+	"github.com/midtrans/midtrans-go/snap"
+)
+
+type IPaymentService interface {
+	GetPlans(ctx context.Context) ([]*dto.PlanResponse, error)
+	CreateSubscription(ctx context.Context, userId uuid.UUID, req *dto.CheckoutRequest) (*dto.CheckoutResponse, error)
+	HandleNotification(ctx context.Context, req *dto.MidtransWebhookRequest) error
+	
+	// FIXED: Added missing interface methods
+	GetSubscriptionStatus(ctx context.Context, userId uuid.UUID) (*dto.SubscriptionStatusResponse, error)
+	CancelSubscription(ctx context.Context, userId uuid.UUID) error
+}
+
+type paymentService struct {
+	subRepo  repository.ISubscriptionRepository
+	userRepo repository.IUserRepository 
+}
+
+func NewPaymentService(subRepo repository.ISubscriptionRepository, userRepo repository.IUserRepository) IPaymentService {
+	return &paymentService{
+		subRepo:  subRepo,
+		userRepo: userRepo,
+	}
+}
+
+func (s *paymentService) GetPlans(ctx context.Context) ([]*dto.PlanResponse, error) {
+	plans, err := s.subRepo.GetAllPlans(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var res []*dto.PlanResponse
+	for _, p := range plans {
+		features := []string{"Basic Note Taking"}
+		if p.SemanticSearchEnabled {
+			features = append(features, "Semantic Search")
+		}
+		if p.AiChatEnabled {
+			features = append(features, "AI Chat Assistant")
+		}
+
+		res = append(res, &dto.PlanResponse{
+			Id:          p.Id,
+			Name:        p.Name,
+			Slug:        p.Slug,
+			Price:       p.Price,
+			Description: p.Description,
+			Features:    features,
+		})
+	}
+	return res, nil
+}
+
+func (s *paymentService) CreateSubscription(ctx context.Context, userId uuid.UUID, req *dto.CheckoutRequest) (*dto.CheckoutResponse, error) {
+	plan, err := s.subRepo.GetPlanById(ctx, req.PlanId)
+	if err != nil {
+		return nil, err
+	}
+
+	user, err := s.userRepo.GetById(ctx, userId)
+	if err != nil {
+		return nil, errors.New("user not found")
+	}
+
+	subId := uuid.New()
+	sub := &entity.UserSubscription{
+		Id:                 subId,
+		UserId:             userId,
+		PlanId:             plan.Id,
+		Status:             entity.SubscriptionStatusInactive,
+		PaymentStatus:      entity.PaymentStatusPending,
+		CreatedAt:          time.Now(),
+		UpdatedAt:          time.Now(),
+		CurrentPeriodStart: time.Now(),
+		CurrentPeriodEnd:   time.Now().AddDate(0, 1, 0), 
+	}
+
+	if plan.BillingPeriod == entity.BillingPeriodYearly {
+		sub.CurrentPeriodEnd = time.Now().AddDate(1, 0, 0)
+	}
+
+	err = s.subRepo.CreateSubscription(ctx, sub)
+	if err != nil {
+		return nil, err
+	}
+
+	var sClient snap.Client
+	serverKey := os.Getenv("MIDTRANS_SERVER_KEY")
+	env := midtrans.Sandbox
+	if os.Getenv("MIDTRANS_IS_PRODUCTION") == "true" {
+		env = midtrans.Production
+	}
+	sClient.New(serverKey, env)
+
+	snapReq := &snap.Request{
+		TransactionDetails: midtrans.TransactionDetails{
+			OrderID:  subId.String(),
+			GrossAmt: int64(plan.Price),
+		},
+		CreditCard: &snap.CreditCardDetails{
+			Secure: true,
+		},
+		CustomerDetail: &midtrans.CustomerDetails{
+			FName: user.FullName,
+			Email: user.Email,
+		},
+		Items: &[]midtrans.ItemDetails{
+			{
+				ID:    plan.Id.String(),
+				Price: int64(plan.Price),
+				Qty:   1,
+				Name:  plan.Name,
+			},
+		},
+		EnabledPayments: snap.AllSnapPaymentType,
+	}
+
+	snapResp, midErr := sClient.CreateTransaction(snapReq)
+	if midErr != nil {
+		return nil, fmt.Errorf("midtrans error: %v", midErr.GetMessage())
+	}
+
+	return &dto.CheckoutResponse{
+		SubscriptionId:  subId,
+		SnapToken:       snapResp.Token,
+		SnapRedirectUrl: snapResp.RedirectURL,
+	}, nil
+}
+
+func (s *paymentService) HandleNotification(ctx context.Context, req *dto.MidtransWebhookRequest) error {
+	fmt.Printf("\n[WEBHOOK] Received notification for Order ID: %s | Status: %s\n", req.OrderId, req.TransactionStatus)
+
+	subId, err := uuid.Parse(req.OrderId)
+	if err != nil {
+		return fmt.Errorf("invalid order id format")
+	}
+
+	sub, err := s.subRepo.GetSubscriptionById(ctx, subId)
+	if err != nil {
+		fmt.Printf("[WEBHOOK] Subscription not found: %s\n", err.Error())
+		return err
+	}
+
+	var newStatus entity.SubscriptionStatus
+	var newPaymentStatus entity.PaymentStatus
+
+	switch req.TransactionStatus {
+	case "capture", "settlement":
+		newStatus = entity.SubscriptionStatusActive
+		newPaymentStatus = entity.PaymentStatusPaid
+		fmt.Println("[WEBHOOK] Payment SUCCESS. Activating subscription.")
+	case "deny", "cancel", "expire":
+		newStatus = entity.SubscriptionStatusInactive
+		newPaymentStatus = entity.PaymentStatusFailed
+		fmt.Println("[WEBHOOK] Payment FAILED. Canceling subscription.")
+	case "pending":
+		fmt.Println("[WEBHOOK] Payment PENDING.")
+		return nil
+	default:
+		fmt.Printf("[WEBHOOK] Unknown status: %s\n", req.TransactionStatus)
+		return nil
+	}
+
+	if sub.Status != newStatus || sub.PaymentStatus != newPaymentStatus {
+		return s.subRepo.UpdateSubscriptionStatus(ctx, subId, newStatus, newPaymentStatus)
+	}
+
+	return nil
+}
+
+func (s *paymentService) GetSubscriptionStatus(ctx context.Context, userId uuid.UUID) (*dto.SubscriptionStatusResponse, error) {
+	sub, plan, err := s.subRepo.GetActiveByUserId(ctx, userId)
+	if err != nil {
+		return nil, err
+	}
+	
+	if sub == nil {
+		return &dto.SubscriptionStatusResponse{
+			PlanName: "Free Plan",
+			Status:   "inactive",
+			IsActive: false,
+		}, nil
+	}
+
+	return &dto.SubscriptionStatusResponse{
+		PlanName:           plan.Name,
+		Status:             string(sub.Status),
+		CurrentPeriodEnd:   sub.CurrentPeriodEnd,
+		AiDailyCreditLimit: plan.AiDailyCreditLimit,
+		IsActive:           true,
+	}, nil
+}
+
+func (s *paymentService) CancelSubscription(ctx context.Context, userId uuid.UUID) error {
+	sub, _, err := s.subRepo.GetActiveByUserId(ctx, userId)
+	if err != nil {
+		return err
+	}
+	if sub == nil {
+		return errors.New("no active subscription found")
+	}
+
+	// In a real app, you might want to call Midtrans to cancel if it's recurring on their side too
+	return s.subRepo.CancelSubscription(ctx, sub.Id)
+}
+FILE: D:\notetaker\notefiber-BE\internal\service\publisher_service.go
+RELATIVE PATH: internal\service\publisher_service.go
+package service
+
+import (
+	"context"
+
+	"github.com/ThreeDotsLabs/watermill"
+	"github.com/ThreeDotsLabs/watermill/message"
+	"github.com/ThreeDotsLabs/watermill/pubsub/gochannel"
+)
+
+type IPublisherService interface {
+	Publish(ctx context.Context, payload []byte) error
+}
+
+type publisherService struct {
+	pubSub *gochannel.GoChannel
+
+	topicName string
+}
+
+func (ps *publisherService) Publish(ctx context.Context, payload []byte) error {
+	err := ps.pubSub.Publish(
+		ps.topicName,
+		message.NewMessage(watermill.NewUUID(), payload),
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func NewPublisherService(topicName string, pubSub *gochannel.GoChannel) IPublisherService {
+	return &publisherService{
+		topicName: topicName,
+		pubSub:    pubSub,
+	}
+}
+
+FILE: D:\notetaker\notefiber-BE\internal\service\user_service.go
+RELATIVE PATH: internal\service\user_service.go
+// FILE: internal/service/user_service.go
+package service
+
+import (
+	"ai-notetaking-be/internal/dto"
+	"ai-notetaking-be/internal/repository"
+	"context"
+
+	"github.com/google/uuid"
+)
+
+type IUserService interface {
+	GetProfile(ctx context.Context, userId uuid.UUID) (*dto.UserProfileResponse, error)
+	UpdateProfile(ctx context.Context, userId uuid.UUID, req *dto.UpdateProfileRequest) error
+	DeleteAccount(ctx context.Context, userId uuid.UUID) error
+}
+
+type userService struct {
+	userRepo repository.IUserRepository
+}
+
+func NewUserService(userRepo repository.IUserRepository) IUserService {
+	return &userService{userRepo: userRepo}
+}
+
+func (s *userService) GetProfile(ctx context.Context, userId uuid.UUID) (*dto.UserProfileResponse, error) {
+	user, err := s.userRepo.GetById(ctx, userId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &dto.UserProfileResponse{
+		Id:           user.Id,
+		Email:        user.Email,
+		FullName:     user.FullName,
+		Role:         string(user.Role),
+		Status:       string(user.Status),
+		AiDailyUsage: user.AiDailyUsage,
+		CreatedAt:    user.CreatedAt,
+	}, nil
+}
+
+func (s *userService) UpdateProfile(ctx context.Context, userId uuid.UUID, req *dto.UpdateProfileRequest) error {
+	user, err := s.userRepo.GetById(ctx, userId)
+	if err != nil {
+		return err
+	}
+
+	user.FullName = req.FullName
+	return s.userRepo.Update(ctx, user)
+}
+
+func (s *userService) DeleteAccount(ctx context.Context, userId uuid.UUID) error {
+	return s.userRepo.Delete(ctx, userId)
+}
+FILE: D:\notetaker\notefiber-BE\pkg\chatbot\gemini_chatbot.go
+RELATIVE PATH: pkg\chatbot\gemini_chatbot.go
+package chatbot
+
+import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+)
+
+type GeminiChatParts struct {
+	Text string `json:"text"`
+}
+
+type GeminiChatContent struct {
+	Parts []*GeminiChatParts `json:"parts"`
+	Role  string             `json:"role"`
+}
+
+type GeminiChatRequest struct {
+	Contents         []*GeminiChatContent        `json:"contents"`
+	GenerationConfig *GeminiChatGenerationConfig `json:"generationConfig,omitempty"`
+}
+
+type ChatHistory struct {
+	Chat string
+	Role string
+}
+
+type GeminiChatCandidate struct {
+	Content *GeminiChatContent `json:"content"`
+}
+
+type GeminiChatResponse struct {
+	Candidates []*GeminiChatCandidate `json:"candidates"`
+}
+
+type GeminiChaPropertySchema struct {
+	Type string `json:"type"`
+}
+
+type GeminiChatAppSchema struct {
+	AnswerDirectly *GeminiChaPropertySchema `json:"answer_directly"`
+}
+
+type GeminiChatResponseSchema struct {
+	Type       string               `json:"type"`
+	Properties *GeminiChatAppSchema `json:"properties"`
+	Required   []string             `json:"required"`
+}
+
+type GeminiChatGenerationConfig struct {
+	ResponseMimeType string                    `json:"responseMimeType,omitempty"`
+	ResponseSchema   *GeminiChatResponseSchema `json:"responseSchema,omitempty"`
+}
+
+type GeminiResponseAppSchema struct {
+	AnswerDirectly bool `json:"answer_directly"`
+}
+
+func GetGeminiResponse(
+	ctx context.Context,
+	apiKey string,
+	chatHistories []*ChatHistory,
+) (string, error) {
+	chatContents := make([]*GeminiChatContent, 0)
+	for _, chatHistory := range chatHistories {
+		chatContents = append(chatContents, &GeminiChatContent{
+			Parts: []*GeminiChatParts{
+				{
+					Text: chatHistory.Chat,
+				},
+			},
+			Role: chatHistory.Role,
+		})
+	}
+	payload := GeminiChatRequest{
+		Contents: chatContents,
+	}
+	payloadJson, err := json.Marshal(payload)
+	if err != nil {
+		return "", err
+	}
+
+	// VERIFIED: v1beta endpoint with gemini-2.0-flash
+	// Available models confirmed via ListModels API
+	req, err := http.NewRequest(
+		"POST",
+		"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+		bytes.NewBuffer(payloadJson),
+	)
+	if err != nil {
+		return "", err
+	}
+
+	req.Header.Set("x-goog-api-key", apiKey)
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	res, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
+
+	resBody, err := io.ReadAll(res.Body)
+	if err != nil {
+		return "", err
+	}
+
+	if res.StatusCode != http.StatusOK {
+		return "", fmt.Errorf(
+			"status error, got status %d. with response body %s",
+			res.StatusCode,
+			string(resBody),
+		)
+	}
+
+	var geminiRes GeminiChatResponse
+	err = json.Unmarshal(resBody, &geminiRes)
+	if err != nil {
+		return "", err
+	}
+
+	return geminiRes.Candidates[0].Content.Parts[0].Text, nil
+}
+
+func DecideToUseRAG(
+	ctx context.Context,
+	apiKey string,
+	chatHistories []*ChatHistory,
+) (bool, error) {
+	chatContents := make([]*GeminiChatContent, 0)
+	for _, chatHistory := range chatHistories {
+		chatContents = append(chatContents, &GeminiChatContent{
+			Parts: []*GeminiChatParts{
+				{
+					Text: chatHistory.Chat,
+				},
+			},
+			Role: chatHistory.Role,
+		})
+	}
+	payload := GeminiChatRequest{
+		Contents: chatContents,
+		GenerationConfig: &GeminiChatGenerationConfig{
+			ResponseMimeType: "application/json",
+			ResponseSchema: &GeminiChatResponseSchema{
+				Type: "OBJECT",
+				Properties: &GeminiChatAppSchema{
+					AnswerDirectly: &GeminiChaPropertySchema{
+						Type: "BOOLEAN",
+					},
+				},
+				Required: []string{
+					"answer_directly",
+				},
+			},
+		},
+	}
+	payloadJson, err := json.Marshal(payload)
+	if err != nil {
+		return false, err
+	}
+
+	// VERIFIED: v1beta endpoint with gemini-2.0-flash
+	// Available models confirmed via ListModels API
+	req, err := http.NewRequest(
+		"POST",
+		"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+		bytes.NewBuffer(payloadJson),
+	)
+	if err != nil {
+		return false, err
+	}
+
+	req.Header.Set("x-goog-api-key", apiKey)
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	res, err := client.Do(req)
+	if err != nil {
+		return false, err
+	}
+
+	resBody, err := io.ReadAll(res.Body)
+	if err != nil {
+		return false, err
+	}
+
+	if res.StatusCode != http.StatusOK {
+		return false, fmt.Errorf(
+			"status error, got status %d. with response body %s",
+			res.StatusCode,
+			string(resBody),
+		)
+	}
+
+	var geminiRes GeminiChatResponse
+	err = json.Unmarshal(resBody, &geminiRes)
+	if err != nil {
+		return false, err
+	}
+
+	var appSchema GeminiResponseAppSchema
+	err = json.Unmarshal([]byte(geminiRes.Candidates[0].Content.Parts[0].Text), &appSchema)
+	if err != nil {
+		return false, err
+	}
+
+	return !appSchema.AnswerDirectly, nil
+}
+FILE: D:\notetaker\notefiber-BE\pkg\database\connection.go
+RELATIVE PATH: pkg\database\connection.go
+package database
+
+import (
+	"context"
+	"log"
+
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+func ConnectDB(connectionString string) *pgxpool.Pool {
+	var err error
+	db, err := pgxpool.New(context.Background(), connectionString)
+	if err != nil {
+		log.Panicf("Unable to connect to DB: %v", err)
+	}
+
+	err = db.Ping(context.Background())
+	if err != nil {
+		log.Panicf("Failed to ping: %v", err)
+	}
+
+	return db
+}
+
+FILE: D:\notetaker\notefiber-BE\pkg\database\queryer.go
+RELATIVE PATH: pkg\database\queryer.go
+package database
+
+import (
+	"context"
+
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
+)
+
+type DatabaseQueryer interface {
+	Exec(ctx context.Context, sql string, arguments ...any) (pgconn.CommandTag, error)
+	Query(ctx context.Context, sql string, args ...any) (pgx.Rows, error)
+	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
+}
+
+FILE: D:\notetaker\notefiber-BE\pkg\embedding\gemini_embedding.go
+RELATIVE PATH: pkg\embedding\gemini_embedding.go
+package embedding
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"io"
+	"log"
+	"net/http"
+)
+
+type EmbeddingRequestContentPart struct {
+	Text string `json:"text"`
+}
+
+type EmbeddingRequestContent struct {
+	Parts []EmbeddingRequestContentPart `json:"parts"`
+}
+
+type EmbeddingRequest struct {
+	Model    string                  `json:"model"`
+	Content  EmbeddingRequestContent `json:"content"`
+	TaskType string                  `json:"task_type,omitempty"`
+}
+
+type EmbeddingResponseEmbedding struct {
+	Values []float32 `json:"values"`
+}
+
+type EmbeddingResponse struct {
+	Embedding EmbeddingResponseEmbedding `json:"embedding"`
+}
+
+func GetGeminiEmbedding(
+	apiKey string,
+	text string,
+	taskType string,
+) (*EmbeddingResponse, error) {
+	// CRITICAL FIX: Use text-embedding-004 with v1 endpoint for 3072 dimensions
+	// v1beta endpoint returns 768 dimensions (legacy)
+	// v1 endpoint returns 3072 dimensions (current)
+	// Source: https://ai.google.dev/gemini-api/docs/embeddings
+	modelName := "text-embedding-004"
+	
+	geminiReq := EmbeddingRequest{
+		Model: modelName,
+		Content: EmbeddingRequestContent{
+			Parts: []EmbeddingRequestContentPart{
+				{
+					Text: text,
+				},
+			},
+		},
+		TaskType: taskType,
+	}
+	geminiReqJson, err := json.Marshal(geminiReq)
+	if err != nil {
+		return nil, err
+	}
+	
+	// CRITICAL FIX: Use v1 endpoint (not v1beta) for 3072 dimensions
+	endpoint := fmt.Sprintf(
+		"https://generativelanguage.googleapis.com/v1/models/%s:embedContent",
+		modelName,
+	)
+	log.Printf("[DEBUG] Embedding API endpoint: %s", endpoint)
+	
+	req, err := http.NewRequest(
+		"POST",
+		endpoint,
+		bytes.NewBuffer(geminiReqJson),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("x-goog-api-key", apiKey)
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	res, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	resByte, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	if res.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("error from response, code %d, body %s", res.StatusCode, string(resByte))
+	}
+
+	var resEmbedding EmbeddingResponse
+	err = json.Unmarshal(resByte, &resEmbedding)
+	if err != nil {
+		return nil, err
+	}
+
+	log.Printf("[DEBUG] Embedding generated: %d dimensions", len(resEmbedding.Embedding.Values))
+
+	return &resEmbedding, nil
+}
+
