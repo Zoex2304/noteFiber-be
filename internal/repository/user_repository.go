@@ -24,11 +24,23 @@ type IUserRepository interface {
 	MarkTokenUsed(ctx context.Context, id uuid.UUID) error
 	UpdatePassword(ctx context.Context, userId uuid.UUID, hash string) error
 
-	// New OTP Methods
+	// OTP Methods
 	CreateVerificationToken(ctx context.Context, token *entity.EmailVerificationToken) error
 	GetVerificationToken(ctx context.Context, userId uuid.UUID, token string) (*entity.EmailVerificationToken, error)
 	DeleteVerificationToken(ctx context.Context, id uuid.UUID) error
 	ActivateUser(ctx context.Context, userId uuid.UUID) error
+
+	// New Profile & Admin Methods
+	Update(ctx context.Context, user *entity.User) error
+	Delete(ctx context.Context, id uuid.UUID) error
+	GetAll(ctx context.Context, limit, offset int) ([]*entity.User, error)
+	Count(ctx context.Context) (int, error)
+	CountByStatus(ctx context.Context, status entity.UserStatus) (int, error)
+	UpdateStatus(ctx context.Context, id uuid.UUID, status entity.UserStatus) error
+
+	// Search & Stats (Implemented in admin_log_repository.go)
+	SearchUsers(ctx context.Context, query string, limit, offset int) ([]*entity.User, error)
+	GetUserGrowth(ctx context.Context) ([]map[string]interface{}, error)
 }
 
 type userRepository struct {
@@ -43,6 +55,9 @@ func (r *userRepository) UsingTx(ctx context.Context, tx database.DatabaseQuerye
 	return &userRepository{db: tx}
 }
 
+// ... Existing methods (Create, GetByEmail, GetById, OTP methods, etc.) are assumed to be here ...
+// ... I am appending the new methods below ...
+
 func (r *userRepository) Create(ctx context.Context, user *entity.User) error {
 	_, err := r.db.Exec(ctx, `
 		INSERT INTO users (id, email, password_hash, full_name, role, status, email_verified, created_at, updated_at)
@@ -56,15 +71,15 @@ func (r *userRepository) GetByEmail(ctx context.Context, email string) (*entity.
 	var user entity.User
 	err := row.Scan(&user.Id, &user.Email, &user.PasswordHash, &user.FullName, &user.Role, &user.Status)
 	if errors.Is(err, pgx.ErrNoRows) {
-		return nil, nil // Return nil if not found, let service handle 404
+		return nil, nil
 	}
 	return &user, err
 }
 
 func (r *userRepository) GetById(ctx context.Context, id uuid.UUID) (*entity.User, error) {
-	row := r.db.QueryRow(ctx, `SELECT id, email, full_name, role FROM users WHERE id = $1`, id)
+	row := r.db.QueryRow(ctx, `SELECT id, email, full_name, role, status, ai_daily_usage, created_at FROM users WHERE id = $1`, id)
 	var user entity.User
-	err := row.Scan(&user.Id, &user.Email, &user.FullName, &user.Role)
+	err := row.Scan(&user.Id, &user.Email, &user.FullName, &user.Role, &user.Status, &user.AiDailyUsage, &user.CreatedAt)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, serverutils.ErrNotFound
 	}
@@ -98,8 +113,6 @@ func (r *userRepository) UpdatePassword(ctx context.Context, userId uuid.UUID, h
 	_, err := r.db.Exec(ctx, `UPDATE users SET password_hash = $1, updated_at = $2 WHERE id = $3`, hash, time.Now(), userId)
 	return err
 }
-
-// --- New OTP Methods ---
 
 func (r *userRepository) CreateVerificationToken(ctx context.Context, token *entity.EmailVerificationToken) error {
 	_, err := r.db.Exec(ctx, `
@@ -135,5 +148,55 @@ func (r *userRepository) ActivateUser(ctx context.Context, userId uuid.UUID) err
 		SET status = 'active', email_verified = true, email_verified_at = $1, updated_at = $2 
 		WHERE id = $3
 	`, time.Now(), time.Now(), userId)
+	return err
+}
+
+// --- NEW METHODS ---
+
+func (r *userRepository) Update(ctx context.Context, user *entity.User) error {
+	_, err := r.db.Exec(ctx, `UPDATE users SET full_name = $1, updated_at = $2 WHERE id = $3`, user.FullName, time.Now(), user.Id)
+	return err
+}
+
+func (r *userRepository) Delete(ctx context.Context, id uuid.UUID) error {
+	// Soft delete or Hard delete? Usually hard delete for "Delete Account" request unless regulated otherwise.
+	// Schema doesn't have deleted_at for users, assuming Hard Delete.
+	_, err := r.db.Exec(ctx, `DELETE FROM users WHERE id = $1`, id)
+	return err
+}
+
+func (r *userRepository) GetAll(ctx context.Context, limit, offset int) ([]*entity.User, error) {
+	rows, err := r.db.Query(ctx, `SELECT id, email, full_name, role, status, created_at FROM users ORDER BY created_at DESC LIMIT $1 OFFSET $2`, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []*entity.User
+	for rows.Next() {
+		var u entity.User
+		err := rows.Scan(&u.Id, &u.Email, &u.FullName, &u.Role, &u.Status, &u.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, &u)
+	}
+	return users, nil
+}
+
+func (r *userRepository) Count(ctx context.Context) (int, error) {
+	var count int
+	err := r.db.QueryRow(ctx, `SELECT COUNT(*) FROM users`).Scan(&count)
+	return count, err
+}
+
+func (r *userRepository) CountByStatus(ctx context.Context, status entity.UserStatus) (int, error) {
+	var count int
+	err := r.db.QueryRow(ctx, `SELECT COUNT(*) FROM users WHERE status = $1`, status).Scan(&count)
+	return count, err
+}
+
+func (r *userRepository) UpdateStatus(ctx context.Context, id uuid.UUID, status entity.UserStatus) error {
+	_, err := r.db.Exec(ctx, `UPDATE users SET status = $1, updated_at = $2 WHERE id = $3`, status, time.Now(), id)
 	return err
 }

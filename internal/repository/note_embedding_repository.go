@@ -73,6 +73,7 @@ func (n *noteEmbeddingRepository) SemanticSearch(ctx context.Context, embeddingV
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close() // FIX: Always close rows
 
 	res := make([]*entity.NoteEmbedding, 0)
 	for rows.Next() {
@@ -88,18 +89,32 @@ func (n *noteEmbeddingRepository) SemanticSearch(ctx context.Context, embeddingV
 		res = append(res, &noteEmbedding)
 	}
 
+	// FIX: Check for errors during iteration
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
 	return res, nil
 }
 
 func (n *noteEmbeddingRepository) SearchSimilarity(ctx context.Context, embeddingValues []float32) ([]*entity.NoteEmbedding, error) {
+	// CRITICAL FIX: Added threshold (> 0.5) to filter out irrelevant notes.
+	// 1 - (embedding_value <=> $1) is Cosine Similarity.
+	// Notes with similarity below 0.5 will be ignored.
 	rows, err := n.db.Query(
 		ctx,
-		`SELECT id, document FROM note_embedding WHERE is_deleted = false ORDER BY 1 - (embedding_value <=> $1) DESC LIMIT 5`,
+		`SELECT id, document 
+		 FROM note_embedding 
+		 WHERE is_deleted = false 
+		 AND (1 - (embedding_value <=> $1)) > 0.5 
+		 ORDER BY 1 - (embedding_value <=> $1) DESC 
+		 LIMIT 5`,
 		pgvector.NewVector(embeddingValues),
 	)
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close() // FIX: Always close rows
 
 	res := make([]*entity.NoteEmbedding, 0)
 	for rows.Next() {
@@ -113,6 +128,11 @@ func (n *noteEmbeddingRepository) SearchSimilarity(ctx context.Context, embeddin
 		}
 
 		res = append(res, &noteEmbedding)
+	}
+
+	// FIX: Check for errors during iteration
+	if err = rows.Err(); err != nil {
+		return nil, err
 	}
 
 	return res, nil

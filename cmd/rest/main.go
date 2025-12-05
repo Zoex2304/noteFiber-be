@@ -40,9 +40,10 @@ func main() {
 	chatMessageRepository := repository.NewChatMessageRepository(db)
 	chatMessageRawRepository := repository.NewChatMessageRawRepository(db)
 
-	// New Repos
+	// User, Sub, Log Repos
 	userRepository := repository.NewUserRepository(db)
 	subscriptionRepository := repository.NewSubscriptionRepository(db)
+	logRepository := repository.NewLogRepository(db) // Correctly initialized
 
 	// --- Event Bus ---
 	watermillLogger := watermill.NewStdLogger(false, false)
@@ -81,10 +82,15 @@ func main() {
 		noteEmbeddingRepository,
 	)
 
-	// New Services
+	// Business Services
 	authService := service.NewAuthService(userRepository)
-	// IMPORTANT: Wired both subscriptionRepository and userRepository
 	paymentService := service.NewPaymentService(subscriptionRepository, userRepository)
+	userService := service.NewUserService(userRepository)
+	
+	// FIXED: Passed 3 arguments as required by NewAdminService
+	adminService := service.NewAdminService(userRepository, subscriptionRepository, logRepository)
+	
+	oauthService := service.NewOAuthService(userRepository)
 
 	// --- Controllers ---
 	exampleController := controller.NewExampleController(exampleService)
@@ -92,9 +98,11 @@ func main() {
 	noteController := controller.NewNoteController(noteService)
 	chatbotController := controller.NewChatbotController(chatbotService)
 
-	// New Controllers
 	authController := controller.NewAuthController(authService)
 	paymentController := controller.NewPaymentController(paymentService)
+	userController := controller.NewUserController(userService)
+	adminController := controller.NewAdminController(adminService)
+	oauthController := controller.NewOAuthController(oauthService)
 
 	// --- Routes ---
 	api := app.Group("/api")
@@ -104,6 +112,9 @@ func main() {
 	chatbotController.RegisterRoutes(api)
 	authController.RegisterRoutes(api)
 	paymentController.RegisterRoutes(api)
+	userController.RegisterRoutes(api)
+	adminController.RegisterRoutes(api)
+	oauthController.RegisterRoutes(api)
 
 	// --- Background Consumers ---
 	err := consumerService.Consume(context.Background())

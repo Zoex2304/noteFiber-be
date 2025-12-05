@@ -20,7 +20,7 @@ type GeminiChatContent struct {
 
 type GeminiChatRequest struct {
 	Contents         []*GeminiChatContent        `json:"contents"`
-	GenerationConfig *GeminiChatGenerationConfig `json:"generationConfig"`
+	GenerationConfig *GeminiChatGenerationConfig `json:"generationConfig,omitempty"`
 }
 
 type ChatHistory struct {
@@ -51,8 +51,8 @@ type GeminiChatResponseSchema struct {
 }
 
 type GeminiChatGenerationConfig struct {
-	ResponseMimeType string                    `json:"responseMimeType"`
-	ResponseSchema   *GeminiChatResponseSchema `json:"responseSchema"`
+	ResponseMimeType string                    `json:"responseMimeType,omitempty"`
+	ResponseSchema   *GeminiChatResponseSchema `json:"responseSchema,omitempty"`
 }
 
 type GeminiResponseAppSchema struct {
@@ -68,7 +68,7 @@ func GetGeminiResponse(
 	for _, chatHistory := range chatHistories {
 		chatContents = append(chatContents, &GeminiChatContent{
 			Parts: []*GeminiChatParts{
-				&GeminiChatParts{
+				{
 					Text: chatHistory.Chat,
 				},
 			},
@@ -83,9 +83,11 @@ func GetGeminiResponse(
 		return "", err
 	}
 
+	// VERIFIED: v1beta endpoint with gemini-2.0-flash
+	// Available models confirmed via ListModels API
 	req, err := http.NewRequest(
 		"POST",
-		"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent",
+		"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
 		bytes.NewBuffer(payloadJson),
 	)
 	if err != nil {
@@ -132,7 +134,7 @@ func DecideToUseRAG(
 	for _, chatHistory := range chatHistories {
 		chatContents = append(chatContents, &GeminiChatContent{
 			Parts: []*GeminiChatParts{
-				&GeminiChatParts{
+				{
 					Text: chatHistory.Chat,
 				},
 			},
@@ -161,9 +163,11 @@ func DecideToUseRAG(
 		return false, err
 	}
 
+	// VERIFIED: v1beta endpoint with gemini-2.0-flash
+	// Available models confirmed via ListModels API
 	req, err := http.NewRequest(
 		"POST",
-		"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent",
+		"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
 		bytes.NewBuffer(payloadJson),
 	)
 	if err != nil {

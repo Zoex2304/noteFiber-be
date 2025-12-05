@@ -1,17 +1,8 @@
--- FILE: seeds/seed.sql
-
--- Enable required extensions
+-- ========== EXTENSIONS ==========
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- Generate dynamic UUIDs and insert data
-WITH plan_ids AS (
-    SELECT 
-        gen_random_uuid() AS free_plan_id,
-        gen_random_uuid() AS pro_plan_id,
-        gen_random_uuid() AS enterprise_plan_id
-)
--- Insert Subscription Plans
+-- ========== SUBSCRIPTION PLANS (UUID STABIL) ==========
 INSERT INTO public.subscription_plans 
 (
     id, 
@@ -25,47 +16,46 @@ INSERT INTO public.subscription_plans
     ai_chat_enabled, 
     ai_daily_credit_limit
 )
-SELECT 
-    free_plan_id, 
-    'Free Plan', 
-    'free', 
-    'Basic note taking features', 
-    0, 
-    'monthly'::public.billing_period, 
-    50, 
-    false, 
-    false, 
+VALUES
+(
+    '05c035ac-2117-40ec-b38f-ab6b912fa114',
+    'Free Plan',
+    'free',
+    'Basic note taking features',
+    0,
+    'monthly'::public.billing_period,
+    50,
+    false,
+    false,
     0
-FROM plan_ids
-UNION ALL
-SELECT 
-    pro_plan_id, 
-    'Pro Plan', 
-    'pro', 
-    'Unlock AI Chat and Semantic Search', 
-    50000.00, 
-    'monthly'::public.billing_period, 
-    1000, 
-    true, 
-    true, 
+),
+(
+    'ce8abb84-10e9-4f54-9f7c-4be693b18ea5',
+    'Pro Plan',
+    'pro',
+    'Unlock AI Chat and Semantic Search',
+    50000.00,
+    'monthly'::public.billing_period,
+    1000,
+    true,
+    true,
     50
-FROM plan_ids
-UNION ALL
-SELECT 
-    enterprise_plan_id, 
-    'Enterprise Plan', 
-    'enterprise', 
-    'Unlimited power for power users', 
-    500000.00, 
-    'yearly'::public.billing_period, 
-    999999, 
-    true, 
-    true, 
+),
+(
+    '6e45d34e-0664-46b3-bbf3-309995c9a723',
+    'Enterprise Plan',
+    'enterprise',
+    'Unlimited power for power users',
+    500000.00,
+    'yearly'::public.billing_period,
+    999999,
+    true,
+    true,
     1000
-FROM plan_ids
+)
 ON CONFLICT (slug) DO NOTHING;
 
--- Insert User 'Zikri' with password 'zikri234'
+-- ========== USER ZIKRI ==========
 INSERT INTO public.users 
 (
     email, 
@@ -94,15 +84,18 @@ VALUES
     0,
     NOW()
 )
-ON CONFLICT (email) DO NOTHING
-RETURNING id;
+ON CONFLICT (email) DO NOTHING;
 
--- Assign user to Free Plan
+-- ========== USER → FREE PLAN ==========
 WITH zikri_user AS (
-    SELECT id FROM public.users WHERE email = 'blueleather11@gmail.com'
+    SELECT id 
+    FROM public.users 
+    WHERE email = 'blueleather11@gmail.com'
 ),
 free_plan AS (
-    SELECT id FROM public.subscription_plans WHERE slug = 'free'
+    SELECT id 
+    FROM public.subscription_plans 
+    WHERE slug = 'free'
 )
 INSERT INTO public.user_subscriptions
 (

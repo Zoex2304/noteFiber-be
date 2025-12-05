@@ -20,11 +20,15 @@ type IPaymentService interface {
 	GetPlans(ctx context.Context) ([]*dto.PlanResponse, error)
 	CreateSubscription(ctx context.Context, userId uuid.UUID, req *dto.CheckoutRequest) (*dto.CheckoutResponse, error)
 	HandleNotification(ctx context.Context, req *dto.MidtransWebhookRequest) error
+	
+	// FIXED: Added missing interface methods
+	GetSubscriptionStatus(ctx context.Context, userId uuid.UUID) (*dto.SubscriptionStatusResponse, error)
+	CancelSubscription(ctx context.Context, userId uuid.UUID) error
 }
 
 type paymentService struct {
 	subRepo  repository.ISubscriptionRepository
-	userRepo repository.IUserRepository // Added to fetch user details for Snap
+	userRepo repository.IUserRepository 
 }
 
 func NewPaymentService(subRepo repository.ISubscriptionRepository, userRepo repository.IUserRepository) IPaymentService {
@@ -42,7 +46,6 @@ func (s *paymentService) GetPlans(ctx context.Context) ([]*dto.PlanResponse, err
 
 	var res []*dto.PlanResponse
 	for _, p := range plans {
-		// Basic features list based on plan type
 		features := []string{"Basic Note Taking"}
 		if p.SemanticSearchEnabled {
 			features = append(features, "Semantic Search")
@@ -64,19 +67,16 @@ func (s *paymentService) GetPlans(ctx context.Context) ([]*dto.PlanResponse, err
 }
 
 func (s *paymentService) CreateSubscription(ctx context.Context, userId uuid.UUID, req *dto.CheckoutRequest) (*dto.CheckoutResponse, error) {
-	// 1. Get Plan Details
 	plan, err := s.subRepo.GetPlanById(ctx, req.PlanId)
 	if err != nil {
 		return nil, err
 	}
 
-	// 2. Get User Details (for Midtrans Customer Details)
 	user, err := s.userRepo.GetById(ctx, userId)
 	if err != nil {
 		return nil, errors.New("user not found")
 	}
 
-	// 3. Create Pending Subscription Record in DB
 	subId := uuid.New()
 	sub := &entity.UserSubscription{
 		Id:                 subId,
@@ -87,7 +87,7 @@ func (s *paymentService) CreateSubscription(ctx context.Context, userId uuid.UUI
 		CreatedAt:          time.Now(),
 		UpdatedAt:          time.Now(),
 		CurrentPeriodStart: time.Now(),
-		CurrentPeriodEnd:   time.Now().AddDate(0, 1, 0), // Default monthly
+		CurrentPeriodEnd:   time.Now().AddDate(0, 1, 0), 
 	}
 
 	if plan.BillingPeriod == entity.BillingPeriodYearly {
@@ -99,7 +99,6 @@ func (s *paymentService) CreateSubscription(ctx context.Context, userId uuid.UUI
 		return nil, err
 	}
 
-	// 4. Initialize Midtrans Snap Client
 	var sClient snap.Client
 	serverKey := os.Getenv("MIDTRANS_SERVER_KEY")
 	env := midtrans.Sandbox
@@ -108,7 +107,6 @@ func (s *paymentService) CreateSubscription(ctx context.Context, userId uuid.UUI
 	}
 	sClient.New(serverKey, env)
 
-	// 5. Build Snap Request
 	snapReq := &snap.Request{
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  subId.String(),
@@ -132,15 +130,10 @@ func (s *paymentService) CreateSubscription(ctx context.Context, userId uuid.UUI
 		EnabledPayments: snap.AllSnapPaymentType,
 	}
 
-	// 6. Create Transaction
-	// Use midErr to avoid shadowing 'err' (which is type error) and forcing type conversion
 	snapResp, midErr := sClient.CreateTransaction(snapReq)
 	if midErr != nil {
 		return nil, fmt.Errorf("midtrans error: %v", midErr.GetMessage())
 	}
-
-	// 7. Save Snap Token to DB (Optional, but good for reference)
-	// We could update the subscription record with the transaction ID here if needed
 
 	return &dto.CheckoutResponse{
 		SubscriptionId:  subId,
@@ -150,10 +143,8 @@ func (s *paymentService) CreateSubscription(ctx context.Context, userId uuid.UUI
 }
 
 func (s *paymentService) HandleNotification(ctx context.Context, req *dto.MidtransWebhookRequest) error {
-	// Log webhook receipt
 	fmt.Printf("\n[WEBHOOK] Received notification for Order ID: %s | Status: %s\n", req.OrderId, req.TransactionStatus)
 
-	// Midtrans sends OrderID which corresponds to our UserSubscription ID
 	subId, err := uuid.Parse(req.OrderId)
 	if err != nil {
 		return fmt.Errorf("invalid order id format")
@@ -168,7 +159,6 @@ func (s *paymentService) HandleNotification(ctx context.Context, req *dto.Midtra
 	var newStatus entity.SubscriptionStatus
 	var newPaymentStatus entity.PaymentStatus
 
-	// Logic based on Midtrans transaction status
 	switch req.TransactionStatus {
 	case "capture", "settlement":
 		newStatus = entity.SubscriptionStatusActive
@@ -180,16 +170,51 @@ func (s *paymentService) HandleNotification(ctx context.Context, req *dto.Midtra
 		fmt.Println("[WEBHOOK] Payment FAILED. Canceling subscription.")
 	case "pending":
 		fmt.Println("[WEBHOOK] Payment PENDING.")
-		return nil // Do nothing for pending
+		return nil
 	default:
 		fmt.Printf("[WEBHOOK] Unknown status: %s\n", req.TransactionStatus)
-		return nil // Unknown status, ignore
+		return nil
 	}
 
-	// Update DB only if status changed
 	if sub.Status != newStatus || sub.PaymentStatus != newPaymentStatus {
 		return s.subRepo.UpdateSubscriptionStatus(ctx, subId, newStatus, newPaymentStatus)
 	}
 
 	return nil
+}
+
+func (s *paymentService) GetSubscriptionStatus(ctx context.Context, userId uuid.UUID) (*dto.SubscriptionStatusResponse, error) {
+	sub, plan, err := s.subRepo.GetActiveByUserId(ctx, userId)
+	if err != nil {
+		return nil, err
+	}
+	
+	if sub == nil {
+		return &dto.SubscriptionStatusResponse{
+			PlanName: "Free Plan",
+			Status:   "inactive",
+			IsActive: false,
+		}, nil
+	}
+
+	return &dto.SubscriptionStatusResponse{
+		PlanName:           plan.Name,
+		Status:             string(sub.Status),
+		CurrentPeriodEnd:   sub.CurrentPeriodEnd,
+		AiDailyCreditLimit: plan.AiDailyCreditLimit,
+		IsActive:           true,
+	}, nil
+}
+
+func (s *paymentService) CancelSubscription(ctx context.Context, userId uuid.UUID) error {
+	sub, _, err := s.subRepo.GetActiveByUserId(ctx, userId)
+	if err != nil {
+		return err
+	}
+	if sub == nil {
+		return errors.New("no active subscription found")
+	}
+
+	// In a real app, you might want to call Midtrans to cancel if it's recurring on their side too
+	return s.subRepo.CancelSubscription(ctx, sub.Id)
 }

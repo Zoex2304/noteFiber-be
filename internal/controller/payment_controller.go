@@ -5,6 +5,7 @@ import (
 	"ai-notetaking-be/internal/dto"
 	"ai-notetaking-be/internal/pkg/serverutils"
 	"ai-notetaking-be/internal/service"
+	"fmt"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
@@ -17,6 +18,8 @@ type IPaymentController interface {
 	GetPlans(ctx *fiber.Ctx) error
 	Checkout(ctx *fiber.Ctx) error
 	Webhook(ctx *fiber.Ctx) error
+	GetStatus(ctx *fiber.Ctx) error // New
+	CancelSubscription(ctx *fiber.Ctx) error // New
 }
 
 type paymentController struct {
@@ -29,12 +32,15 @@ func NewPaymentController(service service.IPaymentService) IPaymentController {
 
 func (c *paymentController) RegisterRoutes(r fiber.Router) {
 	h := r.Group("/payment")
-	h.Get("/plans", c.GetPlans)
-	h.Post("/checkout", c.authMiddleware, c.Checkout) // Protected
 	h.Post("/midtrans/notification", c.Webhook)
+	h.Get("/plans", c.GetPlans)
+	
+	// Protected Routes
+	h.Post("/checkout", c.authMiddleware, c.Checkout)
+	h.Get("/status", c.authMiddleware, c.GetStatus)
+	h.Post("/cancel", c.authMiddleware, c.CancelSubscription)
 }
 
-// Simple internal middleware for extraction
 func (c *paymentController) authMiddleware(ctx *fiber.Ctx) error {
 	authHeader := ctx.Get("Authorization")
 	if len(authHeader) < 7 || authHeader[:7] != "Bearer " {
@@ -89,13 +95,36 @@ func (c *paymentController) Checkout(ctx *fiber.Ctx) error {
 func (c *paymentController) Webhook(ctx *fiber.Ctx) error {
 	var req dto.MidtransWebhookRequest
 	if err := ctx.BodyParser(&req); err != nil {
+		fmt.Printf("[WEBHOOK ERROR] Body parsing failed: %v\n", err)
 		return err
 	}
 
 	err := c.service.HandleNotification(ctx.Context(), &req)
 	if err != nil {
-		// Log error
+		fmt.Printf("[WEBHOOK ERROR] Service handling failed: %v\n", err)
 	}
 
 	return ctx.SendStatus(fiber.StatusOK)
+}
+
+func (c *paymentController) GetStatus(ctx *fiber.Ctx) error {
+	userIdStr := ctx.Locals("user_id").(string)
+	userId, _ := uuid.Parse(userIdStr)
+
+	res, err := c.service.GetSubscriptionStatus(ctx.Context(), userId)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(serverutils.ErrorResponse(500, err.Error()))
+	}
+	return ctx.JSON(serverutils.SuccessResponse("Subscription status", res))
+}
+
+func (c *paymentController) CancelSubscription(ctx *fiber.Ctx) error {
+	userIdStr := ctx.Locals("user_id").(string)
+	userId, _ := uuid.Parse(userIdStr)
+
+	err := c.service.CancelSubscription(ctx.Context(), userId)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(serverutils.ErrorResponse(500, err.Error()))
+	}
+	return ctx.JSON(serverutils.SuccessResponse[any]("Subscription canceled", nil))
 }

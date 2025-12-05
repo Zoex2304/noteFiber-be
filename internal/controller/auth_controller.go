@@ -3,7 +3,6 @@ package controller
 
 import (
 	"ai-notetaking-be/internal/dto"
-	"ai-notetaking-be/internal/pkg/serverutils"
 	"ai-notetaking-be/internal/service"
 
 	"github.com/gofiber/fiber/v2"
@@ -15,7 +14,8 @@ type IAuthController interface {
 	Login(ctx *fiber.Ctx) error
 	ForgotPassword(ctx *fiber.Ctx) error
 	ResetPassword(ctx *fiber.Ctx) error
-	VerifyEmail(ctx *fiber.Ctx) error // New
+	VerifyEmail(ctx *fiber.Ctx) error
+	Logout(ctx *fiber.Ctx) error // New
 }
 
 type authController struct {
@@ -29,10 +29,11 @@ func NewAuthController(service service.IAuthService) IAuthController {
 func (c *authController) RegisterRoutes(r fiber.Router) {
 	h := r.Group("/auth")
 	h.Post("/register", c.Register)
-	h.Post("/verify-email", c.VerifyEmail) // New Route
+	h.Post("/verify-email", c.VerifyEmail)
 	h.Post("/login", c.Login)
 	h.Post("/forgot-password", c.ForgotPassword)
 	h.Post("/reset-password", c.ResetPassword)
+	h.Post("/logout", c.Logout) // New Route
 }
 
 func (c *authController) Register(ctx *fiber.Ctx) error {
@@ -41,15 +42,20 @@ func (c *authController) Register(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	if err := serverutils.ValidateRequest(req); err != nil {
-		return err
-	}
-
 	res, err := c.service.Register(ctx.Context(), &req)
 	if err != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(serverutils.ErrorResponse(400, err.Error()))
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"success": false,
+			"code":    400,
+			"message": err.Error(),
+		})
 	}
-	return ctx.JSON(serverutils.SuccessResponse("User registered successfully. Check console for OTP.", res))
+	return ctx.JSON(fiber.Map{
+		"success": true,
+		"code":    200,
+		"message": "User registered successfully. Check console for OTP.",
+		"data":    res,
+	})
 }
 
 func (c *authController) VerifyEmail(ctx *fiber.Ctx) error {
@@ -58,16 +64,21 @@ func (c *authController) VerifyEmail(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	if err := serverutils.ValidateRequest(req); err != nil {
-		return err
-	}
-
 	err := c.service.VerifyEmail(ctx.Context(), &req)
 	if err != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(serverutils.ErrorResponse(400, err.Error()))
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"success": false,
+			"code":    400,
+			"message": err.Error(),
+		})
 	}
 
-	return ctx.JSON(serverutils.SuccessResponse[any]("Email verified successfully", nil))
+	return ctx.JSON(fiber.Map{
+		"success": true,
+		"code":    200,
+		"message": "Email verified successfully",
+		"data":    nil,
+	})
 }
 
 func (c *authController) Login(ctx *fiber.Ctx) error {
@@ -76,15 +87,20 @@ func (c *authController) Login(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	if err := serverutils.ValidateRequest(req); err != nil {
-		return err
-	}
-
 	res, err := c.service.Login(ctx.Context(), &req)
 	if err != nil {
-		return ctx.Status(fiber.StatusUnauthorized).JSON(serverutils.ErrorResponse(401, err.Error()))
+		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"success": false,
+			"code":    401,
+			"message": err.Error(),
+		})
 	}
-	return ctx.JSON(serverutils.SuccessResponse("Login successful", res))
+	return ctx.JSON(fiber.Map{
+		"success": true,
+		"code":    200,
+		"message": "Login successful",
+		"data":    res,
+	})
 }
 
 func (c *authController) ForgotPassword(ctx *fiber.Ctx) error {
@@ -92,13 +108,14 @@ func (c *authController) ForgotPassword(ctx *fiber.Ctx) error {
 	if err := ctx.BodyParser(&req); err != nil {
 		return err
 	}
-	if err := serverutils.ValidateRequest(req); err != nil {
-		return err
-	}
 
-	c.service.ForgotPassword(ctx.Context(), &req) // Ignore error
-	// Explicitly specifying [any] solves the inference error
-	return ctx.JSON(serverutils.SuccessResponse[any]("If email exists, reset token sent", nil))
+	c.service.ForgotPassword(ctx.Context(), &req)
+	return ctx.JSON(fiber.Map{
+		"success": true,
+		"code":    200,
+		"message": "If email exists, reset token sent",
+		"data":    nil,
+	})
 }
 
 func (c *authController) ResetPassword(ctx *fiber.Ctx) error {
@@ -106,14 +123,30 @@ func (c *authController) ResetPassword(ctx *fiber.Ctx) error {
 	if err := ctx.BodyParser(&req); err != nil {
 		return err
 	}
-	if err := serverutils.ValidateRequest(req); err != nil {
-		return err
-	}
 
 	err := c.service.ResetPassword(ctx.Context(), &req)
 	if err != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(serverutils.ErrorResponse(400, err.Error()))
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"success": false,
+			"code":    400,
+			"message": err.Error(),
+		})
 	}
-	// Explicitly specifying [any] solves the inference error
-	return ctx.JSON(serverutils.SuccessResponse[any]("Password reset successful", nil))
+	return ctx.JSON(fiber.Map{
+		"success": true,
+		"code":    200,
+		"message": "Password reset successful",
+		"data":    nil,
+	})
+}
+
+func (c *authController) Logout(ctx *fiber.Ctx) error {
+	// Stateless JWT logout is handled on client side by removing token.
+	// We just return success here.
+	return ctx.JSON(fiber.Map{
+		"success": true,
+		"code":    200,
+		"message": "Logged out successfully",
+		"data":    nil,
+	})
 }

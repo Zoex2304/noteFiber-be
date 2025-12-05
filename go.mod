@@ -1,6 +1,6 @@
 module ai-notetaking-be
 
-go 1.23.2
+go 1.24.0
 
 require (
 	github.com/ThreeDotsLabs/watermill v1.4.7
@@ -9,9 +9,11 @@ require (
 	github.com/midtrans/midtrans-go v1.3.8
 	github.com/pgvector/pgvector-go v0.3.0
 	golang.org/x/crypto v0.37.0
+	golang.org/x/oauth2 v0.33.0
 )
 
 require (
+	cloud.google.com/go/compute/metadata v0.3.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.8 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
