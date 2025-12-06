@@ -3,6 +3,8 @@ package main
 
 import (
 	"ai-notetaking-be/internal/controller"
+	"ai-notetaking-be/internal/pkg/logger"
+	"ai-notetaking-be/internal/pkg/mailer" // Import mailer
 	"ai-notetaking-be/internal/pkg/serverutils"
 	"ai-notetaking-be/internal/repository"
 	"ai-notetaking-be/internal/service"
@@ -11,6 +13,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/ThreeDotsLabs/watermill"
 	"github.com/ThreeDotsLabs/watermill/pubsub/gochannel"
@@ -20,16 +23,51 @@ import (
 )
 
 func main() {
-	godotenv.Load()
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found, using system env")
+	}
+
 	app := fiber.New(fiber.Config{
 		BodyLimit: 10 * 1024 * 1024,
 	})
 
-	app.Use(cors.New())
+	// ✅ CORS Configuration - Using Environment Variable
+	allowedOrigins := os.Getenv("CORS_ALLOWED_ORIGINS")
+	if allowedOrigins == "" {
+		allowedOrigins = "http://localhost:5173" // fallback default
+		log.Println("⚠️  CORS_ALLOWED_ORIGINS not set, using default:", allowedOrigins)
+	}
+
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     allowedOrigins,                                    // Read from .env
+		AllowCredentials: true,                                              // Required for Authorization headers
+		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",     // Must include Authorization
+		AllowMethods:     "GET, POST, PUT, PATCH, DELETE, OPTIONS",         // Standard HTTP methods
+		ExposeHeaders:    "Content-Length, Content-Type, Authorization",     // Allow frontend to read these headers
+	}))
+
+	log.Printf("✅ CORS enabled for: %s", allowedOrigins)
 
 	app.Use(serverutils.ErrorHandlerMiddleware())
 
 	db := database.ConnectDB(os.Getenv("DB_CONNECTION_STRING"))
+
+	// --- Initialize CSV Logger ---
+	logFilePath := os.Getenv("LOG_FILE_PATH")
+	if logFilePath == "" {
+		logFilePath = "app.log.csv"
+	}
+	sysLogger := logger.NewCsvLogger(logFilePath)
+
+	// --- Initialize Email Service ---
+	smtpPort, _ := strconv.Atoi(os.Getenv("SMTP_PORT"))
+	emailService := mailer.NewEmailService(
+		os.Getenv("SMTP_HOST"),
+		smtpPort,
+		os.Getenv("SMTP_EMAIL"),
+		os.Getenv("SMTP_PASSWORD"),
+		os.Getenv("SMTP_SENDER_NAME"), // e.g., "noreply@notefiber.com"
+	)
 
 	// --- Repositories ---
 	exampleRepository := repository.NewExampleRepository(db)
@@ -39,11 +77,11 @@ func main() {
 	chatSessionRepository := repository.NewChatSessionRepository(db)
 	chatMessageRepository := repository.NewChatMessageRepository(db)
 	chatMessageRawRepository := repository.NewChatMessageRawRepository(db)
-
-	// User, Sub, Log Repos
+	
+	// User, Sub, & Billing Repos
 	userRepository := repository.NewUserRepository(db)
 	subscriptionRepository := repository.NewSubscriptionRepository(db)
-	logRepository := repository.NewLogRepository(db) // Correctly initialized
+	billingRepository := repository.NewBillingRepository(db)
 
 	// --- Event Bus ---
 	watermillLogger := watermill.NewStdLogger(false, false)
@@ -83,26 +121,32 @@ func main() {
 	)
 
 	// Business Services
-	authService := service.NewAuthService(userRepository)
-	paymentService := service.NewPaymentService(subscriptionRepository, userRepository)
+	// Inject EmailService into AuthService
+	authService := service.NewAuthService(userRepository, emailService)
+	
+	// Payment Service now requires Billing Repo
+	paymentService := service.NewPaymentService(subscriptionRepository, userRepository, billingRepository)
+	
 	userService := service.NewUserService(userRepository)
-	
-	// FIXED: Passed 3 arguments as required by NewAdminService
-	adminService := service.NewAdminService(userRepository, subscriptionRepository, logRepository)
-	
 	oauthService := service.NewOAuthService(userRepository)
+	adminService := service.NewAdminService(userRepository, subscriptionRepository, sysLogger)
+
+	locationService := service.NewLocationService(
+		os.Getenv("GEOAPIFY_API_KEY"),
+		os.Getenv("BINDERBYTE_API_KEY"),
+	)
 
 	// --- Controllers ---
 	exampleController := controller.NewExampleController(exampleService)
 	notebookController := controller.NewNotebookController(notebookService)
 	noteController := controller.NewNoteController(noteService)
 	chatbotController := controller.NewChatbotController(chatbotService)
-
 	authController := controller.NewAuthController(authService)
 	paymentController := controller.NewPaymentController(paymentService)
 	userController := controller.NewUserController(userService)
 	adminController := controller.NewAdminController(adminService)
 	oauthController := controller.NewOAuthController(oauthService)
+	locationController := controller.NewLocationController(locationService)
 
 	// --- Routes ---
 	api := app.Group("/api")
@@ -115,6 +159,7 @@ func main() {
 	userController.RegisterRoutes(api)
 	adminController.RegisterRoutes(api)
 	oauthController.RegisterRoutes(api)
+	locationController.RegisterRoutes(api)
 
 	// --- Background Consumers ---
 	err := consumerService.Consume(context.Background())
@@ -122,6 +167,6 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println("Server is running")
+	fmt.Println("✅ Server is running on http://localhost:3000")
 	log.Fatal(app.Listen(":3000"))
 }

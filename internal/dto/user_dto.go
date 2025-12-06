@@ -13,6 +13,7 @@ type UserProfileResponse struct {
 	FullName     string    `json:"full_name"`
 	Role         string    `json:"role"`
 	Status       string    `json:"status"`
+	AvatarURL    string    `json:"avatar_url,omitempty"` // ✅ NEW: Avatar URL (omit if empty)
 	AiDailyUsage int       `json:"ai_daily_usage"`
 	CreatedAt    time.Time `json:"created_at"`
 }

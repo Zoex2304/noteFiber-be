@@ -24,7 +24,8 @@ func NewUserService(userRepo repository.IUserRepository) IUserService {
 }
 
 func (s *userService) GetProfile(ctx context.Context, userId uuid.UUID) (*dto.UserProfileResponse, error) {
-	user, err := s.userRepo.GetById(ctx, userId)
+	// ✅ CHANGED: Use GetByIdWithAvatar instead of GetById
+	user, err := s.userRepo.GetByIdWithAvatar(ctx, userId)
 	if err != nil {
 		return nil, err
 	}
@@ -35,6 +36,7 @@ func (s *userService) GetProfile(ctx context.Context, userId uuid.UUID) (*dto.Us
 		FullName:     user.FullName,
 		Role:         string(user.Role),
 		Status:       string(user.Status),
+		AvatarURL:    user.AvatarURL,    // ✅ NEW: Include avatar URL
 		AiDailyUsage: user.AiDailyUsage,
 		CreatedAt:    user.CreatedAt,
 	}, nil

@@ -58,11 +58,23 @@ type PlanResponse struct {
 	Slug        string    `json:"slug"`
 	Price       float64   `json:"price"`
 	Description string    `json:"description"`
-	Features    []string  `json:"features"` // Helper to list enabled features
+	Features    []string  `json:"features"`
 }
 
 type CheckoutRequest struct {
-	PlanId uuid.UUID `json:"plan_id" validate:"required"`
+	PlanId       uuid.UUID `json:"plan_id" validate:"required"`
+	
+	// Billing Details
+	FirstName    string    `json:"first_name" validate:"required"`
+	LastName     string    `json:"last_name" validate:"required"`
+	Email        string    `json:"email" validate:"required,email"`
+	Phone        string    `json:"phone" validate:"omitempty"`
+	AddressLine1 string    `json:"address_line1" validate:"required"`
+	AddressLine2 string    `json:"address_line2"`
+	City         string    `json:"city" validate:"required"`
+	State        string    `json:"state" validate:"required"`
+	PostalCode   string    `json:"postal_code" validate:"required"`
+	Country      string    `json:"country" validate:"required"`
 }
 
 type CheckoutResponse struct {

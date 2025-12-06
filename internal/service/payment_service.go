@@ -20,21 +20,25 @@ type IPaymentService interface {
 	GetPlans(ctx context.Context) ([]*dto.PlanResponse, error)
 	CreateSubscription(ctx context.Context, userId uuid.UUID, req *dto.CheckoutRequest) (*dto.CheckoutResponse, error)
 	HandleNotification(ctx context.Context, req *dto.MidtransWebhookRequest) error
-	
-	// FIXED: Added missing interface methods
 	GetSubscriptionStatus(ctx context.Context, userId uuid.UUID) (*dto.SubscriptionStatusResponse, error)
 	CancelSubscription(ctx context.Context, userId uuid.UUID) error
 }
 
 type paymentService struct {
-	subRepo  repository.ISubscriptionRepository
-	userRepo repository.IUserRepository 
+	subRepo     repository.ISubscriptionRepository
+	userRepo    repository.IUserRepository
+	billingRepo repository.IBillingRepository
 }
 
-func NewPaymentService(subRepo repository.ISubscriptionRepository, userRepo repository.IUserRepository) IPaymentService {
+func NewPaymentService(
+	subRepo repository.ISubscriptionRepository, 
+	userRepo repository.IUserRepository,
+	billingRepo repository.IBillingRepository,
+) IPaymentService {
 	return &paymentService{
-		subRepo:  subRepo,
-		userRepo: userRepo,
+		subRepo:     subRepo,
+		userRepo:    userRepo,
+		billingRepo: billingRepo,
 	}
 }
 
@@ -67,38 +71,65 @@ func (s *paymentService) GetPlans(ctx context.Context) ([]*dto.PlanResponse, err
 }
 
 func (s *paymentService) CreateSubscription(ctx context.Context, userId uuid.UUID, req *dto.CheckoutRequest) (*dto.CheckoutResponse, error) {
+	// 1. Get Plan
 	plan, err := s.subRepo.GetPlanById(ctx, req.PlanId)
 	if err != nil {
 		return nil, err
 	}
 
-	user, err := s.userRepo.GetById(ctx, userId)
-	if err != nil {
+	// Verify user exists
+	if _, err := s.userRepo.GetById(ctx, userId); err != nil {
 		return nil, errors.New("user not found")
 	}
 
+	// 2. Create Billing Address
+	billingId := uuid.New()
+	billingAddr := &entity.BillingAddress{
+		Id:           billingId,
+		UserId:       userId,
+		FirstName:    req.FirstName,
+		LastName:     req.LastName,
+		Email:        req.Email,
+		Phone:        req.Phone,
+		AddressLine1: req.AddressLine1,
+		AddressLine2: req.AddressLine2,
+		City:         req.City,
+		State:        req.State,
+		PostalCode:   req.PostalCode,
+		Country:      req.Country,
+		IsDefault:    true,
+		CreatedAt:    time.Now(),
+		UpdatedAt:    time.Now(),
+	}
+
+	if err := s.billingRepo.Create(ctx, billingAddr); err != nil {
+		return nil, fmt.Errorf("failed to save billing address: %v", err)
+	}
+
+	// 3. Create Subscription Record
 	subId := uuid.New()
 	sub := &entity.UserSubscription{
 		Id:                 subId,
 		UserId:             userId,
 		PlanId:             plan.Id,
+		BillingAddressId:   &billingId,
 		Status:             entity.SubscriptionStatusInactive,
 		PaymentStatus:      entity.PaymentStatusPending,
 		CreatedAt:          time.Now(),
 		UpdatedAt:          time.Now(),
 		CurrentPeriodStart: time.Now(),
-		CurrentPeriodEnd:   time.Now().AddDate(0, 1, 0), 
+		CurrentPeriodEnd:   time.Now().AddDate(0, 1, 0),
 	}
 
 	if plan.BillingPeriod == entity.BillingPeriodYearly {
 		sub.CurrentPeriodEnd = time.Now().AddDate(1, 0, 0)
 	}
 
-	err = s.subRepo.CreateSubscription(ctx, sub)
-	if err != nil {
+	if err := s.subRepo.CreateSubscription(ctx, sub); err != nil {
 		return nil, err
 	}
 
+	// 4. Initiate Midtrans Transaction
 	var sClient snap.Client
 	serverKey := os.Getenv("MIDTRANS_SERVER_KEY")
 	env := midtrans.Sandbox
@@ -116,8 +147,19 @@ func (s *paymentService) CreateSubscription(ctx context.Context, userId uuid.UUI
 			Secure: true,
 		},
 		CustomerDetail: &midtrans.CustomerDetails{
-			FName: user.FullName,
-			Email: user.Email,
+			FName: req.FirstName,
+			LName: req.LastName,
+			Email: req.Email,
+			Phone: req.Phone,
+			BillAddr: &midtrans.CustomerAddress{
+				FName:       req.FirstName,
+				LName:       req.LastName,
+				Phone:       req.Phone,
+				Address:     req.AddressLine1,
+				City:        req.City,
+				Postcode:    req.PostalCode,
+				CountryCode: "IDN",
+			},
 		},
 		Items: &[]midtrans.ItemDetails{
 			{
@@ -214,7 +256,5 @@ func (s *paymentService) CancelSubscription(ctx context.Context, userId uuid.UUI
 	if sub == nil {
 		return errors.New("no active subscription found")
 	}
-
-	// In a real app, you might want to call Midtrans to cancel if it's recurring on their side too
 	return s.subRepo.CancelSubscription(ctx, sub.Id)
 }

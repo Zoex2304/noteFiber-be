@@ -4,6 +4,7 @@ package service
 import (
 	"ai-notetaking-be/internal/dto"
 	"ai-notetaking-be/internal/entity"
+	"ai-notetaking-be/internal/pkg/mailer"
 	"ai-notetaking-be/internal/repository"
 	"context"
 	"crypto/rand"
@@ -23,18 +24,23 @@ type IAuthService interface {
 	Login(ctx context.Context, req *dto.LoginRequest) (*dto.LoginResponse, error)
 	ForgotPassword(ctx context.Context, req *dto.ForgotPasswordRequest) error
 	ResetPassword(ctx context.Context, req *dto.ResetPasswordRequest) error
-	VerifyEmail(ctx context.Context, req *dto.VerifyEmailRequest) error // New
+	VerifyEmail(ctx context.Context, req *dto.VerifyEmailRequest) error
 }
 
 type authService struct {
-	userRepo repository.IUserRepository
+	userRepo     repository.IUserRepository
+	emailService mailer.IEmailService
 }
 
-func NewAuthService(userRepo repository.IUserRepository) IAuthService {
-	return &authService{userRepo: userRepo}
+func NewAuthService(userRepo repository.IUserRepository, emailService mailer.IEmailService) IAuthService {
+	return &authService{
+		userRepo:     userRepo,
+		emailService: emailService,
+	}
 }
 
-// Helper to generate secure 6-digit OTP
+// ... (Other methods: generateOTP, Register, VerifyEmail, Login - kept as is) ...
+
 func generateOTP() (string, error) {
 	n, err := rand.Int(rand.Reader, big.NewInt(1000000))
 	if err != nil {
@@ -47,7 +53,6 @@ func (s *authService) Register(ctx context.Context, req *dto.RegisterRequest) (*
 	// 1. Check for existing user
 	existing, _ := s.userRepo.GetByEmail(ctx, req.Email)
 	if existing != nil {
-		// FIXED: Return a standard error for duplicate email
 		return nil, errors.New("email already registered")
 	}
 
@@ -77,7 +82,7 @@ func (s *authService) Register(ctx context.Context, req *dto.RegisterRequest) (*
 		return nil, err
 	}
 
-	// 5. --- OTP Generation Logic ---
+	// 5. Generate and save OTP
 	otpCode, err := generateOTP()
 	if err != nil {
 		return nil, err
@@ -87,7 +92,7 @@ func (s *authService) Register(ctx context.Context, req *dto.RegisterRequest) (*
 		Id:        uuid.New(),
 		UserId:    user.Id,
 		Token:     otpCode,
-		ExpiresAt: time.Now().Add(15 * time.Minute), // OTP valid for 15 mins
+		ExpiresAt: time.Now().Add(15 * time.Minute),
 		CreatedAt: time.Now(),
 	}
 
@@ -96,8 +101,17 @@ func (s *authService) Register(ctx context.Context, req *dto.RegisterRequest) (*
 		return nil, err
 	}
 
-	// TODO: Replace this Println with actual Email Service (e.g., SMTP, SendGrid)
-	fmt.Printf(">>> [MOCK EMAIL] OTP for %s is: %s <<<\n", user.Email, otpCode)
+	// Log to console for dev convenience
+	fmt.Printf(">>> [DEBUG OTP] OTP for %s is: %s <<<\n", user.Email, otpCode)
+
+	// SEND REAL EMAIL
+	// We run this in a goroutine so the API response isn't delayed by SMTP latency
+	go func() {
+		emailErr := s.emailService.SendOTP(user.Email, otpCode)
+		if emailErr != nil {
+			fmt.Printf("Error sending registration email: %v\n", emailErr)
+		}
+	}()
 
 	return &dto.RegisterResponse{Id: user.Id, Email: user.Email}, nil
 }
@@ -109,7 +123,7 @@ func (s *authService) VerifyEmail(ctx context.Context, req *dto.VerifyEmailReque
 	}
 
 	if user.Status == entity.UserStatusActive {
-		return nil // Already verified, idempotent success
+		return nil
 	}
 
 	tokenEntity, err := s.userRepo.GetVerificationToken(ctx, user.Id, req.Token)
@@ -121,13 +135,11 @@ func (s *authService) VerifyEmail(ctx context.Context, req *dto.VerifyEmailReque
 		return errors.New("otp code expired")
 	}
 
-	// Activate User
 	err = s.userRepo.ActivateUser(ctx, user.Id)
 	if err != nil {
 		return err
 	}
 
-	// Clean up used token
 	_ = s.userRepo.DeleteVerificationToken(ctx, tokenEntity.Id)
 
 	return nil
@@ -137,7 +149,6 @@ func (s *authService) Login(ctx context.Context, req *dto.LoginRequest) (*dto.Lo
 	// 1. Check if user exists
 	user, err := s.userRepo.GetByEmail(ctx, req.Email)
 	if err != nil || user == nil {
-		// Robust handling: return generic error to prevent enumeration
 		return nil, errors.New("invalid credentials")
 	}
 
@@ -146,23 +157,24 @@ func (s *authService) Login(ctx context.Context, req *dto.LoginRequest) (*dto.Lo
 		return nil, errors.New("user registered via OAuth")
 	}
 
-	// Optional: Block login if email is not verified?
-	// if user.Status == entity.UserStatusPending {
-	// 	return nil, errors.New("please verify your email first")
-	// }
+	// 3. SECURITY CHECK: Check if email is verified
+	// If status is pending or email_verified is false, reject login.
+	if user.Status == entity.UserStatusPending || !user.EmailVerified {
+		return nil, errors.New("email not verified. please check your inbox for the otp code")
+	}
 
-	// 3. Compare passwords
+	// 4. Compare passwords
 	err = bcrypt.CompareHashAndPassword([]byte(*user.PasswordHash), []byte(req.Password))
 	if err != nil {
 		return nil, errors.New("invalid credentials")
 	}
 
-	// 4. Check if user is active
+	// 5. Check if user is blocked/suspended
 	if user.Status == entity.UserStatusBlocked {
 		return nil, errors.New("user account is blocked")
 	}
 
-	// 5. Generate JWT
+	// 6. Generate JWT
 	claims := jwt.MapClaims{
 		"user_id": user.Id.String(),
 		"role":    user.Role,
@@ -171,7 +183,7 @@ func (s *authService) Login(ctx context.Context, req *dto.LoginRequest) (*dto.Lo
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	secret := os.Getenv("JWT_SECRET")
 	if secret == "" {
-		secret = "default_secret" // Fallback for dev
+		secret = "default_secret"
 	}
 	signedToken, err := token.SignedString([]byte(secret))
 	if err != nil {
@@ -192,7 +204,7 @@ func (s *authService) Login(ctx context.Context, req *dto.LoginRequest) (*dto.Lo
 func (s *authService) ForgotPassword(ctx context.Context, req *dto.ForgotPasswordRequest) error {
 	user, err := s.userRepo.GetByEmail(ctx, req.Email)
 	if err != nil || user == nil {
-		return nil // Fail silently for security
+		return nil
 	}
 
 	token := uuid.New().String()
@@ -210,6 +222,13 @@ func (s *authService) ForgotPassword(ctx context.Context, req *dto.ForgotPasswor
 		return err
 	}
 
+	go func() {
+		emailErr := s.emailService.SendResetToken(user.Email, token)
+		if emailErr != nil {
+			fmt.Printf("Error sending reset password email: %v\n", emailErr)
+		}
+	}()
+
 	return nil
 }
 
@@ -219,8 +238,14 @@ func (s *authService) ResetPassword(ctx context.Context, req *dto.ResetPasswordR
 		return errors.New("invalid or expired token")
 	}
 
-	if tokenEntity.Used || time.Now().After(tokenEntity.ExpiresAt) {
-		return errors.New("token expired or already used")
+	// 1. Check if explicitly marked as used
+	if tokenEntity.Used {
+		return errors.New("this password reset link has already been used")
+	}
+
+	// 2. Check expiry
+	if time.Now().After(tokenEntity.ExpiresAt) {
+		return errors.New("this password reset link has expired")
 	}
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(req.NewPassword), bcrypt.DefaultCost)
@@ -233,5 +258,6 @@ func (s *authService) ResetPassword(ctx context.Context, req *dto.ResetPasswordR
 		return err
 	}
 
+	// 3. Mark as used so it cannot be used again
 	return s.userRepo.MarkTokenUsed(ctx, tokenEntity.Id)
 }

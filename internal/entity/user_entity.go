@@ -28,6 +28,7 @@ type User struct {
 	Status                UserStatus
 	EmailVerified         bool
 	EmailVerifiedAt       *time.Time
+	AvatarURL             string     // ✅ NEW: Avatar URL from OAuth provider
 	CreatedAt             time.Time
 	UpdatedAt             time.Time
 	AiDailyUsage          int
@@ -48,10 +49,10 @@ type UserProvider struct {
 	UserId         uuid.UUID
 	ProviderName   string
 	ProviderUserId string
+	AvatarURL      string // Added field for architecture synchronization
 	CreatedAt      time.Time
 }
 
-// Add this struct
 type EmailVerificationToken struct {
 	Id        uuid.UUID
 	UserId    uuid.UUID

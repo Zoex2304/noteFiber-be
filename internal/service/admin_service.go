@@ -4,8 +4,11 @@ package service
 import (
 	"ai-notetaking-be/internal/dto"
 	"ai-notetaking-be/internal/entity"
+	"ai-notetaking-be/internal/pkg/logger" // This should now work
 	"ai-notetaking-be/internal/repository"
 	"context"
+	"encoding/json"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -30,18 +33,18 @@ type IAdminService interface {
 type adminService struct {
 	userRepo repository.IUserRepository
 	subRepo  repository.ISubscriptionRepository
-	logRepo  repository.ILogRepository
+	logger   logger.ILogger 
 }
 
 func NewAdminService(
 	userRepo repository.IUserRepository, 
 	subRepo repository.ISubscriptionRepository,
-	logRepo repository.ILogRepository,
+	logger logger.ILogger,
 ) IAdminService {
 	return &adminService{
 		userRepo: userRepo,
 		subRepo:  subRepo,
-		logRepo:  logRepo,
+		logger:   logger,
 	}
 }
 
@@ -130,8 +133,11 @@ func (s *adminService) GetUserDetail(ctx context.Context, userId uuid.UUID) (*dt
 }
 
 func (s *adminService) UpdateUserStatus(ctx context.Context, userId uuid.UUID, status string) error {
-	// Log the action
-	_ = s.logRepo.Create(ctx, "INFO", "ADMIN", "Updated user status", map[string]interface{}{"userId": userId, "status": status})
+	s.logger.Info("ADMIN", "Updated user status", map[string]interface{}{
+		"userId": userId.String(),
+		"status": status,
+		"admin":  "system", 
+	})
 	return s.userRepo.UpdateStatus(ctx, userId, entity.UserStatus(status))
 }
 
@@ -163,41 +169,43 @@ func (s *adminService) GetTransactions(ctx context.Context, page, limit int, sta
 }
 
 func (s *adminService) GetSystemLogs(ctx context.Context, page, limit int, level string) ([]*dto.LogListResponse, error) {
-	if page < 1 { page = 1 }
-	if limit < 1 { limit = 10 }
-	offset := (page - 1) * limit
-
-	logs, err := s.logRepo.GetAll(ctx, level, limit, offset)
+	logs, err := s.logger.GetLogs(level, limit, (page-1)*limit)
 	if err != nil {
 		return nil, err
 	}
 
 	var res []*dto.LogListResponse
 	for _, l := range logs {
+		ts, _ := time.Parse(time.RFC3339, l.Timestamp)
 		res = append(res, &dto.LogListResponse{
-			Id:        l.Id,
+			Id:        uuid.MustParse(l.Id), 
 			Level:     l.Level,
 			Module:    l.Module,
 			Message:   l.Message,
-			CreatedAt: l.CreatedAt,
+			CreatedAt: ts,
 		})
 	}
 	return res, nil
 }
 
 func (s *adminService) GetLogDetail(ctx context.Context, logId uuid.UUID) (*dto.LogDetailResponse, error) {
-	l, err := s.logRepo.GetById(ctx, logId)
+	l, err := s.logger.GetLogById(logId.String())
 	if err != nil {
 		return nil, err
 	}
+
+	ts, _ := time.Parse(time.RFC3339, l.Timestamp)
+	var detailsMap map[string]interface{}
+	json.Unmarshal([]byte(l.Details), &detailsMap)
+
 	return &dto.LogDetailResponse{
 		LogListResponse: dto.LogListResponse{
-			Id:        l.Id,
+			Id:        logId,
 			Level:     l.Level,
 			Module:    l.Module,
 			Message:   l.Message,
-			CreatedAt: l.CreatedAt,
+			CreatedAt: ts,
 		},
-		Details: l.Details,
+		Details: detailsMap,
 	}, nil
 }

@@ -41,6 +41,7 @@ type UserSubscription struct {
 	Id                    uuid.UUID
 	UserId                uuid.UUID
 	PlanId                uuid.UUID
+	BillingAddressId      *uuid.UUID // Added field
 	Status                SubscriptionStatus
 	CurrentPeriodStart    time.Time
 	CurrentPeriodEnd      time.Time

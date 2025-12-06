@@ -19,6 +19,7 @@ type IUserRepository interface {
 	Create(ctx context.Context, user *entity.User) error
 	GetByEmail(ctx context.Context, email string) (*entity.User, error)
 	GetById(ctx context.Context, id uuid.UUID) (*entity.User, error)
+	GetByIdWithAvatar(ctx context.Context, id uuid.UUID) (*entity.User, error) // ✅ NEW: Get user with avatar
 	CreatePasswordResetToken(ctx context.Context, token *entity.PasswordResetToken) error
 	GetPasswordResetToken(ctx context.Context, tokenString string) (*entity.PasswordResetToken, error)
 	MarkTokenUsed(ctx context.Context, id uuid.UUID) error
@@ -38,9 +39,12 @@ type IUserRepository interface {
 	CountByStatus(ctx context.Context, status entity.UserStatus) (int, error)
 	UpdateStatus(ctx context.Context, id uuid.UUID, status entity.UserStatus) error
 
-	// Search & Stats (Implemented in admin_log_repository.go)
+	// Search & Stats
 	SearchUsers(ctx context.Context, query string, limit, offset int) ([]*entity.User, error)
 	GetUserGrowth(ctx context.Context) ([]map[string]interface{}, error)
+
+	// User Provider Methods
+	SaveUserProvider(ctx context.Context, provider *entity.UserProvider) error
 }
 
 type userRepository struct {
@@ -55,9 +59,6 @@ func (r *userRepository) UsingTx(ctx context.Context, tx database.DatabaseQuerye
 	return &userRepository{db: tx}
 }
 
-// ... Existing methods (Create, GetByEmail, GetById, OTP methods, etc.) are assumed to be here ...
-// ... I am appending the new methods below ...
-
 func (r *userRepository) Create(ctx context.Context, user *entity.User) error {
 	_, err := r.db.Exec(ctx, `
 		INSERT INTO users (id, email, password_hash, full_name, role, status, email_verified, created_at, updated_at)
@@ -67,9 +68,9 @@ func (r *userRepository) Create(ctx context.Context, user *entity.User) error {
 }
 
 func (r *userRepository) GetByEmail(ctx context.Context, email string) (*entity.User, error) {
-	row := r.db.QueryRow(ctx, `SELECT id, email, password_hash, full_name, role, status FROM users WHERE email = $1`, email)
+	row := r.db.QueryRow(ctx, `SELECT id, email, password_hash, full_name, role, status, email_verified FROM users WHERE email = $1`, email)
 	var user entity.User
-	err := row.Scan(&user.Id, &user.Email, &user.PasswordHash, &user.FullName, &user.Role, &user.Status)
+	err := row.Scan(&user.Id, &user.Email, &user.PasswordHash, &user.FullName, &user.Role, &user.Status, &user.EmailVerified)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, nil
 	}
@@ -77,13 +78,66 @@ func (r *userRepository) GetByEmail(ctx context.Context, email string) (*entity.
 }
 
 func (r *userRepository) GetById(ctx context.Context, id uuid.UUID) (*entity.User, error) {
-	row := r.db.QueryRow(ctx, `SELECT id, email, full_name, role, status, ai_daily_usage, created_at FROM users WHERE id = $1`, id)
+	row := r.db.QueryRow(ctx, `SELECT id, email, full_name, role, status, email_verified, ai_daily_usage, created_at FROM users WHERE id = $1`, id)
 	var user entity.User
-	err := row.Scan(&user.Id, &user.Email, &user.FullName, &user.Role, &user.Status, &user.AiDailyUsage, &user.CreatedAt)
+	err := row.Scan(&user.Id, &user.Email, &user.FullName, &user.Role, &user.Status, &user.EmailVerified, &user.AiDailyUsage, &user.CreatedAt)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, serverutils.ErrNotFound
 	}
 	return &user, err
+}
+
+// ✅ NEW: Get user with avatar from user_providers table
+func (r *userRepository) GetByIdWithAvatar(ctx context.Context, id uuid.UUID) (*entity.User, error) {
+	query := `
+		SELECT 
+			u.id, 
+			u.email, 
+			u.full_name, 
+			u.role, 
+			u.status, 
+			u.email_verified, 
+			u.ai_daily_usage, 
+			u.created_at,
+			up.avatar_url
+		FROM users u
+		LEFT JOIN user_providers up ON u.id = up.user_id
+		WHERE u.id = $1
+		ORDER BY up.created_at DESC
+		LIMIT 1
+	`
+	
+	row := r.db.QueryRow(ctx, query, id)
+	
+	var user entity.User
+	var avatarURL *string // Nullable
+	
+	err := row.Scan(
+		&user.Id, 
+		&user.Email, 
+		&user.FullName, 
+		&user.Role, 
+		&user.Status, 
+		&user.EmailVerified, 
+		&user.AiDailyUsage, 
+		&user.CreatedAt,
+		&avatarURL,
+	)
+	
+	if errors.Is(err, pgx.ErrNoRows) {
+		return nil, serverutils.ErrNotFound
+	}
+	
+	if err != nil {
+		return nil, err
+	}
+	
+	// Set avatar URL if exists
+	if avatarURL != nil {
+		user.AvatarURL = *avatarURL
+	}
+	
+	return &user, nil
 }
 
 func (r *userRepository) CreatePasswordResetToken(ctx context.Context, token *entity.PasswordResetToken) error {
@@ -151,16 +205,12 @@ func (r *userRepository) ActivateUser(ctx context.Context, userId uuid.UUID) err
 	return err
 }
 
-// --- NEW METHODS ---
-
 func (r *userRepository) Update(ctx context.Context, user *entity.User) error {
 	_, err := r.db.Exec(ctx, `UPDATE users SET full_name = $1, updated_at = $2 WHERE id = $3`, user.FullName, time.Now(), user.Id)
 	return err
 }
 
 func (r *userRepository) Delete(ctx context.Context, id uuid.UUID) error {
-	// Soft delete or Hard delete? Usually hard delete for "Delete Account" request unless regulated otherwise.
-	// Schema doesn't have deleted_at for users, assuming Hard Delete.
 	_, err := r.db.Exec(ctx, `DELETE FROM users WHERE id = $1`, id)
 	return err
 }
@@ -198,5 +248,69 @@ func (r *userRepository) CountByStatus(ctx context.Context, status entity.UserSt
 
 func (r *userRepository) UpdateStatus(ctx context.Context, id uuid.UUID, status entity.UserStatus) error {
 	_, err := r.db.Exec(ctx, `UPDATE users SET status = $1, updated_at = $2 WHERE id = $3`, status, time.Now(), id)
+	return err
+}
+
+func (r *userRepository) SearchUsers(ctx context.Context, query string, limit, offset int) ([]*entity.User, error) {
+	sql := `
+		SELECT id, email, full_name, role, status, created_at 
+		FROM users 
+		WHERE email ILIKE $1 OR full_name ILIKE $1 
+		ORDER BY created_at DESC 
+		LIMIT $2 OFFSET $3
+	`
+	rows, err := r.db.Query(ctx, sql, "%"+query+"%", limit, offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []*entity.User
+	for rows.Next() {
+		var u entity.User
+		var roleStr, statusStr string
+		if err := rows.Scan(&u.Id, &u.Email, &u.FullName, &roleStr, &statusStr, &u.CreatedAt); err != nil {
+			return nil, err
+		}
+		u.Role = entity.UserRole(roleStr)
+		u.Status = entity.UserStatus(statusStr)
+		users = append(users, &u)
+	}
+	return users, nil
+}
+
+func (r *userRepository) GetUserGrowth(ctx context.Context) ([]map[string]interface{}, error) {
+	sql := `
+		SELECT to_char(created_at, 'YYYY-MM-DD') as date, COUNT(*) as count 
+		FROM users 
+		WHERE created_at > NOW() - INTERVAL '30 days' 
+		GROUP BY date 
+		ORDER BY date ASC
+	`
+	rows, err := r.db.Query(ctx, sql)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var stats []map[string]interface{}
+	for rows.Next() {
+		var date string
+		var count int
+		if err := rows.Scan(&date, &count); err != nil {
+			return nil, err
+		}
+		stats = append(stats, map[string]interface{}{"date": date, "count": count})
+	}
+	return stats, nil
+}
+
+func (r *userRepository) SaveUserProvider(ctx context.Context, provider *entity.UserProvider) error {
+	_, err := r.db.Exec(ctx, `
+		INSERT INTO user_providers (id, user_id, provider_name, provider_user_id, avatar_url, created_at)
+		VALUES ($1, $2, $3, $4, $5, $6)
+		ON CONFLICT (provider_name, provider_user_id) 
+		DO UPDATE SET avatar_url = EXCLUDED.avatar_url
+	`, provider.Id, provider.UserId, provider.ProviderName, provider.ProviderUserId, provider.AvatarURL, provider.CreatedAt)
 	return err
 }
