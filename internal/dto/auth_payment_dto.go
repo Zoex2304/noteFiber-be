@@ -24,13 +24,20 @@ type RegisterResponse struct {
 }
 
 type LoginRequest struct {
-	Email    string `json:"email" validate:"required,email"`
-	Password string `json:"password" validate:"required"`
+	Email      string `json:"email" validate:"required,email"`
+	Password   string `json:"password" validate:"required"`
+	RememberMe bool   `json:"remember_me"` // From both code lama and pembaharuan
 }
 
 type LoginResponse struct {
-	AccessToken string  `json:"access_token"`
-	User        UserDTO `json:"user"`
+	AccessToken  string  `json:"access_token"`
+	RefreshToken string  `json:"refresh_token,omitempty"` // From both code lama and pembaharuan
+	User         UserDTO `json:"user"`
+}
+
+// ✅ NEW from code pembaharuan: LogoutRequest struct
+type LogoutRequest struct {
+	RefreshToken string `json:"refresh_token"` // Added for Logout logic
 }
 
 type UserDTO struct {
@@ -64,7 +71,7 @@ type PlanResponse struct {
 type CheckoutRequest struct {
 	PlanId       uuid.UUID `json:"plan_id" validate:"required"`
 	
-	// Billing Details
+	// Billing Details (from both versions)
 	FirstName    string    `json:"first_name" validate:"required"`
 	LastName     string    `json:"last_name" validate:"required"`
 	Email        string    `json:"email" validate:"required,email"`

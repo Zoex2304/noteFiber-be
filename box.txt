@@ -1,9 +1,50 @@
-internal/entity/user_entity.go
-internal/entity/subscription_entity.go
-internal/dto/auth_payment_dto.go
-internal/repository/user_repository.go
-internal/repository/subscription_repository.go
-internal/service/auth_service.go
-internal/service/payment_service.go
-internal/controller/auth_controller.go
-internal/controller/payment_controller.go
+how "Remember Me" should work, then analyze what might be happening in your current application and how to fix it.
+1. How Should "Remember Me" Work?
+The purpose of this feature is User Experience (UX). Users don't need to log in repeatedly.
+Ideal Scenario:
+Login: The user enters their email/password, checks "Remember Me," then clicks "Sign In."
+Backend: Receives, validates, and because there is a "Remember Me" check, the backend sends two tokens:
+Access Token: Short-lived (e.g., 15 minutes to 1 hour). Used for daily data requests.
+Refresh Token: Long-lived (e.g., 30 days). Stored securely in the browser (HttpOnly Cookie or Secure LocalStorage).
+Frontend (After Successful Login):
+Automatically redirect to the main page (Dashboard/Home).
+Save the token.
+Close Tab/Browser: User closes the browser. Access Token in memory is lost (if not stored in localStorage).
+Re-open Browser (the next day):
+User opens the landing page.
+Automatic Check (Auth Guard): The Frontend application (React/Vue/etc.) must have logic at the beginning (App.js or Layout): "Hey, is there a Refresh Token stored?"
+If so, the Frontend silently (in the background) requests a new Access Token from the Backend using that Refresh Token.
+If successful -> User immediately sees the Dashboard (Skip the Login page).
+If failed/not found -> User sees the Login/Landing page.
+2. Analysis of Problems in Your Application
+Based on your story: "I closed the tab... entered the landing page again... went to login... filled in the empty fields... assumed the fields were filled in... or was immediately redirected"
+What's Wrong?
+Assumption 1: "Email/password fields are automatically filled in"
+This is not the "Remember Me" function of our backend application. This is a Browser Autofill/Password Manager feature. If the fields are empty, it means your browser has not saved those credentials, or you have not allowed it to do so. "Remember Me" in the application does not function to visually fill in the login form.
+Assumption 2: "Immediately redirect to the main page"
+THIS IS CORRECT. This is the core of the Remember Me feature.
+The problem: You said you have to click login again and go to the login page. This means the Frontend has not implemented the "Automatic Check" logic that I explained in point 1 (Ideal Scenario step 5).
+Your Frontend is currently likely "passive." It waits for the user to log in manually. It does not check "does this user actually still have an active session (refresh token)?" when the application is first opened.
+3. Solution for the Frontend Team
+For this feature to work, the Frontend Team must add Persistent Auth State logic.
+Technical Instructions for Frontend:
+Upon Successful Login:
+Store the access_token in memory (state management).
+Store the refresh_token in localStorage (or cookie).
+Store user data (name, email, etc.) in localStorage as well (optional, for fast UI).
+When the Application is Opened (App Mount/Init):
+Check if there is a refresh_token in localStorage.
+IF YES:
+Do not display the Login/Landing page yet (display Loading Spinner).
+Send a request to the backend (e.g., endpoint /auth/refresh-token or /user/profile with the token).
+If Backend OK: Set user state to "LoggedIn" and immediately redirect to Dashboard.
+If Backend Error (Token Expired): Delete the token from storage, then redirect to Login.
+4. Logout
+Logout must clear everything so that "Remember Me" stops working.
+Logout flow:
+User clicks Logout.
+Frontend sends a request to /api/auth/logout to the backend (bringing the refresh token).
+Backend revokes the token in the database (revoked = true).
+Frontend DELETES all tokens from localStorage and memory.
+Frontend redirects to the Login/Landing page.
+Conclusion: my backend is ready (can issue long tokens and handle logout). The "bottleneck" is in the frontend logic, which hasn't leveraged the stored tokens for auto-login or redirect when the user returns.

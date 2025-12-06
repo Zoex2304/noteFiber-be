@@ -87,7 +87,12 @@ func (c *authController) Login(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	res, err := c.service.Login(ctx.Context(), &req)
+	// Capture IP and User-Agent from pembaharuan
+	ipAddress := ctx.IP()
+	userAgent := ctx.Get("User-Agent")
+
+	// Updated call to service.Login with additional parameters
+	res, err := c.service.Login(ctx.Context(), &req, ipAddress, userAgent)
 	if err != nil {
 		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"success": false,
@@ -140,9 +145,27 @@ func (c *authController) ResetPassword(ctx *fiber.Ctx) error {
 	})
 }
 
+// ✅ IMPROVED LOGOUT IMPLEMENTATION from code pembaharuan
 func (c *authController) Logout(ctx *fiber.Ctx) error {
-	// Stateless JWT logout is handled on client side by removing token.
-	// We just return success here.
+	// Parse request to get refresh token
+	var req dto.LogoutRequest
+	if err := ctx.BodyParser(&req); err != nil {
+		// Ignore parsing error, proceed with stateless logout success
+		return ctx.JSON(fiber.Map{
+			"success": true,
+			"code":    200,
+			"message": "Logged out successfully",
+			"data":    nil,
+		})
+	}
+
+	// Call service to revoke token in DB
+	err := c.service.Logout(ctx.Context(), req.RefreshToken)
+	if err != nil {
+		// We log error but still return success to client
+		// fmt.Println("Logout error:", err)
+	}
+
 	return ctx.JSON(fiber.Map{
 		"success": true,
 		"code":    200,

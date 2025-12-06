@@ -60,3 +60,15 @@ type EmailVerificationToken struct {
 	ExpiresAt time.Time
 	CreatedAt time.Time
 }
+
+// NEW: Refresh Token Entity matching the new table
+type UserRefreshToken struct {
+	Id        uuid.UUID
+	UserId    uuid.UUID
+	TokenHash string
+	ExpiresAt time.Time
+	Revoked   bool
+	CreatedAt time.Time
+	IpAddress string // Optional
+	UserAgent string // Optional
+}

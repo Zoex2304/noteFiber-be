@@ -8,6 +8,8 @@ import (
 	"ai-notetaking-be/internal/repository"
 	"context"
 	"crypto/rand"
+	"crypto/sha256"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"math/big"
@@ -21,10 +23,11 @@ import (
 
 type IAuthService interface {
 	Register(ctx context.Context, req *dto.RegisterRequest) (*dto.RegisterResponse, error)
-	Login(ctx context.Context, req *dto.LoginRequest) (*dto.LoginResponse, error)
+	Login(ctx context.Context, req *dto.LoginRequest, ipAddress, userAgent string) (*dto.LoginResponse, error) // Updated signature
 	ForgotPassword(ctx context.Context, req *dto.ForgotPasswordRequest) error
 	ResetPassword(ctx context.Context, req *dto.ResetPasswordRequest) error
 	VerifyEmail(ctx context.Context, req *dto.VerifyEmailRequest) error
+	Logout(ctx context.Context, refreshToken string) error // ✅ NEW METHOD from code pembaharuan
 }
 
 type authService struct {
@@ -38,8 +41,6 @@ func NewAuthService(userRepo repository.IUserRepository, emailService mailer.IEm
 		emailService: emailService,
 	}
 }
-
-// ... (Other methods: generateOTP, Register, VerifyEmail, Login - kept as is) ...
 
 func generateOTP() (string, error) {
 	n, err := rand.Int(rand.Reader, big.NewInt(1000000))
@@ -145,7 +146,7 @@ func (s *authService) VerifyEmail(ctx context.Context, req *dto.VerifyEmailReque
 	return nil
 }
 
-func (s *authService) Login(ctx context.Context, req *dto.LoginRequest) (*dto.LoginResponse, error) {
+func (s *authService) Login(ctx context.Context, req *dto.LoginRequest, ipAddress, userAgent string) (*dto.LoginResponse, error) {
 	// 1. Check if user exists
 	user, err := s.userRepo.GetByEmail(ctx, req.Email)
 	if err != nil || user == nil {
@@ -175,10 +176,14 @@ func (s *authService) Login(ctx context.Context, req *dto.LoginRequest) (*dto.Lo
 	}
 
 	// 6. Generate JWT
+	// Default Access Token Expiry (24 hours)
+	// You might want to shorten this to e.g., 15 mins if you rely on refresh tokens
+	accessTokenExpiry := time.Hour * 24
+
 	claims := jwt.MapClaims{
 		"user_id": user.Id.String(),
 		"role":    user.Role,
-		"exp":     time.Now().Add(time.Hour * 24).Unix(),
+		"exp":     time.Now().Add(accessTokenExpiry).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	secret := os.Getenv("JWT_SECRET")
@@ -190,8 +195,38 @@ func (s *authService) Login(ctx context.Context, req *dto.LoginRequest) (*dto.Lo
 		return nil, err
 	}
 
+	var rawRefreshToken string
+
+	// Hanya buat Refresh Token jika "Remember Me" dicentang - FROM PEMBAHARUAN
+	if req.RememberMe {
+		rawRefreshToken = uuid.New().String()
+		
+		// Hash token
+		hasher := sha256.New()
+		hasher.Write([]byte(rawRefreshToken))
+		tokenHash := hex.EncodeToString(hasher.Sum(nil))
+
+		// Set Expiry: 30 Hari
+		refreshTokenEntity := &entity.UserRefreshToken{
+			Id:        uuid.New(),
+			UserId:    user.Id,
+			TokenHash: tokenHash,
+			ExpiresAt: time.Now().Add(time.Hour * 24 * 30), 
+			Revoked:   false,
+			CreatedAt: time.Now(),
+			IpAddress: ipAddress,
+			UserAgent: userAgent,
+		}
+
+		err = s.userRepo.CreateRefreshToken(ctx, refreshTokenEntity)
+		if err != nil {
+			return nil, fmt.Errorf("failed to create session: %v", err)
+		}
+	}
+
 	return &dto.LoginResponse{
-		AccessToken: signedToken,
+		AccessToken:  signedToken,
+		RefreshToken: rawRefreshToken, // Empty string if not requested - FROM PEMBAHARUAN
 		User: dto.UserDTO{
 			Id:       user.Id,
 			Email:    user.Email,
@@ -199,6 +234,22 @@ func (s *authService) Login(ctx context.Context, req *dto.LoginRequest) (*dto.Lo
 			Role:     string(user.Role),
 		},
 	}, nil
+}
+
+// ✅ NEW LOGOUT IMPLEMENTATION from code pembaharuan
+func (s *authService) Logout(ctx context.Context, refreshToken string) error {
+	// If no token is provided, just return (stateless logout)
+	if refreshToken == "" {
+		return nil
+	}
+
+	// Hash the token to find it in DB
+	hasher := sha256.New()
+	hasher.Write([]byte(refreshToken))
+	tokenHash := hex.EncodeToString(hasher.Sum(nil))
+
+	// Mark as revoked
+	return s.userRepo.RevokeRefreshToken(ctx, tokenHash)
 }
 
 func (s *authService) ForgotPassword(ctx context.Context, req *dto.ForgotPasswordRequest) error {

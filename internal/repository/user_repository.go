@@ -19,7 +19,7 @@ type IUserRepository interface {
 	Create(ctx context.Context, user *entity.User) error
 	GetByEmail(ctx context.Context, email string) (*entity.User, error)
 	GetById(ctx context.Context, id uuid.UUID) (*entity.User, error)
-	GetByIdWithAvatar(ctx context.Context, id uuid.UUID) (*entity.User, error) // ✅ NEW: Get user with avatar
+	GetByIdWithAvatar(ctx context.Context, id uuid.UUID) (*entity.User, error) // ✅ From code lama: Get user with avatar
 	CreatePasswordResetToken(ctx context.Context, token *entity.PasswordResetToken) error
 	GetPasswordResetToken(ctx context.Context, tokenString string) (*entity.PasswordResetToken, error)
 	MarkTokenUsed(ctx context.Context, id uuid.UUID) error
@@ -45,6 +45,10 @@ type IUserRepository interface {
 
 	// User Provider Methods
 	SaveUserProvider(ctx context.Context, provider *entity.UserProvider) error
+
+	// Refresh Token Methods (From code pembaharuan)
+	CreateRefreshToken(ctx context.Context, token *entity.UserRefreshToken) error
+	RevokeRefreshToken(ctx context.Context, tokenHash string) error // ✅ NEW from code pembaharuan
 }
 
 type userRepository struct {
@@ -87,7 +91,7 @@ func (r *userRepository) GetById(ctx context.Context, id uuid.UUID) (*entity.Use
 	return &user, err
 }
 
-// ✅ NEW: Get user with avatar from user_providers table
+// ✅ From code lama: Get user with avatar from user_providers table
 func (r *userRepository) GetByIdWithAvatar(ctx context.Context, id uuid.UUID) (*entity.User, error) {
 	query := `
 		SELECT 
@@ -312,5 +316,20 @@ func (r *userRepository) SaveUserProvider(ctx context.Context, provider *entity.
 		ON CONFLICT (provider_name, provider_user_id) 
 		DO UPDATE SET avatar_url = EXCLUDED.avatar_url
 	`, provider.Id, provider.UserId, provider.ProviderName, provider.ProviderUserId, provider.AvatarURL, provider.CreatedAt)
+	return err
+}
+
+func (r *userRepository) CreateRefreshToken(ctx context.Context, token *entity.UserRefreshToken) error {
+	_, err := r.db.Exec(ctx, `
+		INSERT INTO user_refresh_tokens (
+			id, user_id, token_hash, expires_at, revoked, created_at, ip_address, user_agent
+		) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+	`, token.Id, token.UserId, token.TokenHash, token.ExpiresAt, token.Revoked, token.CreatedAt, token.IpAddress, token.UserAgent)
+	return err
+}
+
+// ✅ From code pembaharuan: IMPLEMENTATION OF REVOKE
+func (r *userRepository) RevokeRefreshToken(ctx context.Context, tokenHash string) error {
+	_, err := r.db.Exec(ctx, `UPDATE user_refresh_tokens SET revoked = true WHERE token_hash = $1`, tokenHash)
 	return err
 }
