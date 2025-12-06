@@ -20,6 +20,7 @@ type IUserRepository interface {
 	GetByEmail(ctx context.Context, email string) (*entity.User, error)
 	GetById(ctx context.Context, id uuid.UUID) (*entity.User, error)
 	GetByIdWithAvatar(ctx context.Context, id uuid.UUID) (*entity.User, error) // ✅ From code lama: Get user with avatar
+	
 	CreatePasswordResetToken(ctx context.Context, token *entity.PasswordResetToken) error
 	GetPasswordResetToken(ctx context.Context, tokenString string) (*entity.PasswordResetToken, error)
 	MarkTokenUsed(ctx context.Context, id uuid.UUID) error
@@ -46,9 +47,12 @@ type IUserRepository interface {
 	// User Provider Methods
 	SaveUserProvider(ctx context.Context, provider *entity.UserProvider) error
 
-	// Refresh Token Methods (From code pembaharuan)
+	// Refresh Token Methods
 	CreateRefreshToken(ctx context.Context, token *entity.UserRefreshToken) error
-	RevokeRefreshToken(ctx context.Context, tokenHash string) error // ✅ NEW from code pembaharuan
+	RevokeRefreshToken(ctx context.Context, tokenHash string) error
+
+	// Avatar Update Method
+	UpdateAvatar(ctx context.Context, userId uuid.UUID, avatarURL string) error
 }
 
 type userRepository struct {
@@ -72,9 +76,10 @@ func (r *userRepository) Create(ctx context.Context, user *entity.User) error {
 }
 
 func (r *userRepository) GetByEmail(ctx context.Context, email string) (*entity.User, error) {
-	row := r.db.QueryRow(ctx, `SELECT id, email, password_hash, full_name, role, status, email_verified FROM users WHERE email = $1`, email)
+	row := r.db.QueryRow(ctx, `SELECT id, email, password_hash, full_name, role, status, email_verified, avatar_url FROM users WHERE email = $1`, email)
 	var user entity.User
-	err := row.Scan(&user.Id, &user.Email, &user.PasswordHash, &user.FullName, &user.Role, &user.Status, &user.EmailVerified)
+	// Scan directly into *string. Postgres driver handles NULL -> nil automatically for pointer types.
+	err := row.Scan(&user.Id, &user.Email, &user.PasswordHash, &user.FullName, &user.Role, &user.Status, &user.EmailVerified, &user.AvatarURL)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, nil
 	}
@@ -82,9 +87,16 @@ func (r *userRepository) GetByEmail(ctx context.Context, email string) (*entity.
 }
 
 func (r *userRepository) GetById(ctx context.Context, id uuid.UUID) (*entity.User, error) {
-	row := r.db.QueryRow(ctx, `SELECT id, email, full_name, role, status, email_verified, ai_daily_usage, created_at FROM users WHERE id = $1`, id)
+	row := r.db.QueryRow(ctx, `
+		SELECT id, email, full_name, role, status, email_verified, avatar_url, ai_daily_usage, created_at 
+		FROM users WHERE id = $1`, id)
 	var user entity.User
-	err := row.Scan(&user.Id, &user.Email, &user.FullName, &user.Role, &user.Status, &user.EmailVerified, &user.AiDailyUsage, &user.CreatedAt)
+	
+	// Scan directly into *string. Postgres driver handles NULL -> nil automatically for pointer types.
+	err := row.Scan(
+		&user.Id, &user.Email, &user.FullName, &user.Role, &user.Status, 
+		&user.EmailVerified, &user.AvatarURL, &user.AiDailyUsage, &user.CreatedAt,
+	)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, serverutils.ErrNotFound
 	}
@@ -92,6 +104,8 @@ func (r *userRepository) GetById(ctx context.Context, id uuid.UUID) (*entity.Use
 }
 
 // ✅ From code lama: Get user with avatar from user_providers table
+// GetByIdWithAvatar retrieves a user with their avatar URL,
+// prioritizing the user's direct avatar_url, falling back to provider avatar_url
 func (r *userRepository) GetByIdWithAvatar(ctx context.Context, id uuid.UUID) (*entity.User, error) {
 	query := `
 		SELECT 
@@ -103,7 +117,7 @@ func (r *userRepository) GetByIdWithAvatar(ctx context.Context, id uuid.UUID) (*
 			u.email_verified, 
 			u.ai_daily_usage, 
 			u.created_at,
-			up.avatar_url
+			COALESCE(u.avatar_url, up.avatar_url) as avatar_url
 		FROM users u
 		LEFT JOIN user_providers up ON u.id = up.user_id
 		WHERE u.id = $1
@@ -114,7 +128,7 @@ func (r *userRepository) GetByIdWithAvatar(ctx context.Context, id uuid.UUID) (*
 	row := r.db.QueryRow(ctx, query, id)
 	
 	var user entity.User
-	var avatarURL *string // Nullable
+	var avatarURL *string
 	
 	err := row.Scan(
 		&user.Id, 
@@ -136,10 +150,9 @@ func (r *userRepository) GetByIdWithAvatar(ctx context.Context, id uuid.UUID) (*
 		return nil, err
 	}
 	
-	// Set avatar URL if exists
-	if avatarURL != nil {
-		user.AvatarURL = *avatarURL
-	}
+	// Direct assignment: both are *string types
+	// pgx handles NULL -> nil automatically
+	user.AvatarURL = avatarURL
 	
 	return &user, nil
 }
@@ -156,8 +169,8 @@ func (r *userRepository) GetPasswordResetToken(ctx context.Context, tokenString 
 	row := r.db.QueryRow(ctx, `SELECT id, user_id, token, expires_at, used FROM password_reset_tokens WHERE token = $1`, tokenString)
 	var t entity.PasswordResetToken
 	err := row.Scan(&t.Id, &t.UserId, &t.Token, &t.ExpiresAt, &t.Used)
-	if errors.Is(err, pgx.ErrNoRows) {
-		return nil, serverutils.ErrNotFound
+	if errors.Is(err, pgx.ErrNoRows) { 
+		return nil, serverutils.ErrNotFound 
 	}
 	return &t, err
 }
@@ -210,7 +223,8 @@ func (r *userRepository) ActivateUser(ctx context.Context, userId uuid.UUID) err
 }
 
 func (r *userRepository) Update(ctx context.Context, user *entity.User) error {
-	_, err := r.db.Exec(ctx, `UPDATE users SET full_name = $1, updated_at = $2 WHERE id = $3`, user.FullName, time.Now(), user.Id)
+	// Updates full_name and avatar_url
+	_, err := r.db.Exec(ctx, `UPDATE users SET full_name = $1, avatar_url = $2, updated_at = $3 WHERE id = $4`, user.FullName, user.AvatarURL, time.Now(), user.Id)
 	return err
 }
 
@@ -221,17 +235,17 @@ func (r *userRepository) Delete(ctx context.Context, id uuid.UUID) error {
 
 func (r *userRepository) GetAll(ctx context.Context, limit, offset int) ([]*entity.User, error) {
 	rows, err := r.db.Query(ctx, `SELECT id, email, full_name, role, status, created_at FROM users ORDER BY created_at DESC LIMIT $1 OFFSET $2`, limit, offset)
-	if err != nil {
-		return nil, err
+	if err != nil { 
+		return nil, err 
 	}
 	defer rows.Close()
-
+	
 	var users []*entity.User
 	for rows.Next() {
 		var u entity.User
 		err := rows.Scan(&u.Id, &u.Email, &u.FullName, &u.Role, &u.Status, &u.CreatedAt)
-		if err != nil {
-			return nil, err
+		if err != nil { 
+			return nil, err 
 		}
 		users = append(users, &u)
 	}
@@ -264,17 +278,17 @@ func (r *userRepository) SearchUsers(ctx context.Context, query string, limit, o
 		LIMIT $2 OFFSET $3
 	`
 	rows, err := r.db.Query(ctx, sql, "%"+query+"%", limit, offset)
-	if err != nil {
-		return nil, err
+	if err != nil { 
+		return nil, err 
 	}
 	defer rows.Close()
-
+	
 	var users []*entity.User
 	for rows.Next() {
 		var u entity.User
 		var roleStr, statusStr string
-		if err := rows.Scan(&u.Id, &u.Email, &u.FullName, &roleStr, &statusStr, &u.CreatedAt); err != nil {
-			return nil, err
+		if err := rows.Scan(&u.Id, &u.Email, &u.FullName, &roleStr, &statusStr, &u.CreatedAt); err != nil { 
+			return nil, err 
 		}
 		u.Role = entity.UserRole(roleStr)
 		u.Status = entity.UserStatus(statusStr)
@@ -292,17 +306,17 @@ func (r *userRepository) GetUserGrowth(ctx context.Context) ([]map[string]interf
 		ORDER BY date ASC
 	`
 	rows, err := r.db.Query(ctx, sql)
-	if err != nil {
-		return nil, err
+	if err != nil { 
+		return nil, err 
 	}
 	defer rows.Close()
-
+	
 	var stats []map[string]interface{}
 	for rows.Next() {
 		var date string
 		var count int
-		if err := rows.Scan(&date, &count); err != nil {
-			return nil, err
+		if err := rows.Scan(&date, &count); err != nil { 
+			return nil, err 
 		}
 		stats = append(stats, map[string]interface{}{"date": date, "count": count})
 	}
@@ -328,8 +342,14 @@ func (r *userRepository) CreateRefreshToken(ctx context.Context, token *entity.U
 	return err
 }
 
-// ✅ From code pembaharuan: IMPLEMENTATION OF REVOKE
 func (r *userRepository) RevokeRefreshToken(ctx context.Context, tokenHash string) error {
 	_, err := r.db.Exec(ctx, `UPDATE user_refresh_tokens SET revoked = true WHERE token_hash = $1`, tokenHash)
+	return err
+}
+
+func (r *userRepository) UpdateAvatar(ctx context.Context, userId uuid.UUID, avatarURL string) error {
+	_, err := r.db.Exec(ctx, `
+		UPDATE users SET avatar_url = $1, updated_at = $2 WHERE id = $3
+	`, avatarURL, time.Now(), userId)
 	return err
 }

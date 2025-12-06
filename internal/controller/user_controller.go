@@ -15,6 +15,7 @@ type IUserController interface {
 	GetProfile(ctx *fiber.Ctx) error
 	UpdateProfile(ctx *fiber.Ctx) error
 	DeleteAccount(ctx *fiber.Ctx) error
+	UploadAvatar(ctx *fiber.Ctx) error // New Route
 }
 
 type userController struct {
@@ -31,6 +32,7 @@ func (c *userController) RegisterRoutes(r fiber.Router) {
 	h.Get("/profile", c.GetProfile)
 	h.Put("/profile", c.UpdateProfile)
 	h.Delete("/account", c.DeleteAccount)
+	h.Post("/avatar", c.UploadAvatar) // Registering the new endpoint
 }
 
 func (c *userController) GetProfile(ctx *fiber.Ctx) error {
@@ -72,4 +74,24 @@ func (c *userController) DeleteAccount(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(serverutils.ErrorResponse(500, err.Error()))
 	}
 	return ctx.JSON(serverutils.SuccessResponse[any]("Account deleted", nil))
+}
+
+func (c *userController) UploadAvatar(ctx *fiber.Ctx) error {
+	userIdStr := ctx.Locals("user_id").(string)
+	userId, _ := uuid.Parse(userIdStr)
+
+	// Get file from request
+	file, err := ctx.FormFile("avatar")
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(serverutils.ErrorResponse(400, "Image file is required"))
+	}
+
+	url, err := c.service.UploadAvatar(ctx.Context(), userId, file)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(serverutils.ErrorResponse(500, err.Error()))
+	}
+
+	return ctx.JSON(serverutils.SuccessResponse("Avatar uploaded successfully", map[string]string{
+		"avatar_url": url,
+	}))
 }

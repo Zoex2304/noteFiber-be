@@ -4,7 +4,7 @@ package main
 import (
 	"ai-notetaking-be/internal/controller"
 	"ai-notetaking-be/internal/pkg/logger"
-	"ai-notetaking-be/internal/pkg/mailer" // Import mailer
+	"ai-notetaking-be/internal/pkg/mailer"
 	"ai-notetaking-be/internal/pkg/serverutils"
 	"ai-notetaking-be/internal/repository"
 	"ai-notetaking-be/internal/service"
@@ -50,6 +50,10 @@ func main() {
 
 	app.Use(serverutils.ErrorHandlerMiddleware())
 
+	// --- Serve Static Files (Uploads) ---
+	// This enables http://localhost:3000/uploads/avatars/filename.jpg
+	app.Static("/uploads", "./uploads")
+
 	db := database.ConnectDB(os.Getenv("DB_CONNECTION_STRING"))
 
 	// --- Initialize CSV Logger ---
@@ -66,7 +70,7 @@ func main() {
 		smtpPort,
 		os.Getenv("SMTP_EMAIL"),
 		os.Getenv("SMTP_PASSWORD"),
-		os.Getenv("SMTP_SENDER_NAME"), // e.g., "noreply@notefiber.com"
+		os.Getenv("SMTP_SENDER_NAME"),
 	)
 
 	// --- Repositories ---

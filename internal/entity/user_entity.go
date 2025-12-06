@@ -28,7 +28,8 @@ type User struct {
 	Status                UserStatus
 	EmailVerified         bool
 	EmailVerifiedAt       *time.Time
-	AvatarURL             string     // ✅ NEW: Avatar URL from OAuth provider
+	// FIXED: Changed back to *string to support database NULLs
+	AvatarURL             *string     
 	CreatedAt             time.Time
 	UpdatedAt             time.Time
 	AiDailyUsage          int
