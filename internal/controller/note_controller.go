@@ -31,7 +31,7 @@ func NewNoteController(noteService service.INoteService) INoteController {
 
 func (c *noteController) RegisterRoutes(r fiber.Router) {
 	h := r.Group("/note/v1")
-	h.Use(serverutils.JwtMiddleware) // ✅ PROTECT ALL NOTE ROUTES (Authentication required)
+	h.Use(serverutils.JwtMiddleware) // ✅ PROTECTED: Wajib login
 	h.Get("semantic-search", c.SemanticSearch)
 	h.Post("", c.Create)
 	h.Get(":id", c.Show)
@@ -41,6 +41,10 @@ func (c *noteController) RegisterRoutes(r fiber.Router) {
 }
 
 func (c *noteController) Create(ctx *fiber.Ctx) error {
+	// 1. Ambil User ID dari Token
+	userIdStr := ctx.Locals("user_id").(string)
+	userId, _ := uuid.Parse(userIdStr)
+
 	var req dto.CreateNoteRequest
 	if err := ctx.BodyParser(&req); err != nil {
 		return err
@@ -51,7 +55,8 @@ func (c *noteController) Create(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	res, err := c.noteService.Create(ctx.Context(), &req)
+	// 2. Kirim userId ke Service
+	res, err := c.noteService.Create(ctx.Context(), userId, &req)
 	if err != nil {
 		return err
 	}
@@ -60,9 +65,15 @@ func (c *noteController) Create(ctx *fiber.Ctx) error {
 }
 
 func (c *noteController) Show(ctx *fiber.Ctx) error {
+	// 1. Ambil User ID dari Token
+	userIdStr := ctx.Locals("user_id").(string)
+	userId, _ := uuid.Parse(userIdStr)
+	
 	idParam := ctx.Params("id")
 	id, _ := uuid.Parse(idParam)
-	res, err := c.noteService.Show(ctx.Context(), id)
+
+	// 2. Kirim userId ke Service
+	res, err := c.noteService.Show(ctx.Context(), userId, id)
 	if err != nil {
 		return err
 	}
@@ -71,6 +82,10 @@ func (c *noteController) Show(ctx *fiber.Ctx) error {
 }
 
 func (c *noteController) Update(ctx *fiber.Ctx) error {
+	// 1. Ambil User ID dari Token
+	userIdStr := ctx.Locals("user_id").(string)
+	userId, _ := uuid.Parse(userIdStr)
+
 	idParam := ctx.Params("id")
 	id, _ := uuid.Parse(idParam)
 
@@ -85,7 +100,8 @@ func (c *noteController) Update(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	res, err := c.noteService.Update(ctx.Context(), &req)
+	// 2. Kirim userId ke Service
+	res, err := c.noteService.Update(ctx.Context(), userId, &req)
 	if err != nil {
 		return err
 	}
@@ -94,10 +110,15 @@ func (c *noteController) Update(ctx *fiber.Ctx) error {
 }
 
 func (c *noteController) Delete(ctx *fiber.Ctx) error {
+	// 1. Ambil User ID dari Token
+	userIdStr := ctx.Locals("user_id").(string)
+	userId, _ := uuid.Parse(userIdStr)
+
 	idParam := ctx.Params("id")
 	id, _ := uuid.Parse(idParam)
 
-	err := c.noteService.Delete(ctx.Context(), id)
+	// 2. Kirim userId ke Service
+	err := c.noteService.Delete(ctx.Context(), userId, id)
 	if err != nil {
 		return err
 	}
@@ -106,6 +127,10 @@ func (c *noteController) Delete(ctx *fiber.Ctx) error {
 }
 
 func (c *noteController) MoveNote(ctx *fiber.Ctx) error {
+	// 1. Ambil User ID dari Token
+	userIdStr := ctx.Locals("user_id").(string)
+	userId, _ := uuid.Parse(userIdStr)
+
 	idParam := ctx.Params("id")
 	id, _ := uuid.Parse(idParam)
 
@@ -120,7 +145,8 @@ func (c *noteController) MoveNote(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	res, err := c.noteService.MoveNote(ctx.Context(), &req)
+	// 2. Kirim userId ke Service
+	res, err := c.noteService.MoveNote(ctx.Context(), userId, &req)
 	if err != nil {
 		return err
 	}
@@ -129,15 +155,16 @@ func (c *noteController) MoveNote(ctx *fiber.Ctx) error {
 }
 
 func (c *noteController) SemanticSearch(ctx *fiber.Ctx) error {
-	q := ctx.Query("q", "")
-
-	// ✅ EXTRACT USER ID from JWT Middleware
+	// 1. Ambil User ID dari Token
 	userIdStr := ctx.Locals("user_id").(string)
 	userId, _ := uuid.Parse(userIdStr)
 
-	// ✅ PASS USER ID to Service for Guard Check
+	q := ctx.Query("q", "")
+
+	// 2. Kirim userId ke Service
 	res, err := c.noteService.SemanticSearch(ctx.Context(), userId, q)
 	if err != nil {
+		// Handle Guard Error (403)
 		if err.Error() == "feature requires pro plan" {
 			return ctx.Status(fiber.StatusForbidden).JSON(serverutils.ErrorResponse(403, "Feature requires Pro Plan"))
 		}

@@ -15,6 +15,8 @@ type INotebookController interface {
 	Show(ctx *fiber.Ctx) error
 	Update(ctx *fiber.Ctx) error
 	Delete(ctx *fiber.Ctx) error
+	GetAll(ctx *fiber.Ctx) error
+	MoveNotebook(ctx *fiber.Ctx) error
 }
 
 type notebookController struct {
@@ -27,6 +29,7 @@ func NewNotebookController(service service.INotebookService) INotebookController
 
 func (c *notebookController) RegisterRoutes(r fiber.Router) {
 	h := r.Group("/notebook/v1")
+	h.Use(serverutils.JwtMiddleware) // ✅ PROTECTED
 	h.Get("", c.GetAll)
 	h.Post("", c.Create)
 	h.Get(":id", c.Show)
@@ -36,7 +39,10 @@ func (c *notebookController) RegisterRoutes(r fiber.Router) {
 }
 
 func (c *notebookController) GetAll(ctx *fiber.Ctx) error {
-	res, err := c.service.GetAll(ctx.Context())
+	userIdStr := ctx.Locals("user_id").(string) // Extract User ID
+	userId, _ := uuid.Parse(userIdStr)
+
+	res, err := c.service.GetAll(ctx.Context(), userId)
 	if err != nil {
 		return err
 	}
@@ -45,17 +51,19 @@ func (c *notebookController) GetAll(ctx *fiber.Ctx) error {
 }
 
 func (c *notebookController) Create(ctx *fiber.Ctx) error {
+	userIdStr := ctx.Locals("user_id").(string)
+	userId, _ := uuid.Parse(userIdStr)
+
 	var req dto.CreateNotebookRequest
 	if err := ctx.BodyParser(&req); err != nil {
 		return err
 	}
 
-	err := serverutils.ValidateRequest(req)
-	if err != nil {
+	if err := serverutils.ValidateRequest(req); err != nil {
 		return err
 	}
 
-	res, err := c.service.Create(ctx.Context(), &req)
+	res, err := c.service.Create(ctx.Context(), userId, &req)
 	if err != nil {
 		return err
 	}
@@ -64,10 +72,12 @@ func (c *notebookController) Create(ctx *fiber.Ctx) error {
 }
 
 func (c *notebookController) Show(ctx *fiber.Ctx) error {
+	userIdStr := ctx.Locals("user_id").(string)
+	userId, _ := uuid.Parse(userIdStr)
 	idParam := ctx.Params("id")
 	id, _ := uuid.Parse(idParam)
 
-	res, err := c.service.Show(ctx.Context(), id)
+	res, err := c.service.Show(ctx.Context(), userId, id)
 	if err != nil {
 		return err
 	}
@@ -76,6 +86,8 @@ func (c *notebookController) Show(ctx *fiber.Ctx) error {
 }
 
 func (c *notebookController) Update(ctx *fiber.Ctx) error {
+	userIdStr := ctx.Locals("user_id").(string)
+	userId, _ := uuid.Parse(userIdStr)
 	idParam := ctx.Params("id")
 	id, _ := uuid.Parse(idParam)
 
@@ -85,7 +97,7 @@ func (c *notebookController) Update(ctx *fiber.Ctx) error {
 	}
 	req.Id = id
 
-	res, err := c.service.Update(ctx.Context(), &req)
+	res, err := c.service.Update(ctx.Context(), userId, &req)
 	if err != nil {
 		return err
 	}
@@ -94,10 +106,12 @@ func (c *notebookController) Update(ctx *fiber.Ctx) error {
 }
 
 func (c *notebookController) Delete(ctx *fiber.Ctx) error {
+	userIdStr := ctx.Locals("user_id").(string)
+	userId, _ := uuid.Parse(userIdStr)
 	idParam := ctx.Params("id")
 	id, _ := uuid.Parse(idParam)
 
-	err := c.service.Delete(ctx.Context(), id)
+	err := c.service.Delete(ctx.Context(), userId, id)
 	if err != nil {
 		return err
 	}
@@ -106,6 +120,8 @@ func (c *notebookController) Delete(ctx *fiber.Ctx) error {
 }
 
 func (c *notebookController) MoveNotebook(ctx *fiber.Ctx) error {
+	userIdStr := ctx.Locals("user_id").(string)
+	userId, _ := uuid.Parse(userIdStr)
 	idParam := ctx.Params("id")
 	id, _ := uuid.Parse(idParam)
 
@@ -115,7 +131,7 @@ func (c *notebookController) MoveNotebook(ctx *fiber.Ctx) error {
 	}
 	req.Id = id
 
-	res, err := c.service.MoveNotebook(ctx.Context(), &req)
+	res, err := c.service.MoveNotebook(ctx.Context(), userId, &req)
 	if err != nil {
 		return err
 	}

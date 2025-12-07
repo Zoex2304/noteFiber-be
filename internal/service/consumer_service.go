@@ -59,14 +59,16 @@ func (cs *consumerService) processMessage(ctx context.Context, msg *message.Mess
 
 	log.Printf("[INFO] Processing note embedding for NoteId: %s", payload.NoteId)
 
-	note, err := cs.noteRepository.GetById(ctx, payload.NoteId)
+	// ✅ FIXED: Use GetByIdGlobal to fetch note without userId context
+	note, err := cs.noteRepository.GetByIdGlobal(ctx, payload.NoteId)
 	if err != nil {
 		log.Printf("[ERROR] Failed to get note %s: %v", payload.NoteId, err)
 		msg.Nack() // Nack for retriable errors
 		return
 	}
 
-	notebook, err := cs.notebookRepository.GetById(ctx, note.NotebookId)
+	// ✅ FIXED: Use GetByIdGlobal for notebook as well
+	notebook, err := cs.notebookRepository.GetByIdGlobal(ctx, note.NotebookId)
 	if err != nil {
 		log.Printf("[ERROR] Failed to get notebook %s: %v", note.NotebookId, err)
 		msg.Nack()

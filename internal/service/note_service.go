@@ -16,12 +16,11 @@ import (
 )
 
 type INoteService interface {
-	Create(ctx context.Context, req *dto.CreateNoteRequest) (*dto.CreateNoteResponse, error)
-	Show(ctx context.Context, id uuid.UUID) (*dto.ShowNoteResponse, error)
-	Update(ctx context.Context, req *dto.UpdateNoteRequest) (*dto.UpdateNoteResponse, error)
-	Delete(ctx context.Context, id uuid.UUID) error
-	MoveNote(ctx context.Context, req *dto.MoveNoteRequest) (*dto.MoveNoteResponse, error)
-	// ✅ UPDATED SIGNATURE: Accepts userId
+	Create(ctx context.Context, userId uuid.UUID, req *dto.CreateNoteRequest) (*dto.CreateNoteResponse, error)
+	Show(ctx context.Context, userId uuid.UUID, id uuid.UUID) (*dto.ShowNoteResponse, error)
+	Update(ctx context.Context, userId uuid.UUID, req *dto.UpdateNoteRequest) (*dto.UpdateNoteResponse, error)
+	Delete(ctx context.Context, userId uuid.UUID, id uuid.UUID) error
+	MoveNote(ctx context.Context, userId uuid.UUID, req *dto.MoveNoteRequest) (*dto.MoveNoteResponse, error)
 	SemanticSearch(ctx context.Context, userId uuid.UUID, search string) ([]*dto.SemanticSearchResponse, error)
 }
 
@@ -30,7 +29,7 @@ type noteService struct {
 	noteEmbeddingRepository repository.INoteEmbeddingRepository
 	publisherService        IPublisherService
 	db                      *pgxpool.Pool
-	subRepo                 repository.ISubscriptionRepository // ✅ INJECTED
+	subRepo                 repository.ISubscriptionRepository
 }
 
 func NewNoteService(
@@ -38,23 +37,24 @@ func NewNoteService(
 	publisherService IPublisherService,
 	noteEmbeddingRepository repository.INoteEmbeddingRepository,
 	db *pgxpool.Pool,
-	subRepo repository.ISubscriptionRepository, // ✅ NEW PARAM
+	subRepo repository.ISubscriptionRepository,
 ) INoteService {
 	return &noteService{
 		noteRepository:          noteRepository,
 		noteEmbeddingRepository: noteEmbeddingRepository,
 		publisherService:        publisherService,
 		db:                      db,
-		subRepo:                 subRepo, // ✅ ASSIGN
+		subRepo:                 subRepo,
 	}
 }
 
-func (c *noteService) Create(ctx context.Context, req *dto.CreateNoteRequest) (*dto.CreateNoteResponse, error) {
+func (c *noteService) Create(ctx context.Context, userId uuid.UUID, req *dto.CreateNoteRequest) (*dto.CreateNoteResponse, error) {
 	note := entity.Note{
 		Id:         uuid.New(),
 		Title:      req.Title,
 		Content:    req.Content,
 		NotebookId: req.NotebookId,
+		UserId:     userId, // ✅ Set Owner
 		CreatedAt:  time.Now(),
 	}
 
@@ -81,8 +81,9 @@ func (c *noteService) Create(ctx context.Context, req *dto.CreateNoteRequest) (*
 	}, nil
 }
 
-func (c *noteService) Show(ctx context.Context, id uuid.UUID) (*dto.ShowNoteResponse, error) {
-	note, err := c.noteRepository.GetById(ctx, id)
+func (c *noteService) Show(ctx context.Context, userId uuid.UUID, id uuid.UUID) (*dto.ShowNoteResponse, error) {
+	// ✅ FIX: Pass userId to repository
+	note, err := c.noteRepository.GetById(ctx, id, userId)
 	if err != nil {
 		return nil, err
 	}
@@ -99,8 +100,9 @@ func (c *noteService) Show(ctx context.Context, id uuid.UUID) (*dto.ShowNoteResp
 	return &res, nil
 }
 
-func (c *noteService) Update(ctx context.Context, req *dto.UpdateNoteRequest) (*dto.UpdateNoteResponse, error) {
-	note, err := c.noteRepository.GetById(ctx, req.Id)
+func (c *noteService) Update(ctx context.Context, userId uuid.UUID, req *dto.UpdateNoteRequest) (*dto.UpdateNoteResponse, error) {
+	// ✅ FIX: Pass userId to repository to check ownership first
+	note, err := c.noteRepository.GetById(ctx, req.Id, userId)
 	if err != nil {
 		return nil, err
 	}
@@ -133,8 +135,9 @@ func (c *noteService) Update(ctx context.Context, req *dto.UpdateNoteRequest) (*
 	}, nil
 }
 
-func (c *noteService) Delete(ctx context.Context, id uuid.UUID) error {
-	_, err := c.noteRepository.GetById(ctx, id)
+func (c *noteService) Delete(ctx context.Context, userId uuid.UUID, id uuid.UUID) error {
+	// ✅ FIX: Pass userId to ensure user owns the note before deleting
+	_, err := c.noteRepository.GetById(ctx, id, userId)
 	if err != nil {
 		return err
 	}
@@ -148,7 +151,8 @@ func (c *noteService) Delete(ctx context.Context, id uuid.UUID) error {
 	noteRepository := c.noteRepository.UsingTx(ctx, tx)
 	noteEmbeddingRepository := c.noteEmbeddingRepository.UsingTx(ctx, tx)
 
-	err = noteRepository.Delete(ctx, id)
+	// ✅ FIX: Pass userId to delete method
+	err = noteRepository.Delete(ctx, id, userId)
 	if err != nil {
 		return err
 	}
@@ -166,8 +170,9 @@ func (c *noteService) Delete(ctx context.Context, id uuid.UUID) error {
 	return nil
 }
 
-func (c *noteService) MoveNote(ctx context.Context, req *dto.MoveNoteRequest) (*dto.MoveNoteResponse, error) {
-	note, err := c.noteRepository.GetById(ctx, req.Id)
+func (c *noteService) MoveNote(ctx context.Context, userId uuid.UUID, req *dto.MoveNoteRequest) (*dto.MoveNoteResponse, error) {
+	// ✅ FIX: Check ownership
+	note, err := c.noteRepository.GetById(ctx, req.Id, userId)
 	if err != nil {
 		return nil, err
 	}
@@ -228,7 +233,8 @@ func (c *noteService) SemanticSearch(ctx context.Context, userId uuid.UUID, sear
 		ids = append(ids, noteEmbedding.NoteId)
 	}
 
-	notes, err := c.noteRepository.GetByIds(ctx, ids)
+	// ✅ FIX: Use GetByIds with userId to ensure we ONLY retrieve notes owned by the user
+	notes, err := c.noteRepository.GetByIds(ctx, ids, userId)
 	if err != nil {
 		return nil, err
 	}

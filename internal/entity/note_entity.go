@@ -11,6 +11,7 @@ type Note struct {
 	Title      string
 	Content    string
 	NotebookId uuid.UUID
+	UserId     uuid.UUID
 	CreatedAt  time.Time
 	UpdatedAt  *time.Time
 	DeletedAt  *time.Time

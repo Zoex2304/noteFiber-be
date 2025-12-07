@@ -1,3 +1,4 @@
+// internal\service\notebook_service.go
 package service
 
 import (
@@ -14,12 +15,12 @@ import (
 )
 
 type INotebookService interface {
-	GetAll(ctx context.Context) ([]*dto.GetAllNotebookResponse, error)
-	Create(ctx context.Context, req *dto.CreateNotebookRequest) (*dto.CreateNotebookResponse, error)
-	Show(ctx context.Context, id uuid.UUID) (*dto.ShowNotebookResponse, error)
-	Update(ctx context.Context, req *dto.UpdateNotebookRequest) (*dto.UpdateNotebookResponse, error)
-	Delete(ctx context.Context, id uuid.UUID) error
-	MoveNotebook(ctx context.Context, req *dto.MoveNotebookRequest) (*dto.MoveNotebookResponse, error)
+	GetAll(ctx context.Context, userId uuid.UUID) ([]*dto.GetAllNotebookResponse, error)
+	Create(ctx context.Context, userId uuid.UUID, req *dto.CreateNotebookRequest) (*dto.CreateNotebookResponse, error)
+	Show(ctx context.Context, userId uuid.UUID, id uuid.UUID) (*dto.ShowNotebookResponse, error)
+	Update(ctx context.Context, userId uuid.UUID, req *dto.UpdateNotebookRequest) (*dto.UpdateNotebookResponse, error)
+	Delete(ctx context.Context, userId uuid.UUID, id uuid.UUID) error
+	MoveNotebook(ctx context.Context, userId uuid.UUID, req *dto.MoveNotebookRequest) (*dto.MoveNotebookResponse, error)
 }
 
 type notebookService struct {
@@ -46,8 +47,9 @@ func NewNotebookService(
 	}
 }
 
-func (c *notebookService) GetAll(ctx context.Context) ([]*dto.GetAllNotebookResponse, error) {
-	notebooks, err := c.notebookRepository.GetAll(ctx)
+func (c *notebookService) GetAll(ctx context.Context, userId uuid.UUID) ([]*dto.GetAllNotebookResponse, error) {
+	// ✅ FIX: Pass userId
+	notebooks, err := c.notebookRepository.GetAll(ctx, userId)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +70,8 @@ func (c *notebookService) GetAll(ctx context.Context) ([]*dto.GetAllNotebookResp
 		ids = append(ids, notebook.Id)
 	}
 
-	notes, err := c.noteRepository.GetByNotebookIds(ctx, ids)
+	// ✅ FIX: Pass userId to fetch only user's notes
+	notes, err := c.noteRepository.GetByNotebookIds(ctx, ids, userId)
 	if err != nil {
 		return nil, err
 	}
@@ -90,11 +93,12 @@ func (c *notebookService) GetAll(ctx context.Context) ([]*dto.GetAllNotebookResp
 	return result, nil
 }
 
-func (c *notebookService) Create(ctx context.Context, req *dto.CreateNotebookRequest) (*dto.CreateNotebookResponse, error) {
+func (c *notebookService) Create(ctx context.Context, userId uuid.UUID, req *dto.CreateNotebookRequest) (*dto.CreateNotebookResponse, error) {
 	notebook := entity.Notebook{
 		Id:        uuid.New(),
 		Name:      req.Name,
 		ParentId:  req.ParentId,
+		UserId:    userId, // ✅ Set Owner
 		CreatedAt: time.Now(),
 	}
 
@@ -108,8 +112,9 @@ func (c *notebookService) Create(ctx context.Context, req *dto.CreateNotebookReq
 	}, nil
 }
 
-func (c *notebookService) Show(ctx context.Context, id uuid.UUID) (*dto.ShowNotebookResponse, error) {
-	notebook, err := c.notebookRepository.GetById(ctx, id)
+func (c *notebookService) Show(ctx context.Context, userId uuid.UUID, id uuid.UUID) (*dto.ShowNotebookResponse, error) {
+	// ✅ FIX: Check ownership
+	notebook, err := c.notebookRepository.GetById(ctx, id, userId)
 	if err != nil {
 		return nil, err
 	}
@@ -125,8 +130,9 @@ func (c *notebookService) Show(ctx context.Context, id uuid.UUID) (*dto.ShowNote
 	return &res, nil
 }
 
-func (c *notebookService) Update(ctx context.Context, req *dto.UpdateNotebookRequest) (*dto.UpdateNotebookResponse, error) {
-	notebook, err := c.notebookRepository.GetById(ctx, req.Id)
+func (c *notebookService) Update(ctx context.Context, userId uuid.UUID, req *dto.UpdateNotebookRequest) (*dto.UpdateNotebookResponse, error) {
+	// ✅ FIX: Check ownership
+	notebook, err := c.notebookRepository.GetById(ctx, req.Id, userId)
 	if err != nil {
 		return nil, err
 	}
@@ -140,7 +146,8 @@ func (c *notebookService) Update(ctx context.Context, req *dto.UpdateNotebookReq
 		return nil, err
 	}
 
-	notes, err := c.noteRepository.GetByNotebookIds(ctx, []uuid.UUID{notebook.Id})
+	// ✅ FIX: Check ownership for notes
+	notes, err := c.noteRepository.GetByNotebookIds(ctx, []uuid.UUID{notebook.Id}, userId)
 	if err != nil {
 		return nil, err
 	}
@@ -162,15 +169,14 @@ func (c *notebookService) Update(ctx context.Context, req *dto.UpdateNotebookReq
 		}
 	}
 
-	res := dto.UpdateNotebookResponse{
+	return &dto.UpdateNotebookResponse{
 		Id: notebook.Id,
-	}
-
-	return &res, nil
+	}, nil
 }
 
-func (c *notebookService) Delete(ctx context.Context, id uuid.UUID) error {
-	_, err := c.notebookRepository.GetById(ctx, id)
+func (c *notebookService) Delete(ctx context.Context, userId uuid.UUID, id uuid.UUID) error {
+	// ✅ FIX: Check ownership
+	_, err := c.notebookRepository.GetById(ctx, id, userId)
 	if err != nil {
 		return err
 	}
@@ -185,7 +191,8 @@ func (c *notebookService) Delete(ctx context.Context, id uuid.UUID) error {
 	noteRepo := c.noteRepository.UsingTx(ctx, tx)
 	noteEmbeddingRepo := c.noteEmbeddingRepository.UsingTx(ctx, tx)
 
-	err = notebookRepo.DeleteById(ctx, id)
+	// ✅ FIX: Pass userId to delete
+	err = notebookRepo.DeleteById(ctx, id, userId)
 	if err != nil {
 		return err
 	}
@@ -195,12 +202,14 @@ func (c *notebookService) Delete(ctx context.Context, id uuid.UUID) error {
 		return err
 	}
 
-	err = notebookRepo.NullifyParentById(ctx, id)
+	// ✅ FIX: Pass userId
+	err = notebookRepo.NullifyParentById(ctx, id, userId)
 	if err != nil {
 		return err
 	}
 
-	err = noteRepo.DeleteByNotebookId(ctx, id)
+	// ✅ FIX: Pass userId
+	err = noteRepo.DeleteByNotebookId(ctx, id, userId)
 	if err != nil {
 		return err
 	}
@@ -213,19 +222,22 @@ func (c *notebookService) Delete(ctx context.Context, id uuid.UUID) error {
 	return nil
 }
 
-func (c *notebookService) MoveNotebook(ctx context.Context, req *dto.MoveNotebookRequest) (*dto.MoveNotebookResponse, error) {
-	_, err := c.notebookRepository.GetById(ctx, req.Id)
+func (c *notebookService) MoveNotebook(ctx context.Context, userId uuid.UUID, req *dto.MoveNotebookRequest) (*dto.MoveNotebookResponse, error) {
+	// ✅ FIX: Check ownership
+	_, err := c.notebookRepository.GetById(ctx, req.Id, userId)
 	if err != nil {
 		return nil, err
 	}
 	if req.ParentId != nil {
-		_, err = c.notebookRepository.GetById(ctx, *req.ParentId)
+		// ✅ FIX: Check ownership of parent too
+		_, err = c.notebookRepository.GetById(ctx, *req.ParentId, userId)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	err = c.notebookRepository.UpdateParentId(ctx, req.Id, req.ParentId)
+	// ✅ FIX: Update parent
+	err = c.notebookRepository.UpdateParentId(ctx, req.Id, req.ParentId, userId)
 	if err != nil {
 		return nil, err
 	}

@@ -1,3 +1,4 @@
+// internal\entity\notebook_entity.go
 package entity
 
 import (
@@ -10,6 +11,7 @@ type Notebook struct {
 	Id        uuid.UUID
 	Name      string
 	ParentId  *uuid.UUID
+	UserId    uuid.UUID // ✅ ADDED: Owner ID
 	CreatedAt time.Time
 	UpdatedAt *time.Time
 	DeletedAt *time.Time

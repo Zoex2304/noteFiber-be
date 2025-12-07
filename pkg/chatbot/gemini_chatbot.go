@@ -83,11 +83,11 @@ func GetGeminiResponse(
 		return "", err
 	}
 
-	// VERIFIED: v1beta endpoint with gemini-2.0-flash
+	// VERIFIED: v1beta endpoint with gemini-2.5-flash
 	// Available models confirmed via ListModels API
 	req, err := http.NewRequest(
 		"POST",
-		"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+		"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
 		bytes.NewBuffer(payloadJson),
 	)
 	if err != nil {
@@ -163,11 +163,11 @@ func DecideToUseRAG(
 		return false, err
 	}
 
-	// VERIFIED: v1beta endpoint with gemini-2.0-flash
+	// VERIFIED: v1beta endpoint with gemini-2.5-flash
 	// Available models confirmed via ListModels API
 	req, err := http.NewRequest(
 		"POST",
-		"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+		"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
 		bytes.NewBuffer(payloadJson),
 	)
 	if err != nil {
