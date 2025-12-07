@@ -1,6 +1,19 @@
-I want to add a new atomic status pill component in the top bar. This pill must reflect the user’s current subscription plan in real time.
-If the user is on the Free Plan, then:
-The Search icon must never be visible.
-The Chat icon must never be visible.
-In the Settings page, there must also be clear information showing which plan the user is currently on, and the same status pill component must be reused there.
-In short, the plan status pill must be a reusable atomic component, used consistently in both the top bar and the settings page, and it must dynamically reflect the user’s actual subscription status at all times.
+First, check whether my system already implements these capabilities. If any of them are missing, please implement them. While doing so, strictly follow these principles: Atomic Habits structure (molecule, organism), single responsibility, type safety, agnostic design, and decoupled architecture. Avoid writing excessive lines of code—if necessary, separate the logic into multiple files to ensure maintainability, scalability, and long-term readability.
+The system should provide core text editing capabilities with full rich text formatting. This includes support for bold, italic, underline, strikethrough, subscript, and superscript. The editor must allow complex formatting combinations at the individual character level.
+For text styling and typography, it should support font family, font size, text color, background color, and text alignment (left, center, right, and justify). Styling must be applicable at a granular level for specific selections or nodes.
+The editor must follow a hierarchical document structure using a node-based architecture. Every element—such as paragraphs, headings, and list items—should be represented as independent nodes that can be manipulated individually.
+For text organization, the system should support:
+Headings and paragraphs, including multiple heading levels (H1–H6) with easy conversion between block types.
+Lists, including ordered (numbered), unordered (bulleted), nested lists with customizable indentation, and checklist/todo items.
+Blockquotes, with full support for blockquote nodes and custom styling.
+Code blocks, with syntax highlighting, line numbers, and custom formatting for displaying code.
+For advanced text features, the system must support:
+Inline code formatting within regular paragraphs.
+Precise text selection and range control, including cursor positioning through a powerful API.
+Text transformations, such as uppercase, lowercase, capitalize, and custom transformations.
+Auto-formatting, including markdown shortcuts like **bold** and *italic* that convert automatically while typing.
+For content management, the system should include:
+Advanced copy and paste handling that preserves formatting and supports multiple input formats such as HTML, plain text, and RTF.
+A robust undo/redo system with built-in history management and granular control.
+Serialization and deserialization, enabling the editor state to be converted to and from JSON or HTML for storage and loading.
+Finally, the system should provide a foundation for real-time collaboration, including support for multi-user editing and conflict resolution.
