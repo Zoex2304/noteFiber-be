@@ -31,6 +31,7 @@ func NewNoteController(noteService service.INoteService) INoteController {
 
 func (c *noteController) RegisterRoutes(r fiber.Router) {
 	h := r.Group("/note/v1")
+	h.Use(serverutils.JwtMiddleware) // ✅ PROTECT ALL NOTE ROUTES (Authentication required)
 	h.Get("semantic-search", c.SemanticSearch)
 	h.Post("", c.Create)
 	h.Get(":id", c.Show)
@@ -130,8 +131,16 @@ func (c *noteController) MoveNote(ctx *fiber.Ctx) error {
 func (c *noteController) SemanticSearch(ctx *fiber.Ctx) error {
 	q := ctx.Query("q", "")
 
-	res, err := c.noteService.SemanticSearch(ctx.Context(), q)
+	// ✅ EXTRACT USER ID from JWT Middleware
+	userIdStr := ctx.Locals("user_id").(string)
+	userId, _ := uuid.Parse(userIdStr)
+
+	// ✅ PASS USER ID to Service for Guard Check
+	res, err := c.noteService.SemanticSearch(ctx.Context(), userId, q)
 	if err != nil {
+		if err.Error() == "feature requires pro plan" {
+			return ctx.Status(fiber.StatusForbidden).JSON(serverutils.ErrorResponse(403, "Feature requires Pro Plan"))
+		}
 		return err
 	}
 

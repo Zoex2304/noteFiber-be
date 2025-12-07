@@ -25,7 +25,7 @@ type ISubscriptionRepository interface {
 	CancelSubscription(ctx context.Context, id uuid.UUID) error
 	GetTotalRevenue(ctx context.Context) (float64, error)
 	CountActiveSubscribers(ctx context.Context) (int, error)
-    GetTransactions(ctx context.Context, status string, limit, offset int) ([]*entity.TransactionDetail, error)
+	GetTransactions(ctx context.Context, status string, limit, offset int) ([]*entity.TransactionDetail, error)
 }
 
 type subscriptionRepository struct {
@@ -37,7 +37,6 @@ func NewSubscriptionRepository(db *pgxpool.Pool) ISubscriptionRepository {
 }
 
 func (r *subscriptionRepository) GetAllPlans(ctx context.Context) ([]*entity.SubscriptionPlan, error) {
-	// UPDATED: Added tax_rate to SELECT
 	rows, err := r.db.Query(ctx, `SELECT id, name, slug, description, price, tax_rate, billing_period, max_notes, semantic_search_enabled, ai_chat_enabled, ai_daily_credit_limit FROM subscription_plans ORDER BY price ASC`)
 	if err != nil {
 		return nil, err
@@ -48,7 +47,6 @@ func (r *subscriptionRepository) GetAllPlans(ctx context.Context) ([]*entity.Sub
 	for rows.Next() {
 		var p entity.SubscriptionPlan
 		var bp string
-		// UPDATED: Added &p.TaxRate to Scan
 		err := rows.Scan(&p.Id, &p.Name, &p.Slug, &p.Description, &p.Price, &p.TaxRate, &bp, &p.MaxNotes, &p.SemanticSearchEnabled, &p.AiChatEnabled, &p.AiDailyCreditLimit)
 		if err != nil {
 			return nil, err
@@ -60,11 +58,9 @@ func (r *subscriptionRepository) GetAllPlans(ctx context.Context) ([]*entity.Sub
 }
 
 func (r *subscriptionRepository) GetPlanById(ctx context.Context, id uuid.UUID) (*entity.SubscriptionPlan, error) {
-	// UPDATED: Added tax_rate to SELECT
 	row := r.db.QueryRow(ctx, `SELECT id, name, price, tax_rate, billing_period FROM subscription_plans WHERE id = $1`, id)
 	var p entity.SubscriptionPlan
 	var bp string
-	// UPDATED: Added &p.TaxRate to Scan
 	err := row.Scan(&p.Id, &p.Name, &p.Price, &p.TaxRate, &bp)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, serverutils.ErrNotFound
@@ -74,7 +70,6 @@ func (r *subscriptionRepository) GetPlanById(ctx context.Context, id uuid.UUID) 
 }
 
 func (r *subscriptionRepository) CreateSubscription(ctx context.Context, sub *entity.UserSubscription) error {
-	// UPDATED: Added billing_address_id field
 	_, err := r.db.Exec(ctx, `
 		INSERT INTO user_subscriptions (id, user_id, plan_id, billing_address_id, status, current_period_start, current_period_end, payment_status, created_at, updated_at)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
@@ -103,11 +98,13 @@ func (r *subscriptionRepository) UpdateSubscriptionStatus(ctx context.Context, i
 	return nil
 }
 
+// ✅ FIXED QUERY: Now fetches capability columns
 func (r *subscriptionRepository) GetActiveByUserId(ctx context.Context, userId uuid.UUID) (*entity.UserSubscription, *entity.SubscriptionPlan, error) {
 	query := `
 		SELECT 
 			us.id, us.status, us.current_period_end, 
-			sp.name, sp.ai_daily_credit_limit 
+			sp.name, sp.ai_daily_credit_limit,
+			sp.ai_chat_enabled, sp.semantic_search_enabled, sp.max_notes
 		FROM user_subscriptions us
 		JOIN subscription_plans sp ON us.plan_id = sp.id
 		WHERE us.user_id = $1 AND us.status = 'active' AND us.current_period_end > NOW()
@@ -119,7 +116,13 @@ func (r *subscriptionRepository) GetActiveByUserId(ctx context.Context, userId u
 	var sub entity.UserSubscription
 	var plan entity.SubscriptionPlan
 	
-	err := row.Scan(&sub.Id, &sub.Status, &sub.CurrentPeriodEnd, &plan.Name, &plan.AiDailyCreditLimit)
+	// ✅ FIXED SCAN: Added pointers for the new columns
+	err := row.Scan(
+		&sub.Id, &sub.Status, &sub.CurrentPeriodEnd, 
+		&plan.Name, &plan.AiDailyCreditLimit,
+		&plan.AiChatEnabled, &plan.SemanticSearchEnabled, &plan.MaxNotes,
+	)
+	
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, nil, nil
 	}

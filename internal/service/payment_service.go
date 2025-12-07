@@ -32,7 +32,7 @@ type paymentService struct {
 }
 
 func NewPaymentService(
-	subRepo repository.ISubscriptionRepository, 
+	subRepo repository.ISubscriptionRepository,
 	userRepo repository.IUserRepository,
 	billingRepo repository.IBillingRepository,
 ) IPaymentService {
@@ -71,20 +71,14 @@ func (s *paymentService) GetPlans(ctx context.Context) ([]*dto.PlanResponse, err
 	return res, nil
 }
 
-// IMPLEMENTATION OF GetOrderSummary
 func (s *paymentService) GetOrderSummary(ctx context.Context, planId uuid.UUID) (*dto.OrderSummaryResponse, error) {
 	plan, err := s.subRepo.GetPlanById(ctx, planId)
 	if err != nil {
 		return nil, err
 	}
 
-	// 1. Get Base Price
 	subtotal := plan.Price
-
-	// 2. Get Tax Rate from Database
 	taxRate := plan.TaxRate
-
-	// 3. Calculate Logic
 	tax := subtotal * taxRate
 	total := subtotal + tax
 
@@ -100,24 +94,21 @@ func (s *paymentService) GetOrderSummary(ctx context.Context, planId uuid.UUID) 
 		Subtotal:      subtotal,
 		Tax:           tax,
 		Total:         total,
-		Currency:      "USD", 
+		Currency:      "USD",
 	}, nil
 }
 
 func (s *paymentService) CreateSubscription(ctx context.Context, userId uuid.UUID, req *dto.CheckoutRequest) (*dto.CheckoutResponse, error) {
-	// 1. Get Plan and User
 	plan, err := s.subRepo.GetPlanById(ctx, req.PlanId)
 	if err != nil {
 		return nil, err
 	}
 
-	// Verify user exists (using blank identifier)
 	_, err = s.userRepo.GetById(ctx, userId)
 	if err != nil {
 		return nil, errors.New("user not found")
 	}
 
-	// 2. Create Billing Address
 	billingId := uuid.New()
 	billingAddr := &entity.BillingAddress{
 		Id:           billingId,
@@ -141,7 +132,6 @@ func (s *paymentService) CreateSubscription(ctx context.Context, userId uuid.UUI
 		return nil, fmt.Errorf("failed to save billing address: %v", err)
 	}
 
-	// 3. Create Subscription Record
 	subId := uuid.New()
 	sub := &entity.UserSubscription{
 		Id:                 subId,
@@ -153,7 +143,7 @@ func (s *paymentService) CreateSubscription(ctx context.Context, userId uuid.UUI
 		CreatedAt:          time.Now(),
 		UpdatedAt:          time.Now(),
 		CurrentPeriodStart: time.Now(),
-		CurrentPeriodEnd:   time.Now().AddDate(0, 1, 0), 
+		CurrentPeriodEnd:   time.Now().AddDate(0, 1, 0),
 	}
 
 	if plan.BillingPeriod == entity.BillingPeriodYearly {
@@ -164,7 +154,6 @@ func (s *paymentService) CreateSubscription(ctx context.Context, userId uuid.UUI
 		return nil, err
 	}
 
-	// 4. Initiate Midtrans Transaction
 	var sClient snap.Client
 	serverKey := os.Getenv("MIDTRANS_SERVER_KEY")
 	env := midtrans.Sandbox
@@ -173,19 +162,12 @@ func (s *paymentService) CreateSubscription(ctx context.Context, userId uuid.UUI
 	}
 	sClient.New(serverKey, env)
 
-	// Get Frontend URL from ENV for dynamic redirect
 	frontendURL := os.Getenv("FRONTEND_URL")
-	
-	// Create callback URLs using the ENV variable
 	finishRedirectURL := fmt.Sprintf("%s/app?payment=success", frontendURL)
 
-	// Calculate Final Amount with Tax from DB
-	taxRate := plan.TaxRate 
+	taxRate := plan.TaxRate
 	finalAmount := int64(plan.Price + (plan.Price * taxRate))
 
-	// FIX: Sanitize Postal Code for Midtrans
-	// Midtrans expects postal codes to be 5-digits for Indonesia.
-	// We truncate it to max 5 chars to prevent "postal_code is invalid" or "too long" errors.
 	midtransPostalCode := req.PostalCode
 	if len(midtransPostalCode) > 5 {
 		midtransPostalCode = midtransPostalCode[:5]
@@ -194,33 +176,33 @@ func (s *paymentService) CreateSubscription(ctx context.Context, userId uuid.UUI
 	snapReq := &snap.Request{
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  subId.String(),
-			GrossAmt: finalAmount, // Updated to use Total (incl. Tax)
+			GrossAmt: finalAmount,
 		},
 		CreditCard: &snap.CreditCardDetails{
 			Secure: true,
 		},
 		Callbacks: &snap.Callbacks{
-			Finish:      finishRedirectURL,
+			Finish: finishRedirectURL,
 		},
 		CustomerDetail: &midtrans.CustomerDetails{
-			FName:    req.FirstName,
-			LName:    req.LastName,
-			Email:    req.Email,
-			Phone:    req.Phone,
+			FName: req.FirstName,
+			LName: req.LastName,
+			Email: req.Email,
+			Phone: req.Phone,
 			BillAddr: &midtrans.CustomerAddress{
 				FName:       req.FirstName,
 				LName:       req.LastName,
 				Phone:       req.Phone,
 				Address:     req.AddressLine1,
 				City:        req.City,
-				Postcode:    midtransPostalCode, // Use Sanitized Code
-				CountryCode: "IDN",              // Hardcoded to IDN per original logic
+				Postcode:    midtransPostalCode,
+				CountryCode: "IDN",
 			},
 		},
 		Items: &[]midtrans.ItemDetails{
 			{
 				ID:    plan.Id.String(),
-				Price: int64(plan.Price), // Base Price
+				Price: int64(plan.Price),
 				Qty:   1,
 				Name:  plan.Name,
 			},
@@ -286,21 +268,33 @@ func (s *paymentService) GetSubscriptionStatus(ctx context.Context, userId uuid.
 	if err != nil {
 		return nil, err
 	}
-	
+
+	// ✅ IMPLEMENTED: Default Free Plan Features if no subscription
 	if sub == nil {
 		return &dto.SubscriptionStatusResponse{
 			PlanName: "Free Plan",
 			Status:   "inactive",
 			IsActive: false,
+			Features: dto.SubscriptionFeatures{
+				AiChat:         false, // Locked
+				SemanticSearch: false, // Locked
+				MaxNotes:       nil,   // Or set a default limit like 5
+			},
 		}, nil
 	}
 
+	// ✅ IMPLEMENTED: Pro/Active Plan Features from DB
 	return &dto.SubscriptionStatusResponse{
 		PlanName:           plan.Name,
 		Status:             string(sub.Status),
 		CurrentPeriodEnd:   sub.CurrentPeriodEnd,
 		AiDailyCreditLimit: plan.AiDailyCreditLimit,
 		IsActive:           true,
+		Features: dto.SubscriptionFeatures{
+			AiChat:         plan.AiChatEnabled,
+			SemanticSearch: plan.SemanticSearchEnabled,
+			MaxNotes:       plan.MaxNotes,
+		},
 	}, nil
 }
 

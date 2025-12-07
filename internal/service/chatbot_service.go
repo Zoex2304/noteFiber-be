@@ -21,7 +21,8 @@ type IChatbotService interface {
 	CreateSession(ctx context.Context) (*dto.CreateSessionResponse, error)
 	GetAllSessions(ctx context.Context) ([]*dto.GetAllSessionsResponse, error)
 	GetChatHistory(ctx context.Context, sessionId uuid.UUID) ([]*dto.GetChatHistoryResponse, error)
-	SendChat(ctx context.Context, request *dto.SendChatRequest) (*dto.SendChatResponse, error)
+	// ✅ UPDATED SIGNATURE: Accepts userId
+	SendChat(ctx context.Context, userId uuid.UUID, request *dto.SendChatRequest) (*dto.SendChatResponse, error)
 	DeleteSession(ctx context.Context, request *dto.DeleteSessionRequest) error
 }
 
@@ -31,10 +32,10 @@ type chatbotService struct {
 	chatMessageRepository    repository.IChatMessageRepository
 	chatMessageRawRepository repository.IChatMessageRawRepository
 	noteEmbeddingRepository  repository.INoteEmbeddingRepository
+	subRepo                  repository.ISubscriptionRepository // ✅ INJECTED
 }
 
 func (cs *chatbotService) CreateSession(ctx context.Context) (*dto.CreateSessionResponse, error) {
-
 	now := time.Now()
 	chatSession := entity.ChatSession{
 		Id:        uuid.New(),
@@ -143,7 +144,18 @@ func (cs *chatbotService) GetChatHistory(ctx context.Context, sessionId uuid.UUI
 	return response, nil
 }
 
-func (cs *chatbotService) SendChat(ctx context.Context, request *dto.SendChatRequest) (*dto.SendChatResponse, error) {
+func (cs *chatbotService) SendChat(ctx context.Context, userId uuid.UUID, request *dto.SendChatRequest) (*dto.SendChatResponse, error) {
+	// ✅ GUARD: Check Pro Plan / AiChatEnabled
+	sub, plan, err := cs.subRepo.GetActiveByUserId(ctx, userId)
+	if err != nil {
+		return nil, err
+	}
+	// If no subscription OR feature disabled in plan
+	if sub == nil || !plan.AiChatEnabled {
+		return nil, fmt.Errorf("feature requires pro plan")
+	}
+	// TODO: Check Daily Credit Limit here if needed (e.g. user.AiDailyUsage < plan.AiDailyCreditLimit)
+
 	tx, err := cs.db.Begin(ctx)
 	if err != nil {
 		return nil, err
@@ -320,7 +332,6 @@ func (cs *chatbotService) SendChat(ctx context.Context, request *dto.SendChatReq
 }
 
 func (cs *chatbotService) DeleteSession(ctx context.Context, request *dto.DeleteSessionRequest) error {
-
 	tx, err := cs.db.Begin(ctx)
 	if err != nil {
 		return err
@@ -365,6 +376,7 @@ func NewChatbotService(
 	chatMessageRepository repository.IChatMessageRepository,
 	chatMessageRawRepository repository.IChatMessageRawRepository,
 	noteEmbeddingRepository repository.INoteEmbeddingRepository,
+	subRepo repository.ISubscriptionRepository, // ✅ NEW PARAM
 ) IChatbotService {
 	return &chatbotService{
 		db:                       db,
@@ -372,5 +384,6 @@ func NewChatbotService(
 		chatMessageRepository:    chatMessageRepository,
 		chatMessageRawRepository: chatMessageRawRepository,
 		noteEmbeddingRepository:  noteEmbeddingRepository,
+		subRepo:                  subRepo, // ✅ ASSIGN
 	}
 }

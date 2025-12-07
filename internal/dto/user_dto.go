@@ -23,10 +23,19 @@ type UpdateProfileRequest struct {
 	Email    string `json:"email" validate:"omitempty,email"` // ✅ From code lama: Added optional email update
 }
 
+// ✅ NEW: Feature flags structure
+type SubscriptionFeatures struct {
+	AiChat         bool `json:"ai_chat"`
+	SemanticSearch bool `json:"semantic_search"`
+	MaxNotes       *int `json:"max_notes"`
+}
+
+// ✅ UPDATED: Include Features
 type SubscriptionStatusResponse struct {
-	PlanName           string    `json:"plan_name"`
-	Status             string    `json:"status"`
-	CurrentPeriodEnd   time.Time `json:"current_period_end"`
-	AiDailyCreditLimit int       `json:"ai_daily_credit_limit"`
-	IsActive           bool      `json:"is_active"`
+	PlanName           string               `json:"plan_name"`
+	Status             string               `json:"status"`
+	CurrentPeriodEnd   time.Time            `json:"current_period_end"`
+	AiDailyCreditLimit int                  `json:"ai_daily_credit_limit"`
+	IsActive           bool                 `json:"is_active"`
+	Features           SubscriptionFeatures `json:"features"` // Added feature flags
 }

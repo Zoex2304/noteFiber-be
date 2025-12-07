@@ -115,13 +115,24 @@ func main() {
 		publisherService,
 		noteEmbeddingRepository,
 	)
-	noteService := service.NewNoteService(noteRepository, publisherService, noteEmbeddingRepository, db)
+	
+	// ✅ UPDATED: Inject subscriptionRepository
+	noteService := service.NewNoteService(
+		noteRepository, 
+		publisherService, 
+		noteEmbeddingRepository, 
+		db,
+		subscriptionRepository, // INJECTED
+	)
+
+	// ✅ UPDATED: Inject subscriptionRepository
 	chatbotService := service.NewChatbotService(
 		db,
 		chatSessionRepository,
 		chatMessageRepository,
 		chatMessageRawRepository,
 		noteEmbeddingRepository,
+		subscriptionRepository, // INJECTED
 	)
 
 	// Business Services

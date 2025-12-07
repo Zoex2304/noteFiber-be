@@ -67,7 +67,7 @@ type PlanResponse struct {
 	Features    []string  `json:"features"`
 }
 
-// NEW: Order Summary DTO
+// Order Summary DTO
 type OrderSummaryResponse struct {
 	PlanName      string  `json:"plan_name"`
 	BillingPeriod string  `json:"billing_period"` // e.g., "year", "month"
@@ -88,7 +88,7 @@ type CheckoutRequest struct {
 	AddressLine2 string    `json:"address_line2"`
 	City         string    `json:"city" validate:"required"`
 	State        string    `json:"state" validate:"required"`
-	PostalCode   string    `json:"postal_code" validate:"required"`
+	PostalCode   string    `json:"postal_code" validate:"required,max=10"`
 	Country      string    `json:"country" validate:"required"`
 }
 
@@ -103,3 +103,4 @@ type MidtransWebhookRequest struct {
 	OrderId           string `json:"order_id"`
 	FraudStatus       string `json:"fraud_status"`
 }
+

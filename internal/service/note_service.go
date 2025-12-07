@@ -7,6 +7,7 @@ import (
 	"ai-notetaking-be/pkg/embedding"
 	"context"
 	"encoding/json"
+	"fmt"
 	"os"
 	"time"
 
@@ -20,7 +21,8 @@ type INoteService interface {
 	Update(ctx context.Context, req *dto.UpdateNoteRequest) (*dto.UpdateNoteResponse, error)
 	Delete(ctx context.Context, id uuid.UUID) error
 	MoveNote(ctx context.Context, req *dto.MoveNoteRequest) (*dto.MoveNoteResponse, error)
-	SemanticSearch(ctx context.Context, search string) ([]*dto.SemanticSearchResponse, error)
+	// ✅ UPDATED SIGNATURE: Accepts userId
+	SemanticSearch(ctx context.Context, userId uuid.UUID, search string) ([]*dto.SemanticSearchResponse, error)
 }
 
 type noteService struct {
@@ -28,6 +30,7 @@ type noteService struct {
 	noteEmbeddingRepository repository.INoteEmbeddingRepository
 	publisherService        IPublisherService
 	db                      *pgxpool.Pool
+	subRepo                 repository.ISubscriptionRepository // ✅ INJECTED
 }
 
 func NewNoteService(
@@ -35,12 +38,14 @@ func NewNoteService(
 	publisherService IPublisherService,
 	noteEmbeddingRepository repository.INoteEmbeddingRepository,
 	db *pgxpool.Pool,
+	subRepo repository.ISubscriptionRepository, // ✅ NEW PARAM
 ) INoteService {
 	return &noteService{
 		noteRepository:          noteRepository,
 		noteEmbeddingRepository: noteEmbeddingRepository,
 		publisherService:        publisherService,
 		db:                      db,
+		subRepo:                 subRepo, // ✅ ASSIGN
 	}
 }
 
@@ -193,7 +198,17 @@ func (c *noteService) MoveNote(ctx context.Context, req *dto.MoveNoteRequest) (*
 	}, nil
 }
 
-func (c *noteService) SemanticSearch(ctx context.Context, search string) ([]*dto.SemanticSearchResponse, error) {
+func (c *noteService) SemanticSearch(ctx context.Context, userId uuid.UUID, search string) ([]*dto.SemanticSearchResponse, error) {
+	// ✅ GUARD: Check Pro Plan / SemanticSearchEnabled
+	sub, plan, err := c.subRepo.GetActiveByUserId(ctx, userId)
+	if err != nil {
+		return nil, err
+	}
+	// If no subscription OR feature disabled in plan
+	if sub == nil || !plan.SemanticSearchEnabled {
+		return nil, fmt.Errorf("feature requires pro plan")
+	}
+
 	embeddingRes, err := embedding.GetGeminiEmbedding(
 		os.Getenv("GOOGLE_GEMINI_API_KEY"),
 		search,

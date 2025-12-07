@@ -1,8 +1,6 @@
-Issue Description: Dropdown Items Are Visible but Not Selectable
-The dropdown list is already visible and successfully populated with data, but there is a critical interaction issue:
-The items cannot be clicked using the mouse.
-The items cannot be selected using the keyboard (arrow keys).
-Although multiple countries and provinces are displayed, none of them become active or selected when interacted with.
-From a user perspective, it feels like:
-The dropdown is visually working,
-But the selection layer is not responding to any input.
+I want to add a new atomic status pill component in the top bar. This pill must reflect the user’s current subscription plan in real time.
+If the user is on the Free Plan, then:
+The Search icon must never be visible.
+The Chat icon must never be visible.
+In the Settings page, there must also be clear information showing which plan the user is currently on, and the same status pill component must be reused there.
+In short, the plan status pill must be a reusable atomic component, used consistently in both the top bar and the settings page, and it must dynamically reflect the user’s actual subscription status at all times.

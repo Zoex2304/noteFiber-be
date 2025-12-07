@@ -30,6 +30,7 @@ func NewChatbotController(chatbotService service.IChatbotService) IChatbotContro
 
 func (c *chatbotController) RegisterRoutes(r fiber.Router) {
 	h := r.Group("/chatbot/v1")
+	h.Use(serverutils.JwtMiddleware) // ✅ PROTECT ALL CHATBOT ROUTES
 	h.Get("sessions", c.GetAllSessions)
 	h.Get("chat-history", c.GetChatHistory)
 	h.Post("create-session", c.CreateSession)
@@ -79,8 +80,17 @@ func (c *chatbotController) SendChat(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	res, err := c.chatbotService.SendChat(ctx.Context(), &request)
+	// ✅ EXTRACT USER ID from JWT Middleware
+	userIdStr := ctx.Locals("user_id").(string)
+	userId, _ := uuid.Parse(userIdStr)
+
+	// ✅ PASS USER ID to Service for Guard Check
+	res, err := c.chatbotService.SendChat(ctx.Context(), userId, &request)
 	if err != nil {
+		// Return 403 if it's a permission issue (simple heuristic)
+		if err.Error() == "feature requires pro plan" {
+			return ctx.Status(fiber.StatusForbidden).JSON(serverutils.ErrorResponse(403, "Feature requires Pro Plan"))
+		}
 		return err
 	}
 
