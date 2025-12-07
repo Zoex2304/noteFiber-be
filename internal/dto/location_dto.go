@@ -16,6 +16,17 @@ type CityOption struct {
 	Longitude float64 `json:"longitude,omitempty"`
 }
 
+// DTO Baru untuk Negara
+type CountryResponse struct {
+	Countries []CountryOption `json:"countries"`
+}
+
+type CountryOption struct {
+	Name string `json:"name"` // Contoh: "Indonesia"
+	Code string `json:"code"` // Contoh: "ID", "SG", "US"
+	Flag string `json:"flag,omitempty"` // Opsional: emoji bendera atau url
+}
+
 type StateResponse struct {
 	City   string        `json:"city"`
 	States []StateOption `json:"states"`

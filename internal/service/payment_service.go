@@ -183,6 +183,14 @@ func (s *paymentService) CreateSubscription(ctx context.Context, userId uuid.UUI
 	taxRate := plan.TaxRate 
 	finalAmount := int64(plan.Price + (plan.Price * taxRate))
 
+	// FIX: Sanitize Postal Code for Midtrans
+	// Midtrans expects postal codes to be 5-digits for Indonesia.
+	// We truncate it to max 5 chars to prevent "postal_code is invalid" or "too long" errors.
+	midtransPostalCode := req.PostalCode
+	if len(midtransPostalCode) > 5 {
+		midtransPostalCode = midtransPostalCode[:5]
+	}
+
 	snapReq := &snap.Request{
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  subId.String(),
@@ -205,8 +213,8 @@ func (s *paymentService) CreateSubscription(ctx context.Context, userId uuid.UUI
 				Phone:       req.Phone,
 				Address:     req.AddressLine1,
 				City:        req.City,
-				Postcode:    req.PostalCode,
-				CountryCode: "IDN",
+				Postcode:    midtransPostalCode, // Use Sanitized Code
+				CountryCode: "IDN",              // Hardcoded to IDN per original logic
 			},
 		},
 		Items: &[]midtrans.ItemDetails{

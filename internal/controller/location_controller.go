@@ -11,6 +11,7 @@ import (
 type ILocationController interface {
 	RegisterRoutes(r fiber.Router)
 	DetectCountry(ctx *fiber.Ctx) error
+	GetCountries(ctx *fiber.Ctx) error
 	GetCities(ctx *fiber.Ctx) error
 	GetStates(ctx *fiber.Ctx) error
 	GetZipCodes(ctx *fiber.Ctx) error
@@ -27,6 +28,7 @@ func NewLocationController(service service.ILocationService) ILocationController
 func (c *locationController) RegisterRoutes(r fiber.Router) {
 	h := r.Group("/location")
 	h.Get("/detect-country", c.DetectCountry)
+	h.Get("/countries", c.GetCountries)
 	h.Get("/cities", c.GetCities)
 	h.Get("/states", c.GetStates)
 	h.Get("/zipcodes", c.GetZipCodes)
@@ -40,15 +42,30 @@ func (c *locationController) DetectCountry(ctx *fiber.Ctx) error {
 	return ctx.JSON(res)
 }
 
-func (c *locationController) GetCities(ctx *fiber.Ctx) error {
-	country := ctx.Query("country", "ID")
+func (c *locationController) GetCountries(ctx *fiber.Ctx) error {
 	query := ctx.Query("query", "")
-
 	if query == "" {
 		return ctx.Status(fiber.StatusBadRequest).JSON(serverutils.ErrorResponse(400, "query parameter is required"))
 	}
 
-	res, err := c.service.GetCities(ctx.Context(), country, query)
+	res, err := c.service.GetCountries(ctx.Context(), query)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(serverutils.ErrorResponse(500, err.Error()))
+	}
+	return ctx.JSON(res)
+}
+
+func (c *locationController) GetCities(ctx *fiber.Ctx) error {
+	country := ctx.Query("country", "ID")
+	query := ctx.Query("query", "") // Bisa kosong jika state ada
+	state := ctx.Query("state", "") // Parameter baru
+
+	// Validasi: Minimal salah satu (query atau state) harus ada
+	if query == "" && state == "" {
+		return ctx.Status(fiber.StatusBadRequest).JSON(serverutils.ErrorResponse(400, "query parameter or state parameter is required"))
+	}
+
+	res, err := c.service.GetCities(ctx.Context(), country, query, state)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(serverutils.ErrorResponse(500, err.Error()))
 	}
