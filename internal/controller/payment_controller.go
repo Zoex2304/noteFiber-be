@@ -16,10 +16,11 @@ import (
 type IPaymentController interface {
 	RegisterRoutes(r fiber.Router)
 	GetPlans(ctx *fiber.Ctx) error
+	GetOrderSummary(ctx *fiber.Ctx) error // NEW
 	Checkout(ctx *fiber.Ctx) error
 	Webhook(ctx *fiber.Ctx) error
-	GetStatus(ctx *fiber.Ctx) error // New
-	CancelSubscription(ctx *fiber.Ctx) error // New
+	GetStatus(ctx *fiber.Ctx) error
+	CancelSubscription(ctx *fiber.Ctx) error
 }
 
 type paymentController struct {
@@ -34,6 +35,7 @@ func (c *paymentController) RegisterRoutes(r fiber.Router) {
 	h := r.Group("/payment")
 	h.Post("/midtrans/notification", c.Webhook)
 	h.Get("/plans", c.GetPlans)
+	h.Get("/summary", c.GetOrderSummary) // Public route, just needs plan_id
 	
 	// Protected Routes
 	h.Post("/checkout", c.authMiddleware, c.Checkout)
@@ -71,6 +73,25 @@ func (c *paymentController) GetPlans(ctx *fiber.Ctx) error {
 		return err
 	}
 	return ctx.JSON(serverutils.SuccessResponse("Success fetching plans", res))
+}
+
+// NEW Handler
+func (c *paymentController) GetOrderSummary(ctx *fiber.Ctx) error {
+	planIdStr := ctx.Query("plan_id")
+	if planIdStr == "" {
+		return ctx.Status(fiber.StatusBadRequest).JSON(serverutils.ErrorResponse(400, "plan_id is required"))
+	}
+
+	planId, err := uuid.Parse(planIdStr)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(serverutils.ErrorResponse(400, "invalid plan_id format"))
+	}
+
+	res, err := c.service.GetOrderSummary(ctx.Context(), planId)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(serverutils.ErrorResponse(500, err.Error()))
+	}
+	return ctx.JSON(serverutils.SuccessResponse("Order summary", res))
 }
 
 func (c *paymentController) Checkout(ctx *fiber.Ctx) error {

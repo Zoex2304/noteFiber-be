@@ -21,14 +21,10 @@ type ISubscriptionRepository interface {
 	CreateSubscription(ctx context.Context, sub *entity.UserSubscription) error
 	GetSubscriptionById(ctx context.Context, id uuid.UUID) (*entity.UserSubscription, error)
 	UpdateSubscriptionStatus(ctx context.Context, id uuid.UUID, status entity.SubscriptionStatus, paymentStatus entity.PaymentStatus) error
-	
-	// New Methods
 	GetActiveByUserId(ctx context.Context, userId uuid.UUID) (*entity.UserSubscription, *entity.SubscriptionPlan, error)
 	CancelSubscription(ctx context.Context, id uuid.UUID) error
 	GetTotalRevenue(ctx context.Context) (float64, error)
 	CountActiveSubscribers(ctx context.Context) (int, error)
-
-    // Admin Transaction Method
     GetTransactions(ctx context.Context, status string, limit, offset int) ([]*entity.TransactionDetail, error)
 }
 
@@ -40,10 +36,9 @@ func NewSubscriptionRepository(db *pgxpool.Pool) ISubscriptionRepository {
 	return &subscriptionRepository{db: db}
 }
 
-// ... Keep Existing Methods (GetAllPlans, GetPlanById, CreateSubscription, GetSubscriptionById, UpdateSubscriptionStatus) ...
-
 func (r *subscriptionRepository) GetAllPlans(ctx context.Context) ([]*entity.SubscriptionPlan, error) {
-	rows, err := r.db.Query(ctx, `SELECT id, name, slug, description, price, billing_period, max_notes, semantic_search_enabled, ai_chat_enabled, ai_daily_credit_limit FROM subscription_plans ORDER BY price ASC`)
+	// UPDATED: Added tax_rate to SELECT
+	rows, err := r.db.Query(ctx, `SELECT id, name, slug, description, price, tax_rate, billing_period, max_notes, semantic_search_enabled, ai_chat_enabled, ai_daily_credit_limit FROM subscription_plans ORDER BY price ASC`)
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +48,8 @@ func (r *subscriptionRepository) GetAllPlans(ctx context.Context) ([]*entity.Sub
 	for rows.Next() {
 		var p entity.SubscriptionPlan
 		var bp string
-		err := rows.Scan(&p.Id, &p.Name, &p.Slug, &p.Description, &p.Price, &bp, &p.MaxNotes, &p.SemanticSearchEnabled, &p.AiChatEnabled, &p.AiDailyCreditLimit)
+		// UPDATED: Added &p.TaxRate to Scan
+		err := rows.Scan(&p.Id, &p.Name, &p.Slug, &p.Description, &p.Price, &p.TaxRate, &bp, &p.MaxNotes, &p.SemanticSearchEnabled, &p.AiChatEnabled, &p.AiDailyCreditLimit)
 		if err != nil {
 			return nil, err
 		}
@@ -64,10 +60,12 @@ func (r *subscriptionRepository) GetAllPlans(ctx context.Context) ([]*entity.Sub
 }
 
 func (r *subscriptionRepository) GetPlanById(ctx context.Context, id uuid.UUID) (*entity.SubscriptionPlan, error) {
-	row := r.db.QueryRow(ctx, `SELECT id, name, price, billing_period FROM subscription_plans WHERE id = $1`, id)
+	// UPDATED: Added tax_rate to SELECT
+	row := r.db.QueryRow(ctx, `SELECT id, name, price, tax_rate, billing_period FROM subscription_plans WHERE id = $1`, id)
 	var p entity.SubscriptionPlan
 	var bp string
-	err := row.Scan(&p.Id, &p.Name, &p.Price, &bp)
+	// UPDATED: Added &p.TaxRate to Scan
+	err := row.Scan(&p.Id, &p.Name, &p.Price, &p.TaxRate, &bp)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, serverutils.ErrNotFound
 	}
@@ -76,10 +74,11 @@ func (r *subscriptionRepository) GetPlanById(ctx context.Context, id uuid.UUID) 
 }
 
 func (r *subscriptionRepository) CreateSubscription(ctx context.Context, sub *entity.UserSubscription) error {
+	// UPDATED: Added billing_address_id field
 	_, err := r.db.Exec(ctx, `
-		INSERT INTO user_subscriptions (id, user_id, plan_id, status, current_period_start, current_period_end, payment_status, created_at, updated_at)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-	`, sub.Id, sub.UserId, sub.PlanId, sub.Status, sub.CurrentPeriodStart, sub.CurrentPeriodEnd, sub.PaymentStatus, sub.CreatedAt, sub.UpdatedAt)
+		INSERT INTO user_subscriptions (id, user_id, plan_id, billing_address_id, status, current_period_start, current_period_end, payment_status, created_at, updated_at)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+	`, sub.Id, sub.UserId, sub.PlanId, sub.BillingAddressId, sub.Status, sub.CurrentPeriodStart, sub.CurrentPeriodEnd, sub.PaymentStatus, sub.CreatedAt, sub.UpdatedAt)
 	return err
 }
 
@@ -104,10 +103,7 @@ func (r *subscriptionRepository) UpdateSubscriptionStatus(ctx context.Context, i
 	return nil
 }
 
-// --- NEW METHODS ---
-
 func (r *subscriptionRepository) GetActiveByUserId(ctx context.Context, userId uuid.UUID) (*entity.UserSubscription, *entity.SubscriptionPlan, error) {
-	// Join with plans to get details
 	query := `
 		SELECT 
 			us.id, us.status, us.current_period_end, 
@@ -123,10 +119,9 @@ func (r *subscriptionRepository) GetActiveByUserId(ctx context.Context, userId u
 	var sub entity.UserSubscription
 	var plan entity.SubscriptionPlan
 	
-	// We only scan partial fields needed for status display
 	err := row.Scan(&sub.Id, &sub.Status, &sub.CurrentPeriodEnd, &plan.Name, &plan.AiDailyCreditLimit)
 	if errors.Is(err, pgx.ErrNoRows) {
-		return nil, nil, nil // No active subscription
+		return nil, nil, nil
 	}
 	if err != nil {
 		return nil, nil, err
@@ -140,7 +135,6 @@ func (r *subscriptionRepository) CancelSubscription(ctx context.Context, id uuid
 }
 
 func (r *subscriptionRepository) GetTotalRevenue(ctx context.Context) (float64, error) {
-	// Sum price of all plans linked to PAID subscriptions
 	query := `
 		SELECT COALESCE(SUM(sp.price), 0)
 		FROM user_subscriptions us
@@ -158,9 +152,7 @@ func (r *subscriptionRepository) CountActiveSubscribers(ctx context.Context) (in
 	return count, err
 }
 
-// Implementation of GetTransactions
 func (r *subscriptionRepository) GetTransactions(ctx context.Context, status string, limit, offset int) ([]*entity.TransactionDetail, error) {
-	// A JOIN query to fetch transaction info
 	sql := `
 		SELECT us.id, us.user_id, u.email, sp.name, sp.price, us.status, us.payment_status, us.created_at, us.midtrans_transaction_id
 		FROM user_subscriptions us
@@ -188,7 +180,6 @@ func (r *subscriptionRepository) GetTransactions(ctx context.Context, status str
 	var txs []*entity.TransactionDetail
 	for rows.Next() {
 		var t entity.TransactionDetail
-		// Use generic string scanning for enums to avoid type mismatch in projection
 		var statusStr, payStatusStr string
 		if err := rows.Scan(&t.Id, &t.UserId, &t.UserEmail, &t.PlanName, &t.Amount, &statusStr, &payStatusStr, &t.CreatedAt, &t.MidtransOrderId); err != nil {
 			return nil, err

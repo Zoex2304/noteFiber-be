@@ -18,6 +18,7 @@ import (
 
 type IPaymentService interface {
 	GetPlans(ctx context.Context) ([]*dto.PlanResponse, error)
+	GetOrderSummary(ctx context.Context, planId uuid.UUID) (*dto.OrderSummaryResponse, error)
 	CreateSubscription(ctx context.Context, userId uuid.UUID, req *dto.CheckoutRequest) (*dto.CheckoutResponse, error)
 	HandleNotification(ctx context.Context, req *dto.MidtransWebhookRequest) error
 	GetSubscriptionStatus(ctx context.Context, userId uuid.UUID) (*dto.SubscriptionStatusResponse, error)
@@ -70,15 +71,49 @@ func (s *paymentService) GetPlans(ctx context.Context) ([]*dto.PlanResponse, err
 	return res, nil
 }
 
+// IMPLEMENTATION OF GetOrderSummary
+func (s *paymentService) GetOrderSummary(ctx context.Context, planId uuid.UUID) (*dto.OrderSummaryResponse, error) {
+	plan, err := s.subRepo.GetPlanById(ctx, planId)
+	if err != nil {
+		return nil, err
+	}
+
+	// 1. Get Base Price
+	subtotal := plan.Price
+
+	// 2. Get Tax Rate from Database
+	taxRate := plan.TaxRate
+
+	// 3. Calculate Logic
+	tax := subtotal * taxRate
+	total := subtotal + tax
+
+	billingPeriod := "month"
+	if plan.BillingPeriod == entity.BillingPeriodYearly {
+		billingPeriod = "year"
+	}
+
+	return &dto.OrderSummaryResponse{
+		PlanName:      plan.Name,
+		BillingPeriod: billingPeriod,
+		PricePerUnit:  fmt.Sprintf("$%.2f/%s", plan.Price, billingPeriod),
+		Subtotal:      subtotal,
+		Tax:           tax,
+		Total:         total,
+		Currency:      "USD", 
+	}, nil
+}
+
 func (s *paymentService) CreateSubscription(ctx context.Context, userId uuid.UUID, req *dto.CheckoutRequest) (*dto.CheckoutResponse, error) {
-	// 1. Get Plan
+	// 1. Get Plan and User
 	plan, err := s.subRepo.GetPlanById(ctx, req.PlanId)
 	if err != nil {
 		return nil, err
 	}
 
-	// Verify user exists
-	if _, err := s.userRepo.GetById(ctx, userId); err != nil {
+	// Verify user exists (using blank identifier)
+	_, err = s.userRepo.GetById(ctx, userId)
+	if err != nil {
 		return nil, errors.New("user not found")
 	}
 
@@ -118,7 +153,7 @@ func (s *paymentService) CreateSubscription(ctx context.Context, userId uuid.UUI
 		CreatedAt:          time.Now(),
 		UpdatedAt:          time.Now(),
 		CurrentPeriodStart: time.Now(),
-		CurrentPeriodEnd:   time.Now().AddDate(0, 1, 0),
+		CurrentPeriodEnd:   time.Now().AddDate(0, 1, 0), 
 	}
 
 	if plan.BillingPeriod == entity.BillingPeriodYearly {
@@ -138,19 +173,32 @@ func (s *paymentService) CreateSubscription(ctx context.Context, userId uuid.UUI
 	}
 	sClient.New(serverKey, env)
 
+	// Get Frontend URL from ENV for dynamic redirect
+	frontendURL := os.Getenv("FRONTEND_URL")
+	
+	// Create callback URLs using the ENV variable
+	finishRedirectURL := fmt.Sprintf("%s/app?payment=success", frontendURL)
+
+	// Calculate Final Amount with Tax from DB
+	taxRate := plan.TaxRate 
+	finalAmount := int64(plan.Price + (plan.Price * taxRate))
+
 	snapReq := &snap.Request{
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  subId.String(),
-			GrossAmt: int64(plan.Price),
+			GrossAmt: finalAmount, // Updated to use Total (incl. Tax)
 		},
 		CreditCard: &snap.CreditCardDetails{
 			Secure: true,
 		},
+		Callbacks: &snap.Callbacks{
+			Finish:      finishRedirectURL,
+		},
 		CustomerDetail: &midtrans.CustomerDetails{
-			FName: req.FirstName,
-			LName: req.LastName,
-			Email: req.Email,
-			Phone: req.Phone,
+			FName:    req.FirstName,
+			LName:    req.LastName,
+			Email:    req.Email,
+			Phone:    req.Phone,
 			BillAddr: &midtrans.CustomerAddress{
 				FName:       req.FirstName,
 				LName:       req.LastName,
@@ -164,7 +212,7 @@ func (s *paymentService) CreateSubscription(ctx context.Context, userId uuid.UUI
 		Items: &[]midtrans.ItemDetails{
 			{
 				ID:    plan.Id.String(),
-				Price: int64(plan.Price),
+				Price: int64(plan.Price), // Base Price
 				Qty:   1,
 				Name:  plan.Name,
 			},

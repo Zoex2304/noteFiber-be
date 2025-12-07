@@ -30,6 +30,7 @@ type SubscriptionPlan struct {
 	Slug                  string
 	Description           string
 	Price                 float64
+	TaxRate               float64 // NEW: Tax Rate (e.g., 0.11 for 11%)
 	BillingPeriod         BillingPeriod
 	MaxNotes              *int
 	SemanticSearchEnabled bool
@@ -41,7 +42,7 @@ type UserSubscription struct {
 	Id                    uuid.UUID
 	UserId                uuid.UUID
 	PlanId                uuid.UUID
-	BillingAddressId      *uuid.UUID // Added field
+	BillingAddressId      *uuid.UUID
 	Status                SubscriptionStatus
 	CurrentPeriodStart    time.Time
 	CurrentPeriodEnd      time.Time

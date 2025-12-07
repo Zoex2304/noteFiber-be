@@ -1,90 +1,22 @@
-Before saving:
-Checklist appears with the correct visuals (icons present, clear interactions)
-Table appears neat with borders and column structure
-Formatting such as underline, bold, and strike appear normal
-After saving and re-rendering from the backend data:
-Checklist changes to raw text such as [x] Start writing
-Table is still there but the styling and visual structure have changed
-Underline, strike, and some other formats appear inconsistent
-Some checkboxes even become empty without visual icons
-Meaning:
-What is stored in the backend and what is rendered back to the editor is not in the same format representation.
-2. Important Note: This is NOT a Backend Structure Issue
-This is NOT an issue with:
-Backend endpoint
-Database structure
-JWT, OAuth, or API authentication logic
-Or CORS issues
-Your backend only does:
-Receive payload → save it
-Send back saved data
-The backend is not responsible for the visual checklist, tables, or editor formatting.
-This issue is 100% in the Frontend layer + Lexical Serialization Logic.
-Technically, this issue occurs because:
-The Lexical state before saving is EditorState (Lexical-specific JSON)
-When saving, what is likely sent to the backend is:
-Converted HTML
-or plain text
-or Markdown
-When reloading, that data:
-is not converted back to the Lexical node format
-and is then rendered as regular static content
-As a result:
-Checklist Node → changes to a string [x]
-Table Node → loses its node schema
-DecoratorNode (icons, underlines, UI) → is no longer rendered
-3. The Most Likely Technical Root Cause
-One (or a combination) of the following conditions occurs in the Frontend:
-When saving, you use:
-$generateHtmlFromNodes
-then save the HTML to the backend
-However, when reloading:
-The HTML is not parsed back into Lexical EditorState
-Or:
-You only save editorState.toJSON()
-but when loading, you do not perform editor.setEditorState() with that JSON
-So what happens is:
-When loading, the editor does not recognize the content as a Lexical structural Node, but only as plain text.
-4. Why does it look fine before saving, but broken after saving?
-Because before saving:
-The data is still completely within the Lexical Runtime EditorState
-All Nodes are active: TableNode, ListNode, CheckListNode, etc.
-After saving:
-The data exits the editor system
-It enters the backend as a string or HTML
-It returns to the frontend without being converted back to Lexical Nodes
-So what is displayed is only:
-The passive render result
-Without the interactive logic of the editor
-Without visual decorators (icons, active checkboxes, etc.)
-5. Is this related to the backend structure logic?
-Firm answer:
-No.
-This has absolutely nothing to do with backend structure logic.
-Your backend:
-Is correctly receiving data
-Is correctly storing data
-Is correctly sending data back
-What is not correct is:
-The data format contract between the Lexical Editor and the Backend
-The data rehydration process to EditorState in the frontend
-6. Narrative Instructions for the Agent (Ready to Send to the Team)
-Please send the following narrative to the agent:
-Currently, the issue with the formatting of checklists, tables, and underlines changing after the save process does not originate from the backend. The backend only stores and returns data; it does not control how the editor is rendered. The main issue lies in the frontend Lexical serialization–deserialization flow.
-Before saving, the content is still in Lexical EditorState format, so all nodes such as checklists, tables, and decorators appear normal. After saving and reloading, the data retrieved from the backend is not converted back to Lexical node format, so it is only rendered as static text or HTML.
-The solution is to ensure that:
-When saving, what is sent to the backend is Lexical JSON EditorState, not just HTML or plain text.
-When loading, the JSON data must be parsed again using editor.setEditorState() or editor.parseEditorState().
-If you are still using HTML as the storage medium, then an HTML → Lexical Nodes pipeline with an official transformer must be created. Without this, checklists will remain [x] and tables will lose their editor UI structure.
-This issue is unrelated to the API, JWT, CORS, or database schema.
-7. Final Conclusion
-This issue is purely frontend rendering & data transformation.
-Your backend is structurally correct.
-What needs to be fixed is:
-How to save Lexical state.
-How to rehydrate Lexical state after loading.
-If you'd like, I can continue with:
-The correct EditorState storage schema
-The JSON flow: Lexical → Backend → Rehydrate to Editor
-An example architecture aligned with your Atomic Design principles (Atom → Molecule → Organism → Template)
-Just let me know: proceed with the technical fixes or not.
+Also, do not forget to include the pricing switcher component.
+By switcher, I am referring to the Monthly ↔ Yearly toggle button.
+Let me restate this in terms of our Atomic Design architecture, because this is critical for consistency:
+A single pricing button inside one card is an Atom.
+A single pricing card composed of multiple atoms is a Molecule.
+When three pricing cards are grouped together, that becomes a higher-level Molecule or an Organism, depending on the layout context.
+When this group of pricing cards is combined with the Monthly/Yearly switcher, it becomes a new composed Molecule/Organism formed from smaller reusable parts.
+Because of this hierarchical composition, the switcher is not optional.
+It is a required part of the pricing composition.
+Therefore, on the /app layer, the Monthly/Yearly switcher must also be rendered, exactly as it appears on the landing page. It must remain consistent across layers.
+If the switcher is missing on the /app pricing page, it will result in an architectural violation, which must be avoided.
+In summary:
+The pricing switcher is mandatory.
+It is part of the molecular composition of the pricing system.
+It must appear both on the landing page and the /app pricing page for consistency and architectural compliance.The implementation is now working, but I want to remind you to maintain visual consistency.
+In the second screenshot, which represents the landing page, I do not want the “Most Popular” label placed at the top of the card. Instead, I want it positioned diagonally at the top-right corner, slightly tilted, to give it a more dynamic and premium visual feel.
+Next, please ensure that the card sizes are fully consistent. If you look at the first screenshot, which is from the /app layer, the card proportions currently look unbalanced and inconsistent. The sizing there needs to be corrected so that all pricing cards follow a clean and consistent layout.
+Additionally, when a pricing card is highlighted or focused, the user experience must clearly reflect that interaction with proper visual feedback (hover state, focus state, or active state).
+In summary:
+Keep the landing page layout as designed, with a diagonal “Most Popular” badge.
+Fix the inconsistent card sizing in the /app layer.
+Ensure that highlighted pricing states provide proper UX feedback.

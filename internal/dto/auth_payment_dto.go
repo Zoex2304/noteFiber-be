@@ -26,18 +26,17 @@ type RegisterResponse struct {
 type LoginRequest struct {
 	Email      string `json:"email" validate:"required,email"`
 	Password   string `json:"password" validate:"required"`
-	RememberMe bool   `json:"remember_me"` // From both code lama and pembaharuan
+	RememberMe bool   `json:"remember_me"`
 }
 
 type LoginResponse struct {
 	AccessToken  string  `json:"access_token"`
-	RefreshToken string  `json:"refresh_token,omitempty"` // From both code lama and pembaharuan
+	RefreshToken string  `json:"refresh_token,omitempty"`
 	User         UserDTO `json:"user"`
 }
 
-// ✅ NEW from code pembaharuan: LogoutRequest struct
 type LogoutRequest struct {
-	RefreshToken string `json:"refresh_token"` // Added for Logout logic
+	RefreshToken string `json:"refresh_token"`
 }
 
 type UserDTO struct {
@@ -68,10 +67,19 @@ type PlanResponse struct {
 	Features    []string  `json:"features"`
 }
 
+// NEW: Order Summary DTO
+type OrderSummaryResponse struct {
+	PlanName      string  `json:"plan_name"`
+	BillingPeriod string  `json:"billing_period"` // e.g., "year", "month"
+	PricePerUnit  string  `json:"price_per_unit"` // e.g., "$9/year"
+	Subtotal      float64 `json:"subtotal"`
+	Tax           float64 `json:"tax"`
+	Total         float64 `json:"total"`
+	Currency      string  `json:"currency"`
+}
+
 type CheckoutRequest struct {
 	PlanId       uuid.UUID `json:"plan_id" validate:"required"`
-	
-	// Billing Details (from both versions)
 	FirstName    string    `json:"first_name" validate:"required"`
 	LastName     string    `json:"last_name" validate:"required"`
 	Email        string    `json:"email" validate:"required,email"`
