@@ -1,0 +1,98 @@
+@startuml Tech Stack
+!theme plain
+skinparam backgroundColor white
+
+rectangle "USER DEVICE" #LightBlue {
+  rectangle "Web Browser\n(Chrome, Firefox, Safari)" as browser #White
+}
+
+cloud "INTERNET" #LightGray {
+  () "HTTPS" as https
+}
+
+rectangle "FRONTEND SERVER" #LightGreen {
+  card "notefiber-FE" #Yellow {
+    component "React 18" as react
+    component "TypeScript" as ts
+    component "Vite" as vite
+    component "TailwindCSS" as tailwind
+    component "Axios/Fetch" as axios
+    
+    react -[hidden]down-> ts
+    ts -[hidden]down-> vite
+    vite -[hidden]down-> tailwind
+    tailwind -[hidden]down-> axios
+  }
+}
+
+rectangle "BACKEND SERVER" #Orange {
+  card "notefiber-BE" #Coral {
+    component "Go Fiber\n(Web Framework)" as fiber
+    component "REST API" as rest
+    component "Middleware" as middleware
+    component "JWT Auth" as jwt
+    component "pgx\n(PostgreSQL Driver)" as pgx
+    
+    fiber -[hidden]down-> rest
+    rest -[hidden]down-> middleware
+    middleware -[hidden]down-> jwt
+    jwt -[hidden]down-> pgx
+  }
+}
+
+database "DATABASE SERVER" #LightSteelBlue {
+  storage "PostgreSQL 14+" as postgres {
+    folder "Tables" as tables
+    folder "users" as users_table
+    folder "notes" as notes_table
+    folder "sessions" as sessions_table
+  }
+}
+
+' Connections with protocols
+browser --> https : "User requests\npage/data"
+https --> react : "Serve static\nHTML/CSS/JS"
+axios --> https : "HTTP Requests\n(JSON payload)"
+https --> fiber : "RESTful API calls"
+fiber --> rest : "Route to handler"
+rest --> middleware : "Validate & auth"
+middleware --> jwt : "Verify token"
+pgx --> postgres : "SQL Commands\n(SELECT, INSERT,\nUPDATE, DELETE)"
+
+' Data format notes
+note top of axios
+  **Request Example:**
+  POST /api/notes
+  {
+    "title": "My Note",
+    "content": "Hello world"
+  }
+end note
+
+note bottom of fiber
+  **Response Example:**
+  HTTP 201 Created
+  {
+    "id": 123,
+    "title": "My Note",
+    "content": "Hello world",
+    "createdAt": "2024-12-09T..."
+  }
+end note
+
+note bottom of postgres
+  **Database Schema:**
+  - users (id, email, password_hash)
+  - notes (id, user_id, title, content)
+  - sessions (id, user_id, token)
+end note
+
+legend right
+  |= Layer |= Technology |= Purpose |
+  | Frontend | React + TypeScript | User Interface |
+  | Transport | REST API (JSON) | Communication |
+  | Backend | Go + Fiber | Business Logic |
+  | Database | PostgreSQL | Data Storage |
+endlegend
+
+@enduml

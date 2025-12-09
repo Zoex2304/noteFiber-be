@@ -1,0 +1,33 @@
+@startwbs
+skinparam backgroundColor white
+skinparam shadowing false
+
+* notefiber-BE
+** cmd
+*** rest
+** docs
+** features
+** internal
+*** constant
+*** controller
+*** dto
+*** entity
+*** pkg
+**** logger
+**** mailer
+**** serverutils
+*** repository
+*** service
+** pkg
+*** chatbot
+*** database
+*** embedding
+** seeds
+** uploads
+*** avatars
+** .env
+** .gitignore
+** go.mod
+** go.sum
+
+@endwbs

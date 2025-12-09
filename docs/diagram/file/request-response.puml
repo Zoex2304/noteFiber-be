@@ -1,0 +1,113 @@
+@startuml "Request-Response Flow - notefiber"
+
+
+
+title Request-Response Flow - notefibe
+
+
+
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+
+' ===== AUTONUMBER VALID 1.2025+ =====
+autonumber 1 1
+
+' ===== PARTICIPANTS =====
+actor "User" as user
+boundary "Browser\n(React App)" as browser
+control "routes\n(Router)" as routes
+boundary "pages\n(Components)" as pages
+control "hooks\n(Custom Hooks)" as hooks
+control "contexts\n(State)" as contexts
+boundary "api\n(HTTP Client)" as api
+
+control "cmd/rest\n(Entry)" as rest
+control "middleware\n(Auth)" as middleware
+control "controller\n(Handler)" as controller
+control "service\n(Logic)" as service
+control "repository\n(Data Access)" as repository
+entity "entity\n(Models)" as entity
+database "PostgreSQL" as db
+
+' ===== FLOW =====
+== <font size=32>User Request Phase</font> ==
+user -> browser : Click / Navigate
+activate browser
+
+browser -> routes : Match URL
+activate routes
+routes -> pages : Load Page Component
+activate pages
+
+pages -> browser : Render UI
+deactivate pages
+
+browser -> hooks : Call Hook
+activate hooks
+
+hooks -> contexts : Get/Set State
+activate contexts
+contexts -> api : HTTP Request
+activate api
+
+== <font size=32>Backend Processing Phase</font> ==
+autonumber 10 1
+
+api -> rest : POST /api/resource\n{JSON payload}
+activate rest
+
+rest -> middleware : Validate Request
+activate middleware
+middleware -> middleware : Check Auth Token
+middleware -> middleware : Validate Input
+middleware -> rest : Authorized
+deactivate middleware
+
+rest -> controller : Handle(request)
+activate controller
+
+controller -> service : Execute Business Logic
+activate service
+
+service -> repository : Query Data
+activate repository
+
+repository -> entity : Map to Entity
+activate entity
+entity -> db : SQL Query
+activate db
+db -> entity : Result Set
+deactivate db
+entity -> repository : Entity Object
+deactivate entity
+
+repository -> service : Domain Model
+deactivate repository
+
+service -> service : Process Business Rules
+service -> controller : Result DTO
+deactivate service
+
+controller -> controller : Format Response
+controller -> rest : HTTP Response
+deactivate controller
+
+== <font size=32>Response Flow Phase</font> ==
+autonumber 20 1
+
+rest -> api : 200 OK\n{JSON response}
+deactivate rest
+
+api -> contexts : Update State
+deactivate api
+
+contexts -> hooks : State Updated
+deactivate contexts
+
+hooks -> browser : Re-render
+deactivate hooks
+
+browser -> user : Display Result
+deactivate browser
+
+@enduml

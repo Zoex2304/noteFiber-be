@@ -1,0 +1,87 @@
+@startuml Client-Server Architecture
+!theme plain
+skinparam backgroundColor white
+skinparam shadowing false
+
+title Client-Server Architecture - notefiber
+
+package "Client Tier (Frontend)" #LightGreen {
+  [Browser] as browser
+  
+  package "notefiber-FE" #Yellow {
+    [React Components] as components
+    [Hooks & State] as state
+    [API Services] as apiservice
+    [Routing] as routing
+  }
+  
+  browser --> components
+  components --> state
+  state --> apiservice
+  routing --> components
+}
+
+package "Server Tier (Backend)" #Orange {
+  package "notefiber-BE" {
+    [REST API\nEndpoints] as endpoints
+    [Controller Layer] as ctrl
+    [Service Layer\n(Business Logic)] as svc
+    [Repository Layer\n(Data Access)] as repo
+    [Authentication\nMiddleware] as auth
+    [Validation] as valid
+  }
+  
+  endpoints --> auth
+  auth --> ctrl
+  ctrl --> valid
+  ctrl --> svc
+  svc --> repo
+}
+
+package "Data Tier (Database)" #LightBlue {
+  database "PostgreSQL" as postgres {
+    [Tables] as tables
+    [Indexes] as indexes
+    [Constraints] as constraints
+  }
+}
+
+apiservice -down-> endpoints : "HTTP/HTTPS\nJSON over REST"
+repo -down-> postgres : "SQL Queries\n(pgx/lib)"
+
+note right of components
+  **Client Application**
+  - User Interface
+  - Client-side rendering
+  - State management
+  - User interactions
+  - Runs in browser
+end note
+
+note right of svc
+  **Server Application**
+  - Business Logic
+  - Data validation
+  - API endpoints
+  - Authentication
+  - Runs on server
+end note
+
+note right of postgres
+  **Database**
+  - Data persistence
+  - Data integrity
+  - Concurrent access
+  - Backup & recovery
+end note
+
+legend right
+  <b>Communication Flow:</b>
+  1. Client sends HTTP request
+  2. Server processes request
+  3. Server queries database
+  4. Server sends HTTP response
+  5. Client updates UI
+end legend
+
+@enduml
